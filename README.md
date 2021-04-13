@@ -1,2 +1,8 @@
-# almost-linkedin
-Implementation of a simple social/job network with AngularJS and PHP interacting through a REST API
+# Τεχνολογίες Εφαρμογών Διαδικτύου 2020-21
+
+### Ομάδα:
+
+| Όνοματεπώνυμο | ΑΜ |
+| --- | --- |
+| Κρυπωτός Χρήστος | 1115201700063 |
+| Παπαδάκος Λεωνίδας-Παναγιώτης | 1115201700117 |
