@@ -1,6 +1,15 @@
-# AlmostLinkedin
+# Τεχνολογίες Εφαρμογών Διαδικτύου 2020-21
+
+## AlmostLinkedin
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.8.
+
+## Ομάδα
+
+| Όνοματεπώνυμο | ΑΜ |
+| --- | --- |
+| Κρυπωτός Χρήστος | 1115201700063 |
+| Παπαδάκος Λεωνίδας-Παναγιώτης | 1115201700117 |
 
 ## Development server
 
