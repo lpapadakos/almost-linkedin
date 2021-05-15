@@ -5,19 +5,21 @@ import { HttpClientModule } from '@angular/common/http';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 
-import { WelcomeComponent } from './welcome/welcome.component';
-import { RegisterComponent } from './register/register.component';
-import { NetworkComponent } from './network/network.component';
-import { JobAdsComponent } from './job-ads/job-ads.component';
-import { DiscussionsComponent } from './discussions/discussions.component';
-import { NotificationsComponent } from './notifications/notifications.component';
-import { ProfileComponent } from './profile/profile.component';
-import { SettingsComponent } from './settings/settings.component';
+import { HomeComponent } from './components/home/home.component';
+import { LoginComponent } from './components/login/login.component';
+import { RegisterComponent } from './components/register/register.component';
+import { NetworkComponent } from './components/network/network.component';
+import { JobAdsComponent } from './components/job-ads/job-ads.component';
+import { DiscussionsComponent } from './components/discussions/discussions.component';
+import { NotificationsComponent } from './components/notifications/notifications.component';
+import { ProfileComponent } from './components/profile/profile.component';
+import { SettingsComponent } from './components/settings/settings.component';
 
 @NgModule({
 	declarations: [
 		AppComponent,
-		WelcomeComponent,
+		HomeComponent,
+		LoginComponent,
 		RegisterComponent,
 		NetworkComponent,
 		JobAdsComponent,
