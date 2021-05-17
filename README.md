@@ -11,8 +11,19 @@ This project was generated with [Angular CLI](https://github.com/angular/angular
 | Κρυπωτός Χρήστος              | 1115201700063 |
 | Παπαδάκος Λεωνίδας-Παναγιώτης | 1115201700117 |
 
-## Development server
+## Backend
 
+With mongod running (look it up):
+
+```
+cd api/
+npm install (only first time)
+npm start
+```
+
+## Frontend: Development server
+
+Run `npm install` if this is the first time launching this project.
 Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The app will automatically reload if you change any of the source files.
 
 ## Code scaffolding
