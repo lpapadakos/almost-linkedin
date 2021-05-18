@@ -1,18 +1,21 @@
 // Include Packages
-var express = require("express");
-var bodyParser = require('body-parser');
-var mongoose = require("mongoose");
-var cors = require("cors");
-var logger = require('morgan');
-var fs = require('fs');
-var https = require('https');
+const express = require("express");
+const bodyParser = require('body-parser');
+const mongoose = require("mongoose");
+const cors = require("cors");
+const logger = require('morgan');
+const fs = require('fs');
+const https = require('https');
 
 // Server Configuration
-var config = require('./config');
+const config = require('./config');
 
-var key = fs.readFileSync(__dirname + '/certs/selfsigned.key');
-var cert = fs.readFileSync(__dirname + '/certs/selfsigned.crt');
-var httpsOptions = {
+// Routes
+const userRoutes = require('./routes/user.routes');
+
+const key = fs.readFileSync('./certs/selfsigned.key');
+const cert = fs.readFileSync('./certs/selfsigned.crt');
+const httpsOptions = {
 	key: key,
 	cert: cert
 };
@@ -25,13 +28,22 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 
 // Connect to MongoDB
-mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true });
-mongoose.connection.on('error', function (err) {
+mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true,  useCreateIndex: true });
+mongoose.connection.on('error', err => {
 	console.log('Could not connect to MongoDB');
 });
 
-// TODO Load server routes
-//require('./routes')(server);
+// Allowed headers
+server.use((req, res, next) => {
+	res.header(
+		"Access-Control-Allow-Headers",
+		"x-access-token, Origin, Content-Type, Accept"
+	);
+	next();
+});
+
+// Set server routes
+server.use('/api/user', userRoutes);
 
 //DEBUG say hi
 server.get("/", (req, res) => {
@@ -39,6 +51,6 @@ server.get("/", (req, res) => {
 });
 
 // Start the server (HTTPS)
-https.createServer(httpsOptions, server).listen(config.LISTEN_PORT, function () {
+https.createServer(httpsOptions, server).listen(config.LISTEN_PORT, () => {
 	console.log("Listening on port " + config.LISTEN_PORT);
 });
