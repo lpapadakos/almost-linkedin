@@ -1,36 +1,3 @@
-<div class="container-fluid w-75">
-	<nav class="navbar navbar-expand-lg navbar-dark bg-primary" *ngIf="loggedIn">
-		<div class="container">
-			<a class="navbar-brand" routerLink="">LankedOn</a>
-			<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
-				<span class="navbar-toggler-icon"></span>
-			</button>
-			<div class="collapse navbar-collapse" id="navbarNavDropdown">
-				<ul class="navbar-nav">
-					<li class="nav-item">
-						<a class="nav-link" routerLink="" routerLinkActive="active">Αρχική Σελίδα</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/network"  routerLinkActive="active">Δίκτυο</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/job-ads"  routerLinkActive="active">Αγγελίες</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/discussions"  routerLinkActive="active">Συζητήσεις</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/notifications"  routerLinkActive="active">Ειδοποιήσεις</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/profile"  routerLinkActive="active">Προσωπικά Στοιχεία</a>
-					</li>
-					<li class="nav-item">
-						<a class="nav-link" routerLink="/settings"  routerLinkActive="active">Ρυθμίσεις</a>
-					</li>
-				</ul>
-			</div>
-		</div>
-	</nav>
-	<router-outlet></router-outlet>
-</div>
+<app-nav></app-nav>
+<!-- TODO: container to get twitter style or sth -->
+<router-outlet></router-outlet>

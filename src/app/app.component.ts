@@ -6,5 +6,6 @@ import { Component } from '@angular/core';
 	styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
-	title = 'almost-linkedin';
+	public title = 'Almost LinkedIn';
+	public loggedIn = false;
 }
