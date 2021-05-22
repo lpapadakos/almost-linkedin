@@ -43,7 +43,7 @@ server.use((req, res, next) => {
 });
 
 // Set server routes
-server.use('/api/user', userRoutes);
+server.use('/users', userRoutes);
 
 //DEBUG say hi
 server.get("/", (req, res) => {

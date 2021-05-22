@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms';
+import { FormsModule } from '@angular/forms'; //TODO maybe reactive?
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /* Angular Material */
@@ -12,6 +12,8 @@ import { MatTabsModule } from '@angular/material/tabs';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
+//TODO needed? (probably, yeah)
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 /* Pages (Routes) */
 import { HomeComponent } from './pages/home/home.component';
@@ -25,10 +27,7 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
-import { AuthService } from './services/auth.service';
-
 import { AuthGuard } from './guards/auth.guard';
-import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
 	declarations: [
@@ -56,7 +55,7 @@ import { SidebarComponent } from './components/sidebar/sidebar.component';
 		MatToolbarModule,
 		MatTabsModule
 	],
-	providers: [AuthGuard, AuthService],
+	providers: [AuthGuard],
 	bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

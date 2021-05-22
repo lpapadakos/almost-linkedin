@@ -1,17 +1,15 @@
 const jwt = require("jsonwebtoken");
 
 verifyToken = (req, res, next) => {
-	// TODO maybe authentication, depends on angular implementation
-	let token = req.headers["x-access-token"];
+	let token = req.headers.authentication;
 
-	if (!token) {
-		return res.status(403).send({ message: "No token provided!" });
-	}
+	if (!token)
+		return res.status(403).send({ message: "No token provided" });
 
 	jwt.verify(token, config.secret, (err, decoded) => {
-		if (err) {
-			return res.status(401).send({ message: "Unauthorized!" });
-		}
+		if (err)
+			return res.status(401).send({ message: "Invalid token" });
+
 		req.userId = decoded.id;
 		next();
 	});

@@ -7,5 +7,4 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
 	public title = 'Almost LinkedIn';
-	public loggedIn = false;
 }

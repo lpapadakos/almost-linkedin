@@ -22,30 +22,31 @@ exports.register = async (req, res) => {
 		return res.status(500).json({ error: "Απέτυχε η εγγραφή χρήστη: " + err });
 	}
 
-	res.status(201).json({ message: "Δημιουργήθηκε νέος χρήστης" });
+	res.status(201);
 };
 
 exports.login = async (req, res) => {
 	try {
 		const user = await User.findOne({ email: req.body.email });
+
+		// Deliberately don't inform users on the existence of emails
+		if (!user)
+			return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
+
+		const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+		if (!passwordMatch)
+			return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
+
+		const token = jwt.sign({ id: user._id }, config.TOKEN_SECRET, { expiresIn: '1d'	});
+
+		res.status(200).json({
+			id: user._id,
+			name: user.name,
+			email: user.email,
+			joinDate: user.joinDate,
+			token: token
+		});
 	} catch (err) {
-		return res.status(500).json({ error: "Απέτυχε η σύνδεση χρήστη" + err });
+		return res.status(500).json({ error: "Απέτυχε η σύνδεση χρήστη: " + err });
 	}
-
-	// Deliberately don't inform users on the existence of emails
-	if (!user)
-		return res.status(401).json({ error: "Λάθος όνομα χρήστη ή κωδικός πρόσβασης" });
-
-	const passwordMatch = await bcrypt.compare(req.body.password, user.password);
-	if (!passwordMatch)
-		return res.status(401).json({ error: "Λάθος όνομα χρήστη ή κωδικός πρόσβασης" });
-
-	const token = jwt.sign({ name: user.name, email: req.body.email }, config.TOKEN_SECRET, {
-		expiresIn: 86400, // 1 day
-	});
-
-	res.status(200).json({
-		message: "Επιτυχής σύνδεση χρήστη",
-		token: token,
-	});
 };
