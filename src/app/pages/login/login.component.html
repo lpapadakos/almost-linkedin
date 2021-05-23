@@ -1,1 +1,18 @@
-<p>Login bitch</p>
+<mat-card>
+	<mat-card-content>
+		<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+			<h2>Log In</h2>
+			<mat-error *ngIf="error">{{error}}</mat-error>
+			<mat-form-field class="full-width-input">
+				<input matInput placeholder="Email" formControlName="email" required />
+				<mat-error>Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email</mat-error>
+			</mat-form-field>
+			<mat-form-field class="full-width-input">
+				<input matInput type="password" placeholder="Password" formControlName="password" required />
+				<mat-error>Παρακαλώ εισάγετε τον κωδικό πρόσβασής σας</mat-error>
+			</mat-form-field>
+			<input type="submit" mat-raised-button color="primary" value="Σύνδεση" />
+		</form>
+	</mat-card-content>
+</mat-card>
+<!-- TODO actual welcome page, links to register etc -->

@@ -1,18 +1,19 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
-import { HttpClientModule } from '@angular/common/http';
-import { FormsModule } from '@angular/forms'; //TODO maybe reactive?
+import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /* Angular Material */
-import { MatSliderModule } from '@angular/material/slider';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatTabsModule } from '@angular/material/tabs';
+import { MatInputModule } from '@angular/material/input';
+import { MatCardModule } from '@angular/material/card';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
-//TODO needed? (probably, yeah)
+//TODO sidebar needed? (probably, yeah)
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 /* Pages (Routes) */
@@ -27,7 +28,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
-import { AuthGuard } from './guards/auth.guard';
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
 
 @NgModule({
 	declarations: [
@@ -50,12 +52,17 @@ import { AuthGuard } from './guards/auth.guard';
 		AppRoutingModule,
 		HttpClientModule,
 		FormsModule,
+		ReactiveFormsModule,
 		BrowserAnimationsModule,
-		MatSliderModule,
 		MatToolbarModule,
-		MatTabsModule
+		MatTabsModule,
+		MatInputModule,
+		MatCardModule
 	],
-	providers: [AuthGuard],
+	providers: [
+		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },
+		{ provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true }
+	],
 	bootstrap: [AppComponent],
 })
 export class AppModule {}

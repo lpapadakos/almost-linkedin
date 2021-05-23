@@ -1,4 +1,8 @@
 import { Component, OnInit } from '@angular/core';
+
+import { AuthService } from 'src/app/services/auth.service';
+import { User } from '../../models/user.model';
+
 @Component({
   selector: 'app-nav',
   templateUrl: './nav.component.html',
@@ -6,8 +10,9 @@ import { Component, OnInit } from '@angular/core';
 })
 export class NavComponent implements OnInit {
 	pages: any[];
+	user: User;
 
-	constructor() {
+	constructor(private authService: AuthService) {
 		this.pages = [
 			{
 				label: "Αρχική Σελίδα",
@@ -41,6 +46,6 @@ export class NavComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
+		this.user = this.authService.user;
 	}
-
 }

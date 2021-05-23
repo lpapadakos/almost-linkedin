@@ -1,3 +1,5 @@
 <nav mat-tab-nav-bar color="primary">
-	<a mat-tab-link *ngFor="let page of pages" routerLink="{{page.link}}" routerLinkActive="active">{{page.label}}</a>
+	<div *ngIf="user">
+		<a mat-tab-link *ngFor="let page of pages" routerLink="{{page.link}}" routerLinkActive="active">{{page.label}}</a>
+	</div>
 </nav>
