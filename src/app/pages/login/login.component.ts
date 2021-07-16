@@ -22,7 +22,8 @@ export class LoginComponent implements OnInit {
 
 	ngOnInit() {
 		// Don't be here if you're logged in, boi
-		if (this.authService.user) this.router.navigate([this.returnUrl]);
+		if (this.authService.user)
+			this.router.navigate([this.returnUrl]);
 
 		this.loginForm = this.formBuilder.group({
 			email: ['', Validators.email],
@@ -45,6 +46,7 @@ export class LoginComponent implements OnInit {
 				error: (error) => {
 					this.error = error;
 				},
+				// TODO actually get backend error
 			});
 	}
 }

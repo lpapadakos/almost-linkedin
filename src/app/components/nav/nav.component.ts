@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router, ActivatedRoute } from '@angular/router';
 
 import { AuthService } from 'src/app/services/auth.service';
 import { User } from '../../models/user.model';
@@ -12,11 +13,11 @@ export class NavComponent implements OnInit {
 	pages: any[];
 	user: User;
 
-	constructor(private authService: AuthService) {
+	constructor( private route: ActivatedRoute, private router: Router, private authService: AuthService) {
 		this.pages = [
 			{
 				label: "Αρχική Σελίδα",
-				link: ""
+				link: "/home"
 			},
 			{
 				label: "Δίκτυο",
@@ -46,6 +47,11 @@ export class NavComponent implements OnInit {
 	}
 
 	ngOnInit(): void {
-		this.user = this.authService.user;
+		this.authService.userEmitter().subscribe(user => this.user = user);
+	}
+
+	logout(): void {
+		this.authService.logout();
+		this.router.navigate(["/login"]);
 	}
 }

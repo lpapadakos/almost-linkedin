@@ -12,12 +12,16 @@ export class AuthService {
 	public _user: Observable<User>;
 
 	constructor(private http: HttpClient) {
-		this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('currentUser')));
+		this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
 		this._user = this.userSubject.asObservable();
 	}
 
 	public get user(): User {
 		return this.userSubject.value;
+	}
+
+	public userEmitter(): Observable<User> {
+		return this._user;
 	}
 
 	login(email: string, password: string) {

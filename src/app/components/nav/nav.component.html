@@ -1,5 +1,10 @@
-<nav mat-tab-nav-bar color="primary">
+<mat-toolbar color="primary">
+	<span id="logo">AlmostLinkedIn</span>
 	<div *ngIf="user">
-		<a mat-tab-link *ngFor="let page of pages" routerLink="{{page.link}}" routerLinkActive="active">{{page.label}}</a>
+		<a *ngFor="let page of pages" mat-flat-button color="primary" routerLink="{{page.link}}" routerLinkActive="mat-accent">{{page.label}}</a>
 	</div>
-</nav>
+	<!--  Right Align after this  -->
+	<span class="flexExpand"></span>
+	<button *ngIf="user" mat-raised-button color="warn" (click)="logout()">Αποσύνδεση</button>
+	<button *ngIf="!user" mat-raised-button color="accent" routerLink="/register">ΕΓΓΡΑΦΗ</button>
+</mat-toolbar>
