@@ -32,6 +32,7 @@ export class LoginComponent implements OnInit {
 	}
 
 	onSubmit() {
+		//TODO Do we want animations?
 		this.submitted = true;
 
 		if (this.loginForm.invalid)
@@ -45,8 +46,9 @@ export class LoginComponent implements OnInit {
 				},
 				error: (error) => {
 					this.error = error;
-				},
-				// TODO actually get backend error
+				}
 			});
+
+		return;
 	}
 }

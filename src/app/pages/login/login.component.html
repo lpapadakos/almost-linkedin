@@ -1,18 +1,25 @@
-<mat-card>
-	<mat-card-content>
-		<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
-			<h2>Σύνδεση Χρήστη</h2>
-			<mat-error *ngIf="error">{{error}}</mat-error>
-			<mat-form-field class="full-width">
-				<input matInput placeholder="Email" formControlName="email" required />
-				<mat-error>Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email</mat-error>
-			</mat-form-field>
-			<mat-form-field class="full-width">
-				<input matInput type="password" placeholder="Password" formControlName="password" required />
-				<mat-error>Παρακαλώ εισάγετε τον κωδικό πρόσβασής σας</mat-error>
-			</mat-form-field>
-			<input type="submit" mat-raised-button color="primary" value="Σύνδεση" />
-		</form>
-	</mat-card-content>
-</mat-card>
-<!-- TODO actual welcome page, links to register etc -->
+<div fxLayout="row" fxLayoutAlign="center center">
+	<h1>
+		Καλωσορίσατε στο AlmostLinkedIn!<br>
+		<sub>(είμαι σίγουρος ότι το όνομα δεν καταπατά κανένα copyright... /s)</sub>
+	</h1>
+	<mat-card>
+		<mat-card-content>
+			<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
+				<h2>Σύνδεση Χρήστη</h2>
+				<mat-error *ngIf="error">{{error}}</mat-error>
+				<mat-form-field>
+					<input matInput placeholder="Email" formControlName="email" required />
+					<mat-error>Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email</mat-error>
+				</mat-form-field>
+				<mat-form-field>
+					<input matInput type="password" placeholder="Password" formControlName="password" required />
+					<mat-error>Παρακαλώ εισάγετε τον κωδικό πρόσβασής σας</mat-error>
+				</mat-form-field>
+				<mat-card-actions>
+					<button mat-raised-button type="submit" color="primary">Σύνδεση</button>
+				</mat-card-actions>
+			</form>
+		</mat-card-content>
+	</mat-card>
+</div>
