@@ -24,7 +24,11 @@ import { NavComponent } from './components/nav/nav.component';
 //TODO sidebar needed? (probably, yeah)
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 
+import { ErrorInterceptor } from './interceptors/error.interceptor';
+import { JwtInterceptor } from './interceptors/jwt.interceptor';
+
 /* Pages (Routes) */
+import { AdminComponent } from './pages/admin/admin.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
@@ -35,9 +39,6 @@ import { NotificationsComponent } from './pages/notifications/notifications.comp
 import { ProfileComponent } from './pages/profile/profile.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
-
-import { ErrorInterceptor } from './interceptors/error.interceptor';
-import { JwtInterceptor } from './interceptors/jwt.interceptor';
 
 @NgModule({
 	declarations: [
@@ -53,7 +54,8 @@ import { JwtInterceptor } from './interceptors/jwt.interceptor';
 		NotificationsComponent,
 		ProfileComponent,
 		SettingsComponent,
-		NotFoundComponent
+		NotFoundComponent,
+		AdminComponent
 	],
 	imports: [
 		BrowserModule,

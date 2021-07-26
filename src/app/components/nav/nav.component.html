@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
 	<span id="logo">AlmostLinkedIn</span>
-	<div *ngIf="user">
+	<div *ngIf="user && user.role == 'user'">
 		<a *ngFor="let page of pages" mat-flat-button color="primary" routerLink="{{page.link}}" routerLinkActive="mat-accent">{{page.label}}</a>
 	</div>
 	<!--  Right Align after this  -->

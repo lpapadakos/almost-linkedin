@@ -1,7 +1,10 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from '@angular/router';
 
+import { AuthGuard } from './guards/auth.guard';
+
 /* Pages (Routes) */
+import { AdminComponent } from './pages/admin/admin.component';
 import { HomeComponent } from './pages/home/home.component';
 import { LoginComponent } from './pages/login/login.component';
 import { RegisterComponent } from './pages/register/register.component';
@@ -13,9 +16,8 @@ import { ProfileComponent } from './pages/profile/profile.component';
 import { SettingsComponent } from './pages/settings/settings.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
-import { AuthGuard } from './guards/auth.guard';
-
 const routes: Routes = [
+	{ path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: { adminOnly: true } },
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
 	{ path: 'dashboard', redirectTo: '/home', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
