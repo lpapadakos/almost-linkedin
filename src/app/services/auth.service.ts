@@ -16,11 +16,11 @@ export class AuthService {
 		this._user = this.userSubject.asObservable();
 	}
 
-	public get user(): User {
+	get user(): User {
 		return this.userSubject.value;
 	}
 
-	public userEmitter(): Observable<User> {
+	userEmitter(): Observable<User> {
 		return this._user;
 	}
 
@@ -39,4 +39,23 @@ export class AuthService {
 		localStorage.removeItem('user');
 		this.userSubject.next(null);
 	}
+
+	register(user: User) {
+		return this.http.post(`${environment.apiUrl}/users/register`, user);
+	}
+
+	/* TODO: Admin stuff */
+	getAll() {
+		if (this.user.role == "admin")
+			return this.http.get<User[]>(`${environment.apiUrl}/users`);
+	}
+
+	getById(id: string) {
+		if (this.user.role == "admin")
+			return this.http.get<User[]>(`${environment.apiUrl}/users/${id}`);
+	}
+
+	update(id, params) {}
+
+	delete(id: string) {}
 }

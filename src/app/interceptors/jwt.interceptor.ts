@@ -21,7 +21,7 @@ export class JwtInterceptor implements HttpInterceptor {
 				}
 			});
 		}
-		//TODO are we sending auth header for requests? we'll see
+
 		return next.handle(request);
 	}
 }

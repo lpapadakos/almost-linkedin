@@ -1,29 +1,8 @@
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
-const validationResult = require("express-validator");
 
 const User = require("../models/user.model");
 const config = require("../config");
-
-exports.register = async (req, res) => {
-	// TODO? role is not defined during registration. It's 'user'
-	const user = new User(req.body);
-
-	// Hash password before save
-	user.password = await bcrypt.hash(req.body.password, 10);
-
-	// DEBUG
-	console.log(user);
-
-	try {
-		await user.save();
-	} catch (err) {
-		//TODO: Maybe not specific message for security? EXCEPTION: Uniqueness
-		return res.status(500).json({ error: "Απέτυχε η εγγραφή χρήστη: " + err });
-	}
-
-	res.status(201);
-};
 
 exports.login = async (req, res) => {
 	try {
@@ -49,5 +28,29 @@ exports.login = async (req, res) => {
 		});
 	} catch (err) {
 		return res.status(500).json({ error: "Απέτυχε η σύνδεση χρήστη: " + err });
+	}
+};
+
+exports.register = async (req, res) => {
+	try {
+		// role is not defined during registration. It's 'user'. Admin is preinstalled
+		const user = new User({
+			name: req.body.name,
+			email: req.body.email,
+			phone: req.body.phone,
+			img: req.body.img //TODO any special handling needed for img?
+		});
+
+		// Hash password before save
+		user.password = await bcrypt.hash(req.body.password, 10);
+
+		// DEBUG
+		console.log(user);
+
+		await user.save();
+		res.status(201);
+	} catch (err) {
+		//TODO: Maybe not specific message for security? EXCEPTION: Uniqueness
+		return res.status(500).json({ error: "Απέτυχε η εγγραφή χρήστη: " + err });
 	}
 };

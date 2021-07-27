@@ -6,8 +6,12 @@ const userSchema = mongoose.Schema({
 	name: { type: String, required: true },
 	email: { type: String, required: true, unique: [ true, "Ο χρήστης υπάρχει ήδη" ] },
 	password: { type: String, required: true },
-	role: { type: String, default: 'user' },
 	phone: String,
+	img: {
+		data: Buffer,
+		contentType: String
+	},
+	role: { type: String, default: 'user' },
 	joinDate: { type: Date, default: Date.now }
 });
 

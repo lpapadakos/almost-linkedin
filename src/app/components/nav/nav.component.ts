@@ -13,7 +13,7 @@ export class NavComponent implements OnInit {
 	pages: any[];
 	user: User;
 
-	constructor( private route: ActivatedRoute, private router: Router, private authService: AuthService) {
+	constructor(private route: ActivatedRoute, private router: Router, private authService: AuthService) {
 		this.pages = [
 			{
 				label: "Αρχική Σελίδα",

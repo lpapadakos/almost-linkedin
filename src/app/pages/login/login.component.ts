@@ -12,7 +12,6 @@ import { AuthService } from '../../services/auth.service';
 })
 export class LoginComponent implements OnInit {
 	loginForm: FormGroup;
-	submitted = false;
 	error = '';
 	private returnUrl: string;
 
@@ -32,9 +31,6 @@ export class LoginComponent implements OnInit {
 	}
 
 	onSubmit() {
-		//TODO Do we want animations?
-		this.submitted = true;
-
 		if (this.loginForm.invalid)
 			return;
 
@@ -48,7 +44,5 @@ export class LoginComponent implements OnInit {
 					this.error = error;
 				}
 			});
-
-		return;
 	}
 }

@@ -6,5 +6,7 @@
 	<!--  Right Align after this  -->
 	<span class="flexExpand"></span>
 	<button *ngIf="user" mat-raised-button color="warn" (click)="logout()">Αποσύνδεση</button>
+
+	<button *ngIf="!user" mat-flat-button color="primary" routerLink="/login">Σύνδεση</button>
 	<button *ngIf="!user" mat-raised-button color="accent" routerLink="/register">ΕΓΓΡΑΦΗ</button>
 </mat-toolbar>

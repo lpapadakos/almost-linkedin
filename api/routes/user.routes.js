@@ -5,16 +5,15 @@ const { body } = require('express-validator');
 const validationHandler = require("../middlewares/validationHandler");
 const controller = require("../controllers/user.controller");
 
-//TODO user friendly msg?
 router.post("/register", [
-	body('name').exists(),
-	body('email').isEmail(),
-	body('password').isLength({ min: 8 }),
-	body('phone').isMobilePhone()
+	body('name', "Παρακαλώ εισάγετε το ονοματεπώνυμό σας").exists(),
+	body('email', "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail(),
+	body('phone', "Παρακαλώ εισάγετε έναν έγκυρο αριθμό τηλεφώνου").isMobilePhone().optional({ nullable: true, checkFalsy: true }),
+	body('password', "Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες").isLength({ min: 8 })
 ], validationHandler, controller.register);
 
 router.post("/login", [
-	body('email').isEmail()
+	body('email', "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail()
 ], validationHandler, controller.login);
 
 module.exports = router;
