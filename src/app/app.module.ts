@@ -6,6 +6,7 @@ import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
+/* Angular Material */
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
 import { MatCardModule } from '@angular/material/card';
@@ -19,13 +20,11 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatOptionModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-import { AppComponent } from './app.component';
-import { NavComponent } from './components/nav/nav.component';
-//TODO sidebar needed? (probably, yeah)
-import { SidebarComponent } from './components/sidebar/sidebar.component';
-
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
+
+import { AppComponent } from './app.component';
+import { NavComponent } from './components/nav/nav.component';
 
 /* Pages (Routes) */
 import { AdminComponent } from './pages/admin/admin.component';
@@ -44,7 +43,6 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 	declarations: [
 		AppComponent,
 		NavComponent,
-		SidebarComponent,
 		HomeComponent,
 		LoginComponent,
 		RegisterComponent,
