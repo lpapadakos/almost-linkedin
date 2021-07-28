@@ -9,15 +9,9 @@ const https = require('https');
 
 // Server Configuration
 const config = require('./config');
-
-// Routes
-const userRoutes = require('./routes/user.routes');
-
-const key = fs.readFileSync('./certs/selfsigned.key');
-const cert = fs.readFileSync('./certs/selfsigned.crt');
 const httpsOptions = {
-	key: key,
-	cert: cert
+	key: fs.readFileSync('./certs/selfsigned.key'),
+	cert: fs.readFileSync('./certs/selfsigned.crt')
 };
 
 // Initialize the application
@@ -28,7 +22,7 @@ server.use(bodyParser.json());
 server.use(bodyParser.urlencoded({ extended: true }));
 
 // Connect to MongoDB
-mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true,  useCreateIndex: true });
+mongoose.connect(config.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true });
 mongoose.connection.on('error', err => {
 	console.log('Could not connect to MongoDB');
 });
@@ -42,13 +36,9 @@ server.use((req, res, next) => {
 	next();
 });
 
-// Set server routes
-server.use('/users', userRoutes);
-
-//DEBUG say hi
-server.get("/", (req, res) => {
-	res.json({ message: "Όου τζιιζ" });
-});
+// Set API endpoint routes
+server.use('/users', require('./routes/user.routes'));
+server.use('/admin', require('./routes/admin.routes'));
 
 // Start the server (HTTPS)
 https.createServer(httpsOptions, server).listen(config.LISTEN_PORT, () => {
