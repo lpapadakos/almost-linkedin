@@ -1,18 +1,18 @@
 const jwt = require("jsonwebtoken");
+const config = require('../config');
 
-verifyToken = (req, res, next) => {
-	let token = req.headers.authorization;
+module.exports = (req, res, next) => {
+	// First string is "Bearer", next is JWT token
+	let token = req.headers.authorization.split(" ")[1];
 
 	if (!token)
-		return res.status(403).send({ error: "No token provided" });
+		return res.status(401).json({ error: "Δεν δόθηκε JWT token" });
 
-	jwt.verify(token, config.secret, (err, decoded) => {
+	jwt.verify(token, config.TOKEN_SECRET, (err, decoded) => {
 		if (err)
-			return res.status(401).send({ error: "Invalid token" });
+			return res.status(401).json({ error: "Μη έγκυρο JWT token" });
 
 		req.userId = decoded.id;
 		next();
 	});
 };
-
-module.exports = verifyToken;
