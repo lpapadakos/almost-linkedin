@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
 	selector: 'app-login',
@@ -15,13 +15,13 @@ export class LoginComponent implements OnInit {
 	error = '';
 	private returnUrl: string;
 
-	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService) {
+	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private userService: UserService) {
 		this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
 	}
 
 	ngOnInit() {
 		// Don't be here if you're logged in, boi
-		if (this.authService.user)
+		if (this.userService.user)
 			this.router.navigate([this.returnUrl]);
 
 		this.loginForm = this.formBuilder.group({
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
 		if (this.loginForm.invalid)
 			return;
 
-		this.authService.login(this.loginForm.get('email')?.value, this.loginForm.get('password')?.value)
+		this.userService.login(this.loginForm.get('email')?.value, this.loginForm.get('password')?.value)
 			.pipe(first())
 			.subscribe({
 				next: () => {

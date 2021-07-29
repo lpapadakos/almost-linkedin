@@ -3,7 +3,7 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { AuthService } from '../../services/auth.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
 	selector: 'app-register',
@@ -16,7 +16,7 @@ export class RegisterComponent implements OnInit {
 	//TODO returnurl needed?
 	private returnUrl: string;
 
-	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private authService: AuthService) {
+	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private userService: UserService) {
 		this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
 	}
 
@@ -56,8 +56,7 @@ export class RegisterComponent implements OnInit {
 		if (this.registerForm.invalid)
 			return;
 
-		// TODO Fix next() not happening
-		this.authService.register(this.registerForm.value)
+		this.userService.register(this.registerForm.value)
 			.pipe(first())
 			.subscribe({
 				next: () => {

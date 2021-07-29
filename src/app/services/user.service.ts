@@ -7,7 +7,7 @@ import { environment } from '../../environments/environment';
 import { User } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
-export class AuthService {
+export class UserService { // TODO Rename to user service?
 	private userSubject: BehaviorSubject<User>;
 	public _user: Observable<User>;
 
@@ -25,7 +25,7 @@ export class AuthService {
 	}
 
 	login(email: string, password: string) {
-		return this.http.post<any>(`${environment.apiUrl}/users/login`, { email, password })
+		return this.http.post<any>(`${environment.apiUrl}/user/login`, { email, password })
 			.pipe(map(user => {
 				// store user details and jwt token in local storage to keep user logged in between page refreshes
 				localStorage.setItem('user', JSON.stringify(user));
@@ -41,21 +41,11 @@ export class AuthService {
 	}
 
 	register(user: User) {
-		return this.http.post(`${environment.apiUrl}/users/register`, user);
+		return this.http.post(`${environment.apiUrl}/user/register`, user);
 	}
 
-	/* TODO: Admin stuff */
-	getAll() {
-		if (this.user.role == "admin")
-			return this.http.get<User[]>(`${environment.apiUrl}/users`);
-	}
-
+	// To get profile info, etc
 	getById(id: string) {
-		if (this.user.role == "admin")
-			return this.http.get<User[]>(`${environment.apiUrl}/users/${id}`);
+		return this.http.get<User[]>(`${environment.apiUrl}/users/${id}`);
 	}
-
-	update(id, params) {}
-
-	delete(id: string) {}
 }

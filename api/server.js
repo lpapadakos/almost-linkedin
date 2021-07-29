@@ -37,7 +37,7 @@ server.use((req, res, next) => {
 });
 
 // Set API endpoint routes
-server.use('/users', require('./routes/user.routes'));
+server.use('/user', require('./routes/user.routes'));
 server.use('/admin', require('./routes/admin.routes'));
 
 // Start the server (HTTPS)

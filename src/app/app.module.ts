@@ -9,6 +9,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 /* Angular Material */
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatInputModule } from '@angular/material/input';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatCardModule } from '@angular/material/card';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatIconModule } from '@angular/material/icon';
@@ -65,6 +66,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		BrowserAnimationsModule,
 		MatToolbarModule,
 		MatInputModule,
+		MatCheckboxModule,
 		MatCardModule,
 		MatMenuModule,
 		MatIconModule,
