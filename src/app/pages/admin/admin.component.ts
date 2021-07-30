@@ -21,4 +21,16 @@ export class AdminComponent implements OnInit {
 	ngOnInit(): void {
 		this.adminService.getAll().subscribe((users) => (this.users = users));
 	}
+
+	isAllSelected() {
+		return this.selection.selected.length === this.users.length;
+	}
+
+	masterToggle() {
+		this.isAllSelected() ? this.selection.clear() : this.users.forEach(user => this.selection.select(user));
+	}
+
+	extractUserData(fileType: String) {
+		// TODO send ids to path, extract
+	}
 }

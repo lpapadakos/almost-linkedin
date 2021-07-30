@@ -1,18 +1,28 @@
 const jwt = require("jsonwebtoken");
-const config = require('../config');
 
-module.exports = (req, res, next) => {
+const config = require('../config');
+const User = require("../models/user.model");
+
+module.exports = async (req, res, next) => {
 	// First string is "Bearer", next is JWT token
+	if (!req.headers.authorization)
+		return res.status(401).json({ error: "Δεν δόθηκε token" });
+
 	let token = req.headers.authorization.split(" ")[1];
 
-	if (!token)
-		return res.status(401).json({ error: "Δεν δόθηκε JWT token" });
-
-	jwt.verify(token, config.TOKEN_SECRET, (err, decoded) => {
-		if (err)
-			return res.status(401).json({ error: "Μη έγκυρο JWT token" });
-
+	try {
+		let decoded = await jwt.verify(token, config.TOKEN_SECRET);
 		req.userId = decoded.id;
-		next();
-	});
+
+		// Check admin routes for authorization as well
+		if (req.originalUrl.startsWith("/admin")) {
+			const possibleAdmin = await User.findById(req.userId);
+			if (!possibleAdmin || possibleAdmin.role != "admin")
+				return res.status(403).json({ error: "Διαθέσιμο μόνο για διαχειριστές" });
+		}
+	} catch (err) {
+		return res.status(401).json({ error: err.message });
+	}
+
+	next();
 };
