@@ -16,6 +16,7 @@ export class NavComponent implements OnInit {
 	constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {
 		this.pages = [
 			{
+				icon: "home",
 				label: "Αρχική Σελίδα",
 				link: "/home"
 			},

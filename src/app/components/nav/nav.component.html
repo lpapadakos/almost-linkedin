@@ -1,13 +1,17 @@
 <mat-toolbar color="primary">
 	<span id="logo">AlmostLinkedIn</span>
 	<div *ngIf="user && user.role == 'user'">
-		<a *ngFor="let page of pages" mat-flat-button color="primary" routerLink="{{page.link}}" routerLinkActive="mat-accent">{{page.label}}</a>
+		<a *ngFor="let page of pages" mat-flat-button color="primary" routerLink="{{page.link}}" routerLinkActive="mat-accent">
+			<mat-icon *ngIf="page.icon">{{page.icon}}</mat-icon>{{page.label}}
+		</a>
 	</div>
 	<!--  Right Align after this  -->
 	<span class="flexExpand"></span>
-	<button *ngIf="user && user.role == 'admin'" mat-raised-button color="accent" routerLink="/admin">Διαχείριση Χρηστών</button>
-	<button *ngIf="user" mat-raised-button color="warn" (click)="logout()">Αποσύνδεση</button>
+	<div class="left">
+		<a *ngIf="!user" mat-flat-button color="primary" routerLink="/login">Σύνδεση</a>
+		<a *ngIf="!user" mat-raised-button color="accent" routerLink="/register">ΕΓΓΡΑΦΗ</a>
 
-	<button *ngIf="!user" mat-flat-button color="primary" routerLink="/login">Σύνδεση</button>
-	<button *ngIf="!user" mat-raised-button color="accent" routerLink="/register">ΕΓΓΡΑΦΗ</button>
+		<a *ngIf="user && user.role == 'admin'" mat-raised-button color="accent" routerLink="/admin">Διαχείριση Χρηστών</a>
+		<button *ngIf="user" mat-raised-button color="warn" (click)="logout()">Αποσύνδεση</button>
+	</div>
 </mat-toolbar>

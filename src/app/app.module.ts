@@ -7,19 +7,22 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
 /* Angular Material */
-import { MatToolbarModule } from '@angular/material/toolbar';
-import { MatInputModule } from '@angular/material/input';
-import { MatCheckboxModule } from '@angular/material/checkbox';
-import { MatCardModule } from '@angular/material/card';
-import { MatMenuModule } from '@angular/material/menu';
-import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
-import { MatTableModule } from '@angular/material/table';
+import { MatCardModule } from '@angular/material/card';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
-import { MatSlideToggleModule } from '@angular/material/slide-toggle';
-import { MatSelectModule } from '@angular/material/select';
+import { MatIconModule } from '@angular/material/icon';
+import { MatInputModule } from '@angular/material/input';
+import { MatListModule } from '@angular/material/list';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatOptionModule } from '@angular/material/core';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
+import { MatSelectModule } from '@angular/material/select';
+import { MatSidenavModule } from '@angular/material/sidenav';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatSortModule } from '@angular/material/sort';
+import { MatTableModule } from '@angular/material/table';
+import { MatToolbarModule } from '@angular/material/toolbar';
 
 import { ErrorInterceptor } from './interceptors/error.interceptor';
 import { JwtInterceptor } from './interceptors/jwt.interceptor';
@@ -64,19 +67,22 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		FormsModule,
 		ReactiveFormsModule,
 		BrowserAnimationsModule,
-		MatToolbarModule,
-		MatInputModule,
-		MatCheckboxModule,
-		MatCardModule,
-		MatMenuModule,
-		MatIconModule,
 		MatButtonModule,
-		MatTableModule,
+		MatCardModule,
+		MatCheckboxModule,
 		MatDividerModule,
-		MatSlideToggleModule,
-		MatSelectModule,
+		MatIconModule,
+		MatInputModule,
+		MatListModule,
+		MatMenuModule,
 		MatOptionModule,
-		MatProgressSpinnerModule
+		MatProgressSpinnerModule,
+		MatSelectModule,
+		MatSidenavModule,
+		MatSlideToggleModule,
+		MatSortModule,
+		MatTableModule,
+		MatToolbarModule
 	],
 	providers: [
 		{ provide: HTTP_INTERCEPTORS, useClass: JwtInterceptor, multi: true },

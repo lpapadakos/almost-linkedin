@@ -2,10 +2,14 @@
 	margin-right: 20px;
 }
 
+mat-icon {
+	vertical-align: middle;
+}
+
 .flexExpand {
 	flex: 1 1 auto;
 }
 
-button {
+#left * {
 	margin-left: 0.5em;
 }

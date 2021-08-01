@@ -9,6 +9,15 @@ body {
 	font-family: "Open Sans", Roboto, "Helvetica Neue", sans-serif;
 }
 
+mat-sidenav {
+	width: 20%;
+}
+
+.container {
+	width: 70%;
+	margin: 2em auto;
+}
+
 mat-form-field {
 	width: 100%;
 }

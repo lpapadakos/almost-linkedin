@@ -1,1 +1,25 @@
-<p>POSTS HERE BITCH!</p>
+<mat-sidenav-container>
+	<mat-sidenav #sidenav opened [disableClose]="true" mode="side">
+		<a routerLink="/profile">
+			<!-- TODO <img> -->
+			<h1>{{user.name}}</h1>
+		</a>
+		<mat-list>
+			<mat-list-item><mat-icon>email</mat-icon> {{user.email}}</mat-list-item>
+		</mat-list>
+		<a routerLink="/network"><mat-icon></mat-icon> Το Δίκτυό μου</a>
+		<!-- TODO idea: top 5 friends by interactions -->
+	</mat-sidenav>
+	<section>
+		<div class="container">
+			<mat-card>
+				<mat-card-header>
+					TITLE
+				</mat-card-header>
+				<mat-card-content>
+					<p>Some text, probably</p>
+				</mat-card-content>
+			</mat-card>
+		</div>
+	</section>
+</mat-sidenav-container>

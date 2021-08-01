@@ -1,6 +1,4 @@
-mat-card {
-	display: block;
-	margin: 1.5em auto;
+.container {
 	width: 50%;
 }
 

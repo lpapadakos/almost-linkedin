@@ -1,4 +1,4 @@
-<div id="container">
+<div class="container">
 	<div id="extract-buttons">
 		<button mat-raised-button color="primary"
 			[disabled]="!selection.hasValue()"
@@ -7,7 +7,8 @@
 			[disabled]="!selection.hasValue()"
 			(click)="extractUserData('json')">Εξαγωγή επιλεγμένων σε JSON</button>
 	</div>
-	<mat-table [dataSource]="users" matSort  class="mat-elevation-z8">
+	<!-- TODO sort data? and SEARCH BAR -->
+	<mat-table [dataSource]="users" matSort class="mat-elevation-z8">
 		<!-- Checkbox Column -->
 		<ng-container matColumnDef="select">
 			<mat-header-cell *matHeaderCellDef>
@@ -32,15 +33,21 @@
 		</ng-container>
 		<ng-container matColumnDef="name">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Όνοματεπώνυμο</mat-header-cell>
-			<mat-cell *matCellDef="let row">{{row.name}}</mat-cell>
+			<mat-cell *matCellDef="let row">{{row.name}}
+				<a fxFlexFill [routerLink]="'/profile/' + row._id" class="mat-row-link"></a>
+			</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="email">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Διεύθυνση Email</mat-header-cell>
-			<mat-cell *matCellDef="let row">{{row.email}}</mat-cell>
+			<mat-cell *matCellDef="let row">{{row.email}}
+				<a fxFlexFill [routerLink]="'/profile/' + row._id" class="mat-row-link"></a>
+			</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="joinDate">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Ημερομηνία Εγγραφής</mat-header-cell>
-			<mat-cell *matCellDef="let row">{{row.joinDate}}</mat-cell>
+			<mat-cell *matCellDef="let row">{{row.joinDate}}
+				<a fxFlexFill [routerLink]="'/profile/' + row._id" class="mat-row-link"></a>
+			</mat-cell>
 		</ng-container>
 
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
