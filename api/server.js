@@ -31,7 +31,7 @@ mongoose.connection.on('error', err => {
 server.use((req, res, next) => {
 	res.header(
 		"Access-Control-Allow-Headers",
-		"x-access-token, Origin, Content-Type, Accept"
+		"Authorization, Origin, Content-Type, Accept"
 	);
 	next();
 });
@@ -39,6 +39,7 @@ server.use((req, res, next) => {
 // Set API endpoint routes
 server.use('/user', require('./routes/user.routes'));
 server.use('/admin', require('./routes/admin.routes'));
+server.use('/article', require('./routes/article.routes'));
 
 // Start the server (HTTPS)
 https.createServer(httpsOptions, server).listen(config.LISTEN_PORT, () => {
