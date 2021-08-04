@@ -11,7 +11,8 @@ exports.register = async (req, res) => {
 			name: req.body.name,
 			email: req.body.email,
 			password: await bcrypt.hash(req.body.password, 10),
-			phone: req.body.phone
+			phone: req.body.phone,
+			img: req.file.filename
 		});
 
 		await user.save();
@@ -37,6 +38,7 @@ exports.login = async (req, res) => {
 			name: user.name,
 			email: user.email,
 			role: user.role,
+			img: user.img,
 			joinDate: user.joinDate,
 			token: await jwt.sign({ id: user._id }, config.TOKEN_SECRET, { expiresIn: '1d' })
 		});

@@ -4,10 +4,14 @@ const { body } = require('express-validator');
 
 const validationHandler = require("../middlewares/validationHandler");
 const verifyToken = require("../middlewares/verifyToken");
+const upload = require('../middlewares/multerStorage.js');
 
 const controller = require("../controllers/user.controller");
 
-router.post("/register", [
+router.post("/register", upload.single("image"), (req, res, next) => {
+	req.body = JSON.parse(req.body.user);
+	next();
+}, [
 	body('name', "Παρακαλώ εισάγετε το ονοματεπώνυμό σας").exists(),
 	body('email', "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail(),
 	body('phone', "Παρακαλώ εισάγετε έναν έγκυρο αριθμό τηλεφώνου").isMobilePhone().optional({ nullable: true, checkFalsy: true }),
@@ -19,7 +23,6 @@ router.post("/login", [
 ], validationHandler, controller.login);
 
 // TODO these profile GET/POSTs
-// router.post("/profile/upload", verifyToken, controller.uploadImage);
 // router.get("/profile", verifyToken, controller.getProfile);
 // router.put("/profile", verifyToken, controller.updateProfile);
 

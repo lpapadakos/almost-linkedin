@@ -14,7 +14,9 @@ export class RegisterComponent implements OnInit {
 	public registerForm: FormGroup;
 	public error = '';
 	//TODO returnurl needed?
-	private returnUrl: string;
+	private returnUrl: String;
+	userImage: File | null = null;
+	imageData: any;
 
 	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private userService: UserService) {
 		this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
@@ -52,11 +54,22 @@ export class RegisterComponent implements OnInit {
 		});
 	}
 
+	onFileChange(event): void {
+		if (event.target.files && event.target.files[0]) {
+			this.userImage = event.target.files[0];
+
+			const reader = new FileReader();
+			reader.onload = e => this.imageData = reader.result;
+
+			reader.readAsDataURL(this.userImage);
+		}
+	}
+
 	onSubmit() {
 		if (this.registerForm.invalid)
 			return;
 
-		this.userService.register(this.registerForm.value)
+		this.userService.register(this.registerForm.value, this.userImage)
 			.pipe(first())
 			.subscribe({
 				next: () => {

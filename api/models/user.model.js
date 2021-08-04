@@ -13,10 +13,7 @@ const userSchema = mongoose.Schema({
 	email: { type: String, required: true, unique: true },
 	password: { type: String, required: true },
 	phone: String,
-	img: {
-		data: Buffer,
-		contentType: String
-	},
+	img: String,
 	role: { type: String, enum: ['user', 'admin'], default: 'user' },
 	joinDate: { type: Date, default: Date.now },
 	experience: {

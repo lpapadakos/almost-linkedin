@@ -40,8 +40,14 @@ export class UserService { // TODO Rename to user service?
 		this.userSubject.next(null);
 	}
 
-	register(user: User) {
-		return this.http.post(`${environment.apiUrl}/user/register`, user);
+	register(user: User, img: File) {
+		const formData = new FormData();
+		formData.append("user", JSON.stringify(user));
+
+		if (img)
+			formData.append("image", img);
+
+		return this.http.post(`${environment.apiUrl}/user/register`, formData);
 	}
 
 	// To get profile info, etc

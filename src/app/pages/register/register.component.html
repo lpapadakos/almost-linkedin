@@ -15,11 +15,11 @@
 				<input matInput type="tel" placeholder="Αριθμός Τηλεφώνου" formControlName="phone" />
 				<mat-error>Παρακαλώ εισάγετε έναν έγκυρο αριθμό τηλεφώνου</mat-error>
 			</mat-form-field>
-			<!-- TODO add image upload on register
 			<div id="fileArea">
-				<input #imgInput hidden type="file" formControlName="img" accept="image/*" />
+				<input #imgInput hidden type="file" accept="image/*" (change)="onFileChange($event)" />
 				<button mat-raised-button color="primary" (click)="imgInput.click()">Επιλογή μιας εικόνας προφίλ</button>
-			</div> -->
+				<img [src]="imageData" />
+			</div>
 			<mat-form-field>
 				<input matInput type="password" placeholder="Κωδικός Πρόσβασης" formControlName="password" required />
 				<mat-error>Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες</mat-error>

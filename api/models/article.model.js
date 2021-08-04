@@ -9,7 +9,7 @@ const commentSchema = mongoose.Schema({
 const articleSchema = mongoose.Schema({
 	userId: { type: mongoose.Types.ObjectId, ref: 'User' },
 	text: String,
-	media: [String], // Filenames in gridfs or sth?
+	media: [String], // filenames in uploads/
 	postDate: { type: Date, default: Date.now },
 	interestNotes: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
 	comments: [commentSchema]

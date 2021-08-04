@@ -1,7 +1,7 @@
 <mat-sidenav-container>
 	<mat-sidenav #sidenav opened [disableClose]="true" mode="side">
 		<a routerLink="/profile">
-			<!-- TODO <img> -->
+			<img *ngIf="user.img" src="{{environment.apiUrl}}/file/{{user.img}}" />
 			<h1>{{user.name}}</h1>
 		</a>
 		<mat-list>
