@@ -1,3 +1,9 @@
+export class Entry {
+	where: string;
+	what: string;
+	fromYear: number;
+	toYear: number;
+};
 export class User {
 	_id: string;
 	name: string;
@@ -6,4 +12,7 @@ export class User {
 	role: string;
 	joinDate: Date;
 	token?: string;
+	experience: [Entry];
+	education: [Entry];
+	skills: [string];
 }

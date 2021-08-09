@@ -4,7 +4,7 @@ const { body } = require('express-validator');
 
 const validationHandler = require("../middlewares/validationHandler");
 const verifyToken = require("../middlewares/verifyToken");
-const upload = require('../middlewares/multerStorage.js');
+const upload = require('../middlewares/multerStorage');
 
 const controller = require("../controllers/user.controller");
 

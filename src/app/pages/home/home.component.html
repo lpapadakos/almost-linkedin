@@ -1,7 +1,7 @@
 <mat-sidenav-container>
 	<mat-sidenav #sidenav opened [disableClose]="true" mode="side">
 		<a routerLink="/profile">
-			<img *ngIf="user.img" src="{{environment.apiUrl}}/file/{{user.img}}" />
+			<img *ngIf="user.img" [src]="environment.apiUrl + '/file/' + user.img | secure | async" />
 			<h1>{{user.name}}</h1>
 		</a>
 		<mat-list>
@@ -13,12 +13,34 @@
 	<section>
 		<div class="container">
 			<mat-card>
-				<mat-card-header>
-					TITLE
-				</mat-card-header>
 				<mat-card-content>
-					<p>Some text, probably</p>
+					<form [formGroup]="articleForm" (ngSubmit)="onPost()">
+						<mat-error *ngIf="error">{{error}}</mat-error>
+						<mat-form-field>
+							<mat-label>Ανάρτηση άρθρου</mat-label>
+ 							<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
+							<textarea matInput placeholder="Τι σκέφτεστε;" formControlName="text" required></textarea>
+						</mat-form-field>
+						<label for="media">Μπορείτε να επισυνάψετε αρχεία πολυμέσων: </label>
+						<input id="media" type="file" multiple accept="image/*,audio/*,video/*" formControlName="media" (change)="onFileChange($event)" />
+						<mat-card-actions>
+							<button mat-raised-button type="submit" color="primary">Δημοσίευση</button>
+						</mat-card-actions>
+					</form>
 				</mat-card-content>
+			</mat-card>
+			<mat-card *ngFor="let article of articles">
+				<mat-card-title-group>
+					<img mat-card-sm-image [src]="environment.apiUrl + '/file/' + article.poster.img | secure | async" />
+					<a mat-card-title [routerLink]="'/profile/' + article.poster._id">{{article.poster.name}}</a>
+					<mat-card-subtitle>{{article.postDate | timeAgo}}</mat-card-subtitle>
+				</mat-card-title-group>
+				<mat-card-content>
+					<p>{{article.text}}</p>
+				</mat-card-content>
+				<mat-card-actions>
+					<button mat-button class="like" [ngClass]="{ 'mat-primary': article.interestNotes.includes(user._id) }" (click)="like(article)"><mat-icon>thumb_up</mat-icon> Σημείωση Ενδιαφέροντος</button>
+				</mat-card-actions>
 			</mat-card>
 		</div>
 	</section>
