@@ -24,11 +24,12 @@ import { MatSortModule } from '@angular/material/sort';
 import { MatTableModule } from '@angular/material/table';
 import { MatToolbarModule } from '@angular/material/toolbar';
 
-import { ErrorInterceptor } from './interceptors/error.interceptor';
-import { JwtInterceptor } from './interceptors/jwt.interceptor';
+import { ErrorInterceptor } from './helpers/error.interceptor';
+import { JwtInterceptor } from './helpers/jwt.interceptor';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
+import { SecurePipe } from './helpers/secure.pipe';
 
 /* Pages (Routes) */
 import { AdminComponent } from './pages/admin/admin.component';
@@ -57,7 +58,8 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		ProfileComponent,
 		SettingsComponent,
 		NotFoundComponent,
-		AdminComponent
+		AdminComponent,
+		SecurePipe
 	],
 	imports: [
 		BrowserModule,
