@@ -11,10 +11,6 @@ import { Article } from '../models/article.model';
 export class ArticleService {
 	constructor(private http: HttpClient) {}
 
-	get(): Observable<any> {
-		return this.http.get(`${environment.apiUrl}/article`);
-	}
-
 	post(text: string, files: File[]) {
 		const formData = new FormData();
 
@@ -23,10 +19,18 @@ export class ArticleService {
 		if (files)
 			files.forEach(file => formData.append("media", file));
 
-		return this.http.post(`${environment.apiUrl}/article`, formData);
+		return this.http.post(`${environment.apiUrl}/articles`, formData);
 	}
 
-	// like(articleId: string) {
-	// 	return this.http.put(`${environment.apiUrl}/article/${articleId}/like`);
-	// }
+	get(): Observable<any> {
+		return this.http.get(`${environment.apiUrl}/articles`);
+	}
+
+	like(articleId: string) {
+	 	return this.http.post(`${environment.apiUrl}/articles/${articleId}/like`, {});
+	}
+
+	unlike(articleId: string) {
+		return this.http.delete(`${environment.apiUrl}/articles/${articleId}/like`);
+	}
 }

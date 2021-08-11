@@ -47,9 +47,8 @@ server.get("/file/:id", require("./middlewares/verifyToken"), (req, res) => {
 	});
 });
 
-server.use('/user', require('./routes/user.routes'));
-server.use('/admin', require('./routes/admin.routes'));
-server.use('/article', require('./routes/article.routes'));
+server.use('/users', require('./routes/users.routes'));
+server.use('/articles', require('./routes/articles.routes'));
 
 // Start the server (HTTPS)
 https.createServer(httpsOptions, server).listen(config.LISTEN_PORT, () => {

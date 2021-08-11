@@ -25,7 +25,7 @@ export class UserService { // TODO Rename to user service?
 	}
 
 	login(email: string, password: string) {
-		return this.http.post<any>(`${environment.apiUrl}/user/login`, { email, password })
+		return this.http.post<any>(`${environment.apiUrl}/users/login`, { email, password })
 			.pipe(map(user => {
 				// store user details and jwt token in local storage to keep user logged in between page refreshes
 				localStorage.setItem('user', JSON.stringify(user));
@@ -47,7 +47,7 @@ export class UserService { // TODO Rename to user service?
 		if (img)
 			formData.append("image", img);
 
-		return this.http.post(`${environment.apiUrl}/user/register`, formData);
+		return this.http.post(`${environment.apiUrl}/users/register`, formData);
 	}
 
 	// To get profile info, etc

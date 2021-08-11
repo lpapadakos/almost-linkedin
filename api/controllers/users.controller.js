@@ -48,12 +48,11 @@ exports.login = async (req, res) => {
 };
 
 // Used for profile info
-exports.getProfile = async (req, res) => {
+exports.getById = async (req, res) => {
 	try {
-		// If the use id has not been provided, assume the requester's id
-		let userId = req.params.id || req.userId;
+		const user = await User.findById(req.params.userId, '_id name email phone joinDate experience education skills');
 
-		const user = await User.findById(userId, '_id name email phone joinDate experience education skills');
+		// TODO find if friend to hide private info etc
 
 		if (user)
 			res.status(200).json(user);
@@ -62,4 +61,16 @@ exports.getProfile = async (req, res) => {
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η αναζήτηση προφίλ χρήστη: " + err });
 	}
+}
+
+exports.getAll = async (req, res) => {
+	// Send the properties we want to be seen in the admin table, for all users
+	res.status(200).json(await User.find({ role: "user" }, '_id name email joinDate'));
+}
+
+exports.export = async (req, res) => {
+	const type = req.query.type || "xml";
+
+	console.log(type);
+	// TODO export users that were requested, XML/JSON
 }

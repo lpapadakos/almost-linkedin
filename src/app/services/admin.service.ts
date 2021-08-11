@@ -13,6 +13,6 @@ export class AdminService {
 
 	getAll() {
 		if (this.userService.user.role == "admin")
-			return this.http.get<User[]>(`${environment.apiUrl}/admin/list`);
+			return this.http.get<User[]>(`${environment.apiUrl}/users`);
 	}
 }

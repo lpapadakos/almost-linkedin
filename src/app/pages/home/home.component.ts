@@ -64,24 +64,31 @@ export class HomeComponent implements OnInit {
 		return article.interestNotes.find(u => u._id === user._id) != undefined;
 	}
 
+	// TODO Like, comment, delete post
 	toggleInterest(article: Article) {
 		const interestFlag = !this.isInterested(this.user, article);
 
-	// 	this.articleService.like(article._id, interestflag).subscribe({
-	// 		next: () => {
-				if (interestFlag) {
+		if (interestFlag) {
+			this.articleService.like(article._id).subscribe({
+				next: () => {
 					article.interestNotes.push(this.user);
-				} else {
+				},
+				error: (error) => {
+					this.error = error;
+				},
+			});
+		} else {
+			this.articleService.unlike(article._id).subscribe({
+				next: () => {
 					const index = article.interestNotes.findIndex(u => u._id === this.user._id);
 					if (index > -1)
 						article.interestNotes.splice(index, 1);
-				}
-
-	// 		},
-	// 		error: (error) => {
-	// 			this.error = error;
-	// 		},
-	// 	});
+				},
+				error: (error) => {
+					this.error = error;
+				},
+			});
+		}
 	}
 
 	// comment(article: Article, text: string) {
