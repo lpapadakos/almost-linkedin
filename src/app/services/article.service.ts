@@ -11,11 +11,11 @@ import { Article } from '../models/article.model';
 export class ArticleService {
 	constructor(private http: HttpClient) {}
 
-	getArticles(): Observable<any> {
+	get(): Observable<any> {
 		return this.http.get(`${environment.apiUrl}/article`);
 	}
 
-	postArticle(text: string, files: File[]) {
+	post(text: string, files: File[]) {
 		const formData = new FormData();
 
 		formData.append("text", text);
@@ -25,4 +25,8 @@ export class ArticleService {
 
 		return this.http.post(`${environment.apiUrl}/article`, formData);
 	}
+
+	// like(articleId: string) {
+	// 	return this.http.put(`${environment.apiUrl}/article/${articleId}/like`);
+	// }
 }

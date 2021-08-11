@@ -9,7 +9,10 @@ const commentSchema = mongoose.Schema({
 const articleSchema = mongoose.Schema({
 	poster: { type: mongoose.Types.ObjectId, ref: 'User' },
 	text: String,
-	media: [String], // filenames in uploads/
+	media: [{
+		id: { type: String },
+		type: { type: String }
+	}],
 	postDate: { type: Date, default: Date.now },
 	interestNotes: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
 	comments: [commentSchema]

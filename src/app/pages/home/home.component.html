@@ -1,7 +1,7 @@
 <mat-sidenav-container>
-	<mat-sidenav #sidenav opened [disableClose]="true" mode="side">
-		<a routerLink="/profile">
-			<img *ngIf="user.img" [src]="environment.apiUrl + '/file/' + user.img | secure | async" />
+	<mat-sidenav #sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
+		<a class="profile-area" routerLink="/profile">
+			<img mat-card-avatar *ngIf="user.img" [src]="environment.apiUrl + '/file/' + user.img | secure | async" />
 			<h1>{{user.name}}</h1>
 		</a>
 		<mat-list>
@@ -10,16 +10,16 @@
 		<a routerLink="/network"><mat-icon></mat-icon> Το Δίκτυό μου</a>
 		<!-- TODO idea: top 5 friends by interactions -->
 	</mat-sidenav>
-	<section>
+	<mat-sidenav-content>
 		<div class="container">
 			<mat-card>
 				<mat-card-content>
 					<form [formGroup]="articleForm" (ngSubmit)="onPost()">
 						<mat-error *ngIf="error">{{error}}</mat-error>
+						<h2>Ανάρτηση άρθρου</h2>
 						<mat-form-field>
-							<mat-label>Ανάρτηση άρθρου</mat-label>
  							<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
-							<textarea matInput placeholder="Τι σκέφτεστε;" formControlName="text" required></textarea>
+							<textarea matInput matTextareaAutosize placeholder="Τι σκέφτεστε;" formControlName="text" required></textarea>
 						</mat-form-field>
 						<label for="media">Μπορείτε να επισυνάψετε αρχεία πολυμέσων: </label>
 						<input id="media" type="file" multiple accept="image/*,audio/*,video/*" formControlName="media" (change)="onFileChange($event)" />
@@ -33,15 +33,35 @@
 				<mat-card-title-group>
 					<img mat-card-sm-image [src]="environment.apiUrl + '/file/' + article.poster.img | secure | async" />
 					<a mat-card-title [routerLink]="'/profile/' + article.poster._id">{{article.poster.name}}</a>
-					<mat-card-subtitle>{{article.postDate | timeAgo}}</mat-card-subtitle>
+					<mat-card-subtitle>{{article.postDate}}</mat-card-subtitle>
 				</mat-card-title-group>
 				<mat-card-content>
-					<p>{{article.text}}</p>
+					<p class="article-text">{{article.text}}</p>
+					<div class="article-media">
+						<div *ngFor="let file of article.media">
+							<img *ngIf="file.type.startsWith('image')" [src]="environment.apiUrl + '/file/' + file.id | secure | async" />
+							<audio controls *ngIf="file.type.startsWith('audio')" [src]="environment.apiUrl + '/file/' + file.id | secure | async">
+								Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{file.type}}
+							</audio>
+							<video controls *ngIf="file.type.startsWith('video')" [src]="environment.apiUrl + '/file/' + file.id | secure | async">
+								Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{file.type}}
+							</video>
+						</div>
+					</div>
 				</mat-card-content>
 				<mat-card-actions>
-					<button mat-button class="like" [ngClass]="{ 'mat-primary': article.interestNotes.includes(user._id) }" (click)="like(article)"><mat-icon>thumb_up</mat-icon> Σημείωση Ενδιαφέροντος</button>
+					<button mat-button class="like" [ngClass]="{ 'mat-primary': isInterested(user, article) }" (click)="toggleInterest(article)">
+						<mat-icon>thumb_up</mat-icon> Σημείωση Ενδιαφέροντος
+					</button>
+					<span *ngIf="article.interestNotes.length > 0">{{article.interestNotes.length}} χρήστες βρήκαν το άρθρο ενδιαφέρον</span>
+					<button class="delete-article" *ngIf="article.poster._id === user._id" mat-button color="warn">
+						<mat-icon>delete_forever</mat-icon> Διαγραφή Άρθρου
+					</button>
 				</mat-card-actions>
+				<section class="comments">
+					<input type="text" #comment matInput placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article, $event.target.value)" />
+				</section>
 			</mat-card>
 		</div>
-	</section>
+	</mat-sidenav-content>
 </mat-sidenav-container>

@@ -4,18 +4,21 @@ const Contact = require("../models/contact.model");
 exports.postArticle = async (req, res) => {
 	try {
 		// role is not defined during registration. It's 'user'. Admin is preinstalled
-		const article = new Article({
+		let article = new Article({
 			poster: req.userId,
 			text: req.body.text
 		});
 
 		// Save ids of any uploaded media (photos, e.t.c.)
 		article.media = req.files.map(file => {
-			return file.filename;
+			return {
+				id: file.filename,
+				type: file.mimetype
+			}
 		});
 
 		await article.save();
-		res.status(201).json({ message: "Επιτυχής ανάρτηση άρθρου" });
+		res.status(201).json(article);
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η ανάρτηση άρθρου: " + err });
 	}

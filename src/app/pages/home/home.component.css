@@ -1,10 +1,62 @@
 mat-sidenav {
 	text-align: center;
-	height: 100vh;
+}
+
+.profile-area {
+	display: block;
+	padding: 1em;
+}
+
+.profile-area img {
+	width: 70%;
+	height: auto;
 }
 
 textarea { width: 100% }
 
 mat-card {
 	margin: 2em auto;
+	padding: 0;
+}
+
+mat-card-title-group {
+	padding: 16px 16px 0;
+}
+
+mat-card-content {
+	padding: 16px;
+	margin: 0;
+}
+
+.article-text {
+	white-space: pre-wrap;
+	text-align: justify;
+}
+
+.article-media * {
+	max-width: 100%;
+	margin: 0.5em 0;
+}
+
+mat-card-actions {
+	margin: 0;
+}
+
+mat-card-actions span {
+	font-size: 0.8em;
+}
+
+.delete-article {
+	float: right;
+}
+
+.comments {
+	padding: 16px;
+	background-color: #eee;
+}
+
+.comments input {
+	box-sizing: border-box;
+	background-color: white;
+	padding: 8px;
 }

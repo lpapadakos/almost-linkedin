@@ -1,4 +1,5 @@
 export class Entry {
+	_id: string;
 	where: string;
 	what: string;
 	fromYear: number;
