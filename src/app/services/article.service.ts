@@ -22,8 +22,12 @@ export class ArticleService {
 		return this.http.post(`${environment.apiUrl}/articles`, formData);
 	}
 
-	get(): Observable<any> {
+	getAll(): Observable<any> {
 		return this.http.get(`${environment.apiUrl}/articles`);
+	}
+
+	delete(articleId: string) {
+		return this.http.delete(`${environment.apiUrl}/articles/${articleId}`);
 	}
 
 	like(articleId: string) {
@@ -32,5 +36,13 @@ export class ArticleService {
 
 	unlike(articleId: string) {
 		return this.http.delete(`${environment.apiUrl}/articles/${articleId}/like`);
+	}
+
+	comment(articleId: string, text: string) {
+		return this.http.post(`${environment.apiUrl}/articles/${articleId}/comment`, { text });
+	}
+
+	deleteComment(articleId: string, commentId: string) {
+		return this.http.delete(`${environment.apiUrl}/articles/${articleId}/comment/${commentId}`);
 	}
 }

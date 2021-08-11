@@ -42,16 +42,16 @@ mat-card-actions {
 	margin: 0;
 }
 
-mat-card-actions span {
+span {
 	font-size: 0.8em;
 }
 
-.delete-article {
+.delete-area {
 	float: right;
 }
 
 .comments {
-	padding: 16px;
+	padding: 16px 16px 0;
 	background-color: #eee;
 }
 
@@ -59,4 +59,33 @@ mat-card-actions span {
 	box-sizing: border-box;
 	background-color: white;
 	padding: 8px;
+	margin-bottom: 16px;
+}
+
+.comment {
+	display: flex;
+	margin: 0.5em 0;
+}
+
+.comment > * {
+	vertical-align: middle;
+	padding: 5px;
+}
+
+.comment-header {
+	margin-right: 0.5em;
+}
+
+.comment-header a {
+	font-size: 1em;
+}
+
+.comment-header mat-card-subtitle {
+	font-size: 0.8em;
+	margin: 0;
+}
+
+.comment p {
+	border-left: 1px solid #ccc;
+	padding-left: 0.5em;
 }

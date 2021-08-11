@@ -51,15 +51,42 @@
 				</mat-card-content>
 				<mat-card-actions>
 					<button mat-button class="like" [ngClass]="{ 'mat-primary': isInterested(user, article) }" (click)="toggleInterest(article)">
-						<mat-icon>thumb_up</mat-icon> Σημείωση Ενδιαφέροντος
+						<mat-icon>thumb_up</mat-icon> {{ isInterested(user, article) ? 'Σας ενδιαφέρει' : 'Σημείωση Ενδιαφέροντος' }}
 					</button>
 					<span *ngIf="article.interestNotes.length > 0">{{article.interestNotes.length}} χρήστες βρήκαν το άρθρο ενδιαφέρον</span>
-					<button class="delete-article" *ngIf="article.poster._id === user._id" mat-button color="warn">
-						<mat-icon>delete_forever</mat-icon> Διαγραφή Άρθρου
-					</button>
+					<div *ngIf="article.poster._id === user._id" class="delete-area">
+						<button *ngIf="!article.delet" mat-button color="warn" (click)="article.delet = true">
+							<mat-icon>delete_forever</mat-icon> Διαγραφή Άρθρου
+						</button>
+						<span *ngIf="article.delet">
+							Σίγουρα?
+							<button mat-raised-button color="warn" (click)="delete(article)">Ναι</button>
+							<button mat-raised-button color="primary" (click)="article.delet = false">Όχι</button>
+						</span>
+					</div>
 				</mat-card-actions>
 				<section class="comments">
-					<input type="text" #comment matInput placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article, $event.target.value)" />
+					<input matInput [(ngModel)]="commentInput" type="text" placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article, $event.target.value)" />
+					<div class="comment" *ngFor="let comment of article.comments">
+						<img mat-card-avatar [src]="environment.apiUrl + '/file/' + comment.poster.img | secure | async" />
+						<div class="comment-header">
+							<a mat-card-title [routerLink]="'/profile/' + comment.poster._id">{{comment.poster.name}}</a>
+							<mat-card-subtitle>{{comment.postDate}}</mat-card-subtitle>
+						</div>
+						<p>{{comment.text}}</p>
+						<span class="flexExpand"></span>
+						<div *ngIf="comment.poster._id === user._id">
+							<button *ngIf="!comment.delet" mat-icon-button color="warn" (click)="comment.delet = true">
+								<mat-icon>delete_forever</mat-icon>
+							</button>
+							<span *ngIf="comment.delet">
+								Σίγουρα?
+								<button mat-raised-button color="warn" (click)="deleteComment(article, comment)">Ναι</button>
+								<button mat-raised-button color="primary" (click)="comment.delet = false">Όχι</button>
+							</span>
+						</div>
+					</div>
+
 				</section>
 			</mat-card>
 		</div>

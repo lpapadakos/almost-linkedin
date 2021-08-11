@@ -21,6 +21,7 @@ export class HomeComponent implements OnInit {
 	error = '';
 	user: User;
 	articles: Article[];
+	commentInput: string;
 
 	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private userService: UserService, private articleService: ArticleService) {}
 
@@ -31,7 +32,7 @@ export class HomeComponent implements OnInit {
 		});
 
 		this.userService.userEmitter().subscribe((user) => (this.user = user));
-		this.articleService.get().subscribe((articles) => (this.articles = articles));
+		this.articleService.getAll().subscribe((articles) => (this.articles = articles));
 	}
 
 	onFileChange(event) {
@@ -53,6 +54,19 @@ export class HomeComponent implements OnInit {
 
 				this.articleForm.reset();
 				this.error = '';
+			},
+			error: (error) => {
+				this.error = error;
+			},
+		});
+	}
+
+	delete(article: Article) {
+		this.articleService.delete(article._id).subscribe({
+			next: (obj) => {
+				const index = this.articles.findIndex(a => a._id === article._id);
+				if (index > -1)
+					this.articles.splice(index, 1);
 			},
 			error: (error) => {
 				this.error = error;
@@ -91,16 +105,34 @@ export class HomeComponent implements OnInit {
 		}
 	}
 
-	// comment(article: Article, text: string) {
-	// 	this.articleService.comment(article._id, text).subscribe({
-	// 		next: (obj) => {
-	// 			let comment = <Comment> obj;
-	// 			comment.poster = this.user;
- 	// 			article.comments.push(comment);
-	// 		},
-	// 		error: (error) => {
-	// 			this.error = error;
-	// 		},
-	// 	});
-	// }
+	comment(article: Article, text: string) {
+		if (!text)
+			return;
+
+		this.articleService.comment(article._id, text).subscribe({
+			next: (obj) => {
+				let comment = <Comment> obj;
+				comment.poster = this.user;
+ 				article.comments.push(comment);
+
+				this.commentInput = '';
+			},
+			error: (error) => {
+				this.error = error;
+			},
+		});
+	}
+
+	deleteComment(article: Article, comment: Comment) {
+		this.articleService.deleteComment(article._id, comment._id).subscribe({
+			next: (obj) => {
+				const index = article.comments.findIndex(c => c._id === comment._id);
+				if (index > -1)
+					article.comments.splice(index, 1);
+			},
+			error: (error) => {
+				this.error = error;
+			},
+		});
+	}
 }

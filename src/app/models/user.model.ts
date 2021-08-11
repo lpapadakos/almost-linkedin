@@ -7,12 +7,12 @@ export class Entry {
 };
 export class User {
 	_id: string;
+	token?: string;
 	name: string;
 	email: string;
 	img: string;
 	role: string;
 	joinDate: Date;
-	token?: string;
 	experience: [Entry];
 	education: [Entry];
 	skills: [string];

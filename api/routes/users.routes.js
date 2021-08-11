@@ -24,16 +24,18 @@ router.post("/login", [
 ], validationHandler, usersController.login);
 
 // Profiles
-router.get("/:userId", verifyToken, usersController.getById);
+// The same controller handler for getting single id
+router.get("/", verifyToken, usersController.get);
 //TODO router.put("/:userId", verifyToken, userController.update);
 
 // TODO Contact requests
-// router.post("/:userId/contact", verifyToken, usersController.add);
-// router.put("/:userId/contact", verifyToken, usersController.accept);
-// router.delete("/:userId/contact", verifyToken, usersController.reject);
+// router.post("/:userId/contact-requests", verifyToken, usersController.addContactRequest);
+// router.get("/:userId/contact-requests", verifyToken, usersController.getContactRequests);
+// router.put("/:userId/contact-requests/:requestId", verifyToken, usersController.acceptContactRequest);
+// router.delete("/:userId/contact-requests/:requestId", verifyToken, usersController.rejectContactRequest);
 
 // Admin stuff
-router.get("/", verifyToken, adminOnly, usersController.getAll);
+// TODO router.delete("/:userId", verifyToken, adminOnly usersController.deactivate);
 router.get("/export", verifyToken, adminOnly, usersController.export);
 
 module.exports = router;

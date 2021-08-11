@@ -1,5 +1,5 @@
-const Article = require("../models/article.model");
-const Contact = require("../models/contact.model");
+const { Article, Comment } = require("../models/article.model");
+const { Contact } = require("../models/user.model");
 
 exports.post = async (req, res) => {
 	try {
@@ -26,7 +26,10 @@ exports.post = async (req, res) => {
 
 exports.getById = async (req, res) => {
 	try {
-		const article = await Article.findById(req.params.articleId).populate("poster", "_id name img").populate("interestNotes", "_id name").populate("comments.poster", "_id name img");
+		const article = await Article.findById(req.params.articleId)
+			.populate("poster", "_id name img")
+			.populate("interestNotes", "_id name")
+			.populate("comments.poster", "_id name img");
 
 		if (article) res.status(200).json(article);
 		else res.status(404).json({ error: "Δεν βρέθηκε το άρθρο" });
@@ -37,7 +40,12 @@ exports.getById = async (req, res) => {
 
 exports.getFromUser = async (req, res) => {
 	try {
-		res.status(200).json(await Article.find({ poster: req.query.from }).sort({ postDate: "desc" }).populate("poster", "_id name img").populate("interestNotes", "_id name").populate("comments.poster", "_id name img"));
+		res.status(200).json(await Article.find({ poster: req.query.from })
+			.sort({ postDate: "desc" })
+			.sort({ "comments.postDate": "asc" })
+			.populate("poster", "_id name img")
+			.populate("interestNotes", "_id name")
+			.populate("comments.poster", "_id name img"));
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η αναζήτηση άρθρων: " + err });
 	}
@@ -70,6 +78,7 @@ exports.getAll = async (req, res) => {
 
 		const articles = await Article.find({ $or: [{ poster: { $in: authors } }, { interestNotes: { $in: authors } }] })
 			.sort({ postDate: "desc" })
+			.sort({ "comments.postDate": "asc" })
 			.populate("poster", "_id name img")
 			.populate("interestNotes", "_id name")
 			.populate("comments.poster", "_id name img");
@@ -83,7 +92,7 @@ exports.getAll = async (req, res) => {
 exports.delete = async (req, res) => {
 	try {
 		// Can only delete own articles
-		Article.deleteOne({ _id: req.params.articleId, poster: req.userId });
+		await Article.deleteOne({ _id: req.params.articleId, poster: req.userId });
 		res.status(204).json({ message: "Το άρθρο διεγράφη" });
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η διαγραφή άρθρου: " + err });
@@ -92,9 +101,8 @@ exports.delete = async (req, res) => {
 
 exports.like = async (req, res) => {
 	try {
-		// TODO Fix like not applying
-		Article.updateOne({ _id: req.params.articleId }, { $addToSet: { interestNotes: req.userId } });
-		res.status(200).json({ message: "Δηλώθηκε ενδιαφέρον για το άρθρο" });
+		await Article.updateOne({ _id: req.params.articleId }, { $addToSet: { interestNotes: req.userId } });
+		res.status(201).json({ message: "Δηλώθηκε ενδιαφέρον για το άρθρο" });
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η δήλωση ενδιαφέροντος για το άρθρο: " + err });
 	}
@@ -102,7 +110,7 @@ exports.like = async (req, res) => {
 
 exports.unlike = async (req, res) => {
 	try {
-		Article.updateOne({ _id: req.params.articleId }, { $pull: { interestNotes: req.userId } });
+		await Article.updateOne({ _id: req.params.articleId }, { $pull: { interestNotes: req.userId } });
 		res.status(204).json({ message: "Αφαιρέθηκε η δήλωση ενδιαφέροντος για το άρθρο" });
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η αφαίρεση της δήλωσης ενδιαφέροντος για το άρθρο: " + err });
@@ -111,8 +119,10 @@ exports.unlike = async (req, res) => {
 
 exports.comment = async (req, res) => {
 	try {
-		// TODO Comment
-		res.status(200).json({ message: "Προστέθηκε σχόλιο στο άρθρο" });
+		const comment = new Comment({ poster: req.userId, text: req.body.text });
+		await Article.updateOne({ _id: req.params.articleId }, { $push: { comments: comment } });
+
+		res.status(201).json(comment);
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η προσθήκη σχολίου στο άρθρο: " + err });
 	}
@@ -121,7 +131,7 @@ exports.comment = async (req, res) => {
 exports.deleteComment = async (req, res) => {
 	try {
 		// Can only delete own comments
-		Article.updateOne({ _id: req.params.articleId }, { $pull: { comments: { _id: req.params.commentId, poster: req.userId } } });
+		await Article.updateOne({ _id: req.params.articleId }, { $pull: { comments: { _id: req.params.commentId, poster: req.userId } } });
 		res.status(204).json({ message: "Αφαιρέθηκε το σχόλιο από το άρθρο" });
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η αφαίρεση του σχολίου από το άρθρο: " + err });

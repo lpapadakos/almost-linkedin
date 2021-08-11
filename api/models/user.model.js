@@ -17,19 +17,30 @@ const userSchema = mongoose.Schema({
 	role: { type: String, enum: ['user', 'admin'], default: 'user' },
 	joinDate: { type: Date, default: Date.now },
 	experience: {
-		private: { type: Boolean, default: false },
+		public: { type: Boolean, default: true },
 		entries: [entrySchema]
 	},
 	education: {
-		private: { type: Boolean, default: false },
+		public: { type: Boolean, default: false },
 		entries: [entrySchema]
 	},
 	skills: {
-		private: { type: Boolean, default: false },
+		public: { type: Boolean, default: false },
 		entries: [String]
 	}
 });
 
 userSchema.plugin(uniqueValidator, { message: "Ο χρήστης με αυτό το email υπάρχει ήδη" } );
 
-module.exports = mongoose.model("User", userSchema);
+const contactSchema = mongoose.Schema({
+	sender: { type: mongoose.Types.ObjectId, ref: 'User' },
+	receiver: { type: mongoose.Types.ObjectId, ref: 'User' },
+	accepted: { type: Boolean, default: false },
+	interactions: { type: Number, default: 0 }
+});
+
+module.exports = {
+	Entry: mongoose.model("Entry", entrySchema),
+	User: mongoose.model("User", userSchema),
+	Contact: mongoose.model("Contact", contactSchema)
+};

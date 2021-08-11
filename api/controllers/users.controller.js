@@ -2,7 +2,7 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const config = require("../config");
-const User = require("../models/user.model");
+const { User, Contact } = require("../models/user.model");
 
 exports.register = async (req, res) => {
 	try {
@@ -12,7 +12,7 @@ exports.register = async (req, res) => {
 			email: req.body.email,
 			password: await bcrypt.hash(req.body.password, 10),
 			phone: req.body.phone,
-			img: req.file.filename
+			img: req.file.filename,
 		});
 
 		await user.save();
@@ -26,12 +26,10 @@ exports.login = async (req, res) => {
 	try {
 		const user = await User.findOne({ email: req.body.email });
 
-		if (!user)
-			return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
+		if (!user) return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
 
 		const passwordMatch = await bcrypt.compare(req.body.password, user.password);
-		if (!passwordMatch)
-			return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
+		if (!passwordMatch) return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
 
 		res.status(200).json({
 			_id: user._id,
@@ -40,37 +38,65 @@ exports.login = async (req, res) => {
 			role: user.role,
 			img: user.img,
 			joinDate: user.joinDate,
-			token: await jwt.sign({ id: user._id }, config.TOKEN_SECRET, { expiresIn: '1d' })
+			token: await jwt.sign({ id: user._id }, config.TOKEN_SECRET, { expiresIn: "1d" }),
 		});
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η σύνδεση χρήστη: " + err });
 	}
 };
 
-// Used for profile info
-exports.getById = async (req, res) => {
+exports.get = async (req, res) => {
 	try {
-		const user = await User.findById(req.params.userId, '_id name email phone joinDate experience education skills');
+		let filter = { role: "user" };
 
-		// TODO find if friend to hide private info etc
+		if (req.params.userId)
+			filter._id = req.params.userId;
 
-		if (user)
-			res.status(200).json(user);
-		else
-			res.status(404).json({ error: "Δεν βρέθηκε ο χρήστης" });
+		let users = await User.find(filter, "_id name img joinDate experience education skills");
+
+		users.forEach((user) => {
+			// Find if requesting user and user we're GETting are in the same network
+			const isContact = Contact.exists({
+				$and: [
+					{ accepted: true },
+					{
+						$or: [
+							{ sender: req.userId, receiver: req.params.userId },
+							{ sender: req.params.userId, receiver: req.userId },
+						],
+					},
+				],
+			});
+
+			// Keep protected info from public view
+			if (!isContact) {
+				if (!user.experience.public)
+					delete user.experience;
+
+				if (!user.education.public)
+					delete user.education;
+
+				if (!user.skills.public)
+					delete user.skills;
+			}
+		});
+
+		if (req.params.userId) {
+			if (users)
+				return res.status(200).json(users[0]);
+			else
+				return res.status(404).json({ error: "Δεν βρέθηκε ο χρήστης" })
+		}
+
+		res.status(200).json(users);
 	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η αναζήτηση προφίλ χρήστη: " + err });
+		res.status(500).json({ error: "Απέτυχε η αναζήτηση χρηστών: " + err });
 	}
-}
-
-exports.getAll = async (req, res) => {
-	// Send the properties we want to be seen in the admin table, for all users
-	res.status(200).json(await User.find({ role: "user" }, '_id name email joinDate'));
-}
+};
 
 exports.export = async (req, res) => {
 	const type = req.query.type || "xml";
 
 	console.log(type);
 	// TODO export users that were requested, XML/JSON
-}
+};
