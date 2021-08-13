@@ -99,9 +99,30 @@ exports.delete = async (req, res) => {
 	}
 };
 
+increaseInteractionCount = (userId1, userId2) => {
+	Contact.findOne({
+		$and: [
+			{ accepted: true },
+			{
+				$or: [
+ 					{ sender: userId1, receiver: userId2 },
+					{ sender: userId2, receiver: userId1 },
+				],
+			},
+		]
+	}).then(contact => {
+		contact.interactions++;
+		contact.save();
+	}).catch(err => {
+		console.log("No contact, cannot update interactions");
+	});
+}
+
 exports.like = async (req, res) => {
 	try {
-		await Article.updateOne({ _id: req.params.articleId }, { $addToSet: { interestNotes: req.userId } });
+		const article = await Article.findByIdAndUpdate(req.params.articleId, { $addToSet: { interestNotes: req.userId } });
+		await increaseInteractionCount(req.userId, article.poster);
+
 		res.status(201).json({ message: "Δηλώθηκε ενδιαφέρον για το άρθρο" });
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η δήλωση ενδιαφέροντος για το άρθρο: " + err });
@@ -120,7 +141,9 @@ exports.unlike = async (req, res) => {
 exports.comment = async (req, res) => {
 	try {
 		const comment = new Comment({ poster: req.userId, text: req.body.text });
-		await Article.updateOne({ _id: req.params.articleId }, { $push: { comments: comment } });
+		const article = await Article.findByIdAndUpdate(req.params.articleId, { $push: { comments: comment } });
+
+		await increaseInteractionCount(req.userId, article.poster);
 
 		res.status(201).json(comment);
 	} catch (err) {

@@ -1,6 +1,7 @@
 const jwt = require("jsonwebtoken");
 
 const config = require('../config');
+const { User } = require("../models/user.model");
 
 module.exports = async (req, res, next) => {
 	if (!req.headers.authorization)
@@ -15,6 +16,11 @@ module.exports = async (req, res, next) => {
 	} catch (err) {
 		return res.status(401).json({ error: err.message });
 	}
+
+	const requestingUser = await User.findById(req.userId);
+
+	if (requestingUser && requestingUser.role !== "admin")
+		req.fromAdmin = true;
 
 	next();
 };

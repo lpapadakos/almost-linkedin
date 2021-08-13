@@ -28,11 +28,13 @@ router.post("/login", [
 router.get("/", verifyToken, usersController.get);
 //TODO router.put("/:userId", verifyToken, userController.update);
 
-// TODO Contact requests
-// router.post("/:userId/contact-requests", verifyToken, usersController.addContactRequest);
-// router.get("/:userId/contact-requests", verifyToken, usersController.getContactRequests);
-// router.put("/:userId/contact-requests/:requestId", verifyToken, usersController.acceptContactRequest);
-// router.delete("/:userId/contact-requests/:requestId", verifyToken, usersController.rejectContactRequest);
+// Contacts
+router.post("/:userId/contact-requests", verifyToken, usersController.addContactRequest);
+router.get("/:userId/contact-requests", verifyToken, usersController.getContactRequests);
+router.put("/:userId/contact-requests/:requestId", verifyToken, usersController.acceptContactRequest);
+router.delete("/:userId/contact-requests/:requestId", verifyToken, usersController.rejectContactRequest);
+
+router.get("/:userId/contacts", verifyToken, usersController.getContacts);
 
 // Admin stuff
 // TODO router.delete("/:userId", verifyToken, adminOnly usersController.deactivate);
