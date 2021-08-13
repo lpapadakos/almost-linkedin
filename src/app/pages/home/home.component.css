@@ -1,3 +1,7 @@
+mat-sidenav-container {
+	min-height: 100vh;
+}
+
 mat-sidenav {
 	text-align: center;
 }
@@ -51,7 +55,7 @@ span {
 }
 
 .comments {
-	padding: 16px 16px 0;
+	padding: 16px;
 	background-color: #eee;
 }
 
@@ -59,12 +63,12 @@ span {
 	box-sizing: border-box;
 	background-color: white;
 	padding: 8px;
-	margin-bottom: 16px;
 }
 
 .comment {
 	display: flex;
-	margin: 0.5em 0;
+	align-items: center;
+	margin-top: 16px;
 }
 
 .comment > * {

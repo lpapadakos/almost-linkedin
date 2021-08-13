@@ -6,6 +6,10 @@ mat-icon {
 	vertical-align: middle;
 }
 
-#left * {
+.left * {
 	margin-left: 0.5em;
+}
+
+.left span {
+	font-size: 0.9em;
 }

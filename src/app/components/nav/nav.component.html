@@ -11,6 +11,7 @@
 		<a *ngIf="!user" mat-flat-button color="primary" routerLink="/login">Σύνδεση</a>
 		<a *ngIf="!user" mat-raised-button color="accent" routerLink="/register">ΕΓΓΡΑΦΗ</a>
 
+		<span *ngIf="user"><mat-icon>account_circle</mat-icon> {{user.name.split(' ')[0]}}</span>
 		<a *ngIf="user && user.role == 'admin'" mat-raised-button color="accent" routerLink="/admin">Διαχείριση Χρηστών</a>
 		<button *ngIf="user" mat-raised-button color="warn" (click)="logout()">Αποσύνδεση</button>
 	</div>

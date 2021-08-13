@@ -1,14 +1,20 @@
 <mat-sidenav-container>
 	<mat-sidenav #sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<a class="profile-area" routerLink="/profile">
+		<a mat-card-title-group class="profile-area" routerLink="/profile">
 			<img mat-card-avatar *ngIf="user.img" [src]="environment.apiUrl + '/file/' + user.img | secure | async" />
-			<h1>{{user.name}}</h1>
+ 			<h1>{{user.name}}</h1>
+			<mat-card-subtitle>{{user.email}}</mat-card-subtitle>
 		</a>
-		<mat-list>
-			<mat-list-item><mat-icon>email</mat-icon> {{user.email}}</mat-list-item>
-		</mat-list>
-		<a routerLink="/network"><mat-icon></mat-icon> Το Δίκτυό μου</a>
-		<!-- TODO idea: top 5 friends by interactions -->
+		<a mat-raised-button color="accent" routerLink="/network">Το Δίκτυό μου</a>
+		<mat-card *ngIf="topContacts && topContacts.length > 0">
+			<h2 mat-card-title>Συχνές Επαφές</h2>
+			<mat-list>
+				<mat-list-item *ngFor="let contact of topContacts">
+					<img matListAvatar [src]="environment.apiUrl + '/file/' + contact.img | secure | async" />
+					<a matLine [routerLink]="'/profile/' + contact._id">{{contact.name}}</a>
+				</mat-list-item>
+			</mat-list>
+		</mat-card>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<div class="container">
@@ -66,7 +72,7 @@
 					</div>
 				</mat-card-actions>
 				<section class="comments">
-					<input matInput [(ngModel)]="commentInput" type="text" placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article, $event.target.value)" />
+					<input matInput [(ngModel)]="article.commentDraft" type="text" placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article, $event.target.value)" />
 					<div class="comment" *ngFor="let comment of article.comments">
 						<img mat-card-avatar [src]="environment.apiUrl + '/file/' + comment.poster.img | secure | async" />
 						<div class="comment-header">

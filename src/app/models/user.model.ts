@@ -16,4 +16,5 @@ export class User {
 	experience: [Entry];
 	education: [Entry];
 	skills: [string];
+	contact: string;
 }

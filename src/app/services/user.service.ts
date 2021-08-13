@@ -24,6 +24,16 @@ export class UserService { // TODO Rename to user service?
 		return this._user;
 	}
 
+	register(user: User, img: File) {
+		const formData = new FormData();
+		formData.append("user", JSON.stringify(user));
+
+		if (img)
+			formData.append("image", img);
+
+		return this.http.post(`${environment.apiUrl}/users/register`, formData);
+	}
+
 	login(email: string, password: string) {
 		return this.http.post<any>(`${environment.apiUrl}/users/login`, { email, password })
 			.pipe(map(user => {
@@ -40,18 +50,16 @@ export class UserService { // TODO Rename to user service?
 		this.userSubject.next(null);
 	}
 
-	register(user: User, img: File) {
-		const formData = new FormData();
-		formData.append("user", JSON.stringify(user));
-
-		if (img)
-			formData.append("image", img);
-
-		return this.http.post(`${environment.apiUrl}/users/register`, formData);
+	// Profiles
+	getAll() {
+		return this.http.get<User[]>(`${environment.apiUrl}/users`);
 	}
 
-	// To get profile info, etc
 	getById(id: string) {
-		return this.http.get<User[]>(`${environment.apiUrl}/users/${id}`);
+		return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
+	}
+
+	getContacts() {
+		return this.http.get<User[]>(`${environment.apiUrl}/users/${this.userSubject.value._id}/contacts`);
 	}
 }

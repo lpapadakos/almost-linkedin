@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 import { environment } from '../../../environments/environment';
@@ -20,10 +19,10 @@ export class HomeComponent implements OnInit {
 	files: File[];
 	error = '';
 	user: User;
+	topContacts: User[];
 	articles: Article[];
-	commentInput: string;
 
-	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private userService: UserService, private articleService: ArticleService) {}
+	constructor(private formBuilder: FormBuilder, private userService: UserService, private articleService: ArticleService) {}
 
 	ngOnInit(): void {
 		this.articleForm = this.formBuilder.group({
@@ -32,6 +31,7 @@ export class HomeComponent implements OnInit {
 		});
 
 		this.userService.userEmitter().subscribe((user) => (this.user = user));
+		this.userService.getContacts().subscribe((contacts) => (this.topContacts = contacts.splice(0, 5)));
 		this.articleService.getAll().subscribe((articles) => (this.articles = articles));
 	}
 
@@ -46,7 +46,7 @@ export class HomeComponent implements OnInit {
 		if (this.articleForm.invalid)
 			return;
 
-		this.articleService.post(this.articleForm.get('text').value, this.files).subscribe({
+		this.articleService.post(this.articleForm.get('text').value.trim(), this.files).subscribe({
 			next: (obj) => {
 				let article = <Article> obj;
 				article.poster = this.user;
@@ -106,6 +106,8 @@ export class HomeComponent implements OnInit {
 	}
 
 	comment(article: Article, text: string) {
+		text = text.trim();
+
 		if (!text)
 			return;
 
@@ -115,7 +117,7 @@ export class HomeComponent implements OnInit {
 				comment.poster = this.user;
  				article.comments.push(comment);
 
-				this.commentInput = '';
+				article.commentDraft = '';
 			},
 			error: (error) => {
 				this.error = error;

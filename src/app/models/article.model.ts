@@ -18,4 +18,5 @@ export class Article {
 	postDate: Date;
 	interestNotes: [User];
 	comments: [Comment];
+	commentDraft: string;
 }
