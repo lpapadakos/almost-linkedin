@@ -1,20 +1,6 @@
 <mat-sidenav-container>
-	<mat-sidenav #sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<a mat-card-title-group class="profile-area" routerLink="/profile">
-			<img mat-card-avatar *ngIf="user.img" [src]="environment.apiUrl + '/file/' + user.img | secure | async" />
- 			<h1>{{user.name}}</h1>
-			<mat-card-subtitle>{{user.email}}</mat-card-subtitle>
-		</a>
-		<a mat-raised-button color="accent" routerLink="/network">Το Δίκτυό μου</a>
-		<mat-card *ngIf="topContacts && topContacts.length > 0">
-			<h2 mat-card-title>Συχνές Επαφές</h2>
-			<mat-list>
-				<mat-list-item *ngFor="let contact of topContacts">
-					<img matListAvatar [src]="environment.apiUrl + '/file/' + contact.img | secure | async" />
-					<a matLine [routerLink]="'/profile/' + contact._id">{{contact.name}}</a>
-				</mat-list-item>
-			</mat-list>
-		</mat-card>
+	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
+		<app-sidenav [user]="user" [viewedUser]="user"></app-sidenav>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<div class="container">
@@ -35,66 +21,7 @@
 					</form>
 				</mat-card-content>
 			</mat-card>
-			<mat-card *ngFor="let article of articles">
-				<mat-card-title-group>
-					<img mat-card-sm-image [src]="environment.apiUrl + '/file/' + article.poster.img | secure | async" />
-					<a mat-card-title [routerLink]="'/profile/' + article.poster._id">{{article.poster.name}}</a>
-					<mat-card-subtitle>{{article.postDate}}</mat-card-subtitle>
-				</mat-card-title-group>
-				<mat-card-content>
-					<p class="article-text">{{article.text}}</p>
-					<div class="article-media">
-						<div *ngFor="let file of article.media">
-							<img *ngIf="file.type.startsWith('image')" [src]="environment.apiUrl + '/file/' + file.id | secure | async" />
-							<audio controls *ngIf="file.type.startsWith('audio')" [src]="environment.apiUrl + '/file/' + file.id | secure | async">
-								Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{file.type}}
-							</audio>
-							<video controls *ngIf="file.type.startsWith('video')" [src]="environment.apiUrl + '/file/' + file.id | secure | async">
-								Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{file.type}}
-							</video>
-						</div>
-					</div>
-				</mat-card-content>
-				<mat-card-actions>
-					<button mat-button class="like" [ngClass]="{ 'mat-primary': isInterested(user, article) }" (click)="toggleInterest(article)">
-						<mat-icon>thumb_up</mat-icon> {{ isInterested(user, article) ? 'Σας ενδιαφέρει' : 'Σημείωση Ενδιαφέροντος' }}
-					</button>
-					<span *ngIf="article.interestNotes.length > 0">{{article.interestNotes.length}} χρήστες βρήκαν το άρθρο ενδιαφέρον</span>
-					<div *ngIf="article.poster._id === user._id" class="delete-area">
-						<button *ngIf="!article.delet" mat-button color="warn" (click)="article.delet = true">
-							<mat-icon>delete_forever</mat-icon> Διαγραφή Άρθρου
-						</button>
-						<span *ngIf="article.delet">
-							Σίγουρα?
-							<button mat-raised-button color="warn" (click)="delete(article)">Ναι</button>
-							<button mat-raised-button color="primary" (click)="article.delet = false">Όχι</button>
-						</span>
-					</div>
-				</mat-card-actions>
-				<section class="comments">
-					<input matInput [(ngModel)]="article.commentDraft" type="text" placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article, $event.target.value)" />
-					<div class="comment" *ngFor="let comment of article.comments">
-						<img mat-card-avatar [src]="environment.apiUrl + '/file/' + comment.poster.img | secure | async" />
-						<div class="comment-header">
-							<a mat-card-title [routerLink]="'/profile/' + comment.poster._id">{{comment.poster.name}}</a>
-							<mat-card-subtitle>{{comment.postDate}}</mat-card-subtitle>
-						</div>
-						<p>{{comment.text}}</p>
-						<span class="flexExpand"></span>
-						<div *ngIf="comment.poster._id === user._id">
-							<button *ngIf="!comment.delet" mat-icon-button color="warn" (click)="comment.delet = true">
-								<mat-icon>delete_forever</mat-icon>
-							</button>
-							<span *ngIf="comment.delet">
-								Σίγουρα?
-								<button mat-raised-button color="warn" (click)="deleteComment(article, comment)">Ναι</button>
-								<button mat-raised-button color="primary" (click)="comment.delet = false">Όχι</button>
-							</span>
-						</div>
-					</div>
-
-				</section>
-			</mat-card>
+			<app-article-list [user]="user" [articles]="articles" (errorEmitter)="onError($event)"></app-article-list>
 		</div>
 	</mat-sidenav-content>
 </mat-sidenav-container>

@@ -1,0 +1,60 @@
+<mat-card *ngFor="let article of articles">
+	<mat-card-title-group>
+		<img mat-card-sm-image [src]="article.poster.img | secure | async" />
+		<a mat-card-title [routerLink]="'/profile/' + article.poster._id">{{article.poster.name}}</a>
+		<mat-card-subtitle>{{article.postDate}}</mat-card-subtitle>
+	</mat-card-title-group>
+	<mat-card-content>
+		<p class="article-text">{{article.text}}</p>
+		<div class="article-media">
+			<div *ngFor="let file of article.media">
+				<img *ngIf="file.type.startsWith('image')" [src]="file.id | secure | async" />
+				<audio controls *ngIf="file.type.startsWith('audio')" [src]="file.id | secure | async">
+					Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{file.type}}
+				</audio>
+				<video controls *ngIf="file.type.startsWith('video')" [src]="file.id | secure | async">
+					Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{file.type}}
+				</video>
+			</div>
+		</div>
+	</mat-card-content>
+	<mat-card-actions>
+		<button mat-button class="like" [ngClass]="{ 'mat-primary': isInterested(user, article) }" (click)="toggleInterest(article)">
+			<mat-icon>thumb_up</mat-icon> {{ isInterested(user, article) ? 'Σας ενδιαφέρει' : 'Σημείωση Ενδιαφέροντος' }}
+		</button>
+		<span *ngIf="article.interestNotes.length > 0">{{article.interestNotes.length}} χρήστες βρήκαν το άρθρο ενδιαφέρον</span>
+		<div *ngIf="article.poster._id === user._id" class="delete-area">
+			<button *ngIf="!article.delet" mat-button color="warn" (click)="article.delet = true">
+				<mat-icon>delete_forever</mat-icon> Διαγραφή Άρθρου
+			</button>
+			<span *ngIf="article.delet">
+				Σίγουρα?
+				<button mat-raised-button color="warn" (click)="delete(article)">Ναι</button>
+				<button mat-raised-button color="primary" (click)="article.delet = false">Όχι</button>
+			</span>
+		</div>
+	</mat-card-actions>
+	<section class="comments">
+		<input matInput [(ngModel)]="article.commentDraft" type="text" placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article, $event.target.value)" />
+		<div class="comment" *ngFor="let comment of article.comments">
+			<img mat-card-avatar [src]="comment.poster.img | secure | async" />
+			<div class="comment-header">
+				<a mat-card-title [routerLink]="'/profile/' + comment.poster._id">{{comment.poster.name}}</a>
+				<mat-card-subtitle>{{comment.postDate}}</mat-card-subtitle>
+			</div>
+			<p>{{comment.text}}</p>
+			<span class="flexExpand"></span>
+			<div *ngIf="comment.poster._id === user._id">
+				<button *ngIf="!comment.delet" mat-icon-button color="warn" (click)="comment.delet = true">
+					<mat-icon>delete_forever</mat-icon>
+				</button>
+				<span *ngIf="comment.delet">
+					Σίγουρα?
+					<button mat-raised-button color="warn" (click)="deleteComment(article, comment)">Ναι</button>
+					<button mat-raised-button color="primary" (click)="comment.delet = false">Όχι</button>
+				</span>
+			</div>
+		</div>
+
+	</section>
+</mat-card>

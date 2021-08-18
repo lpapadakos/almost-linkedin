@@ -11,6 +11,7 @@ import { MatButtonModule } from '@angular/material/button';
 import { MatCardModule } from '@angular/material/card';
 import { MatCheckboxModule } from '@angular/material/checkbox';
 import { MatDividerModule } from '@angular/material/divider';
+import { MatGridListModule } from '@angular/material/grid-list';
 import { MatIconModule } from '@angular/material/icon';
 import { MatInputModule } from '@angular/material/input';
 import { MatListModule } from '@angular/material/list';
@@ -29,9 +30,12 @@ import { JwtInterceptor } from './helpers/jwt.interceptor';
 
 import { NgPipesModule } from 'ngx-pipes';
 import { SecurePipe } from './helpers/secure.pipe';
+import { FilterPipe } from './helpers/filter.pipe';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
+import { SidenavComponent } from './components/sidenav/sidenav.component';
+import { ArticleListComponent } from './components/article-list/article-list.component';
 
 /* Pages (Routes) */
 import { AdminComponent } from './pages/admin/admin.component';
@@ -50,6 +54,8 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 	declarations: [
 		AppComponent,
 		NavComponent,
+		SidenavComponent,
+		ArticleListComponent,
 		HomeComponent,
 		LoginComponent,
 		RegisterComponent,
@@ -62,6 +68,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		NotFoundComponent,
 		AdminComponent,
 		SecurePipe,
+		FilterPipe,
 		// NgPipesModule
 	],
 	imports: [
@@ -76,6 +83,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		MatCardModule,
 		MatCheckboxModule,
 		MatDividerModule,
+		MatGridListModule,
 		MatIconModule,
 		MatInputModule,
 		MatListModule,

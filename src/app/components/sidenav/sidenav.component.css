@@ -1,0 +1,11 @@
+
+
+.profile-area {
+	display: block;
+	padding: 1em;
+}
+
+.profile-area img {
+	width: 200px;
+	height: 200px;
+}

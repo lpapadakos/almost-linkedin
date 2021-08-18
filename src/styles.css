@@ -9,6 +9,26 @@ body {
 	font-family: "Open Sans", Roboto, "Helvetica Neue", sans-serif;
 }
 
+mat-sidenav-container {
+	min-height: 100vh;
+}
+
+mat-sidenav {
+	width: 20%;
+	text-align: center;
+}
+
+textarea { width: 100% }
+
+mat-form-field {
+	width: 100%;
+}
+
+mat-card-actions {
+	margin-left: 0 !important;
+	margin-right: 0 !important;
+}
+
 a {
 	color: inherit; /* blue colors for links too */
 	text-decoration: inherit; /* no underline */
@@ -18,10 +38,6 @@ a:hover {
 	text-decoration: underline;
 }
 
-mat-sidenav {
-	width: 20%;
-}
-
 .flexExpand {
 	flex: 1 1 auto;
 }
@@ -29,15 +45,6 @@ mat-sidenav {
 .container {
 	width: 70%;
 	margin: 2em auto;
-}
-
-mat-form-field {
-	width: 100%;
-}
-
-mat-card-actions {
-	margin-left: 0 !important;
-	margin-right: 0 !important;
 }
 
 .mat-row.hovered {
