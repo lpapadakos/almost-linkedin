@@ -1,3 +1,5 @@
+const fs = require("fs");
+
 const { Article, Comment } = require("../models/article.model");
 const { Contact } = require("../models/user.model");
 
@@ -92,7 +94,11 @@ exports.getAll = async (req, res) => {
 exports.delete = async (req, res) => {
 	try {
 		// Can only delete own articles
-		await Article.deleteOne({ _id: req.params.articleId, poster: req.userId });
+		let article = await Article.findOneAndDelete({ _id: req.params.articleId, poster: req.userId });
+
+		if (article)
+			article.media.forEach(file => fs.unlinkSync('./uploads/' + file.id));
+
 		res.status(204).json({ message: "Το άρθρο διεγράφη" });
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η διαγραφή άρθρου: " + err });

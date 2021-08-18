@@ -136,7 +136,7 @@ exports.getContactRequests = async (req, res) => {
 		res.status(200).json(await Contact.find(
 			{ receiver: req.params.userId, accepted: false },
 			"_id sender"
-		));
+		).populate("sender", "_id name img"));
 	} catch(err) {
 		res.status(500).json({ error: "Απέτυχε η προβολή αιτημάτων σύνδεσης: " + err });
 	}
