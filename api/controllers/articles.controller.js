@@ -26,64 +26,54 @@ exports.post = async (req, res) => {
 	}
 };
 
-exports.getById = async (req, res) => {
+exports.get = async (req, res) => {
 	try {
-		const article = await Article.findById(req.params.articleId)
+		let filter = {};
+
+		if (req.params.articleId) {
+			filter._id = req.params.articleId;
+		} else if (req.query.from) {
+			filter.poster = req.query.from
+		} else {
+			const sentContacts = await Contact.find({ sender: req.userId, accepted: true }, "receiver -_id");
+			const receivedContacts = await Contact.find({ receiver: req.userId, accepted: true }, "sender -_id");
+
+			// Articles posted by the user...
+			let authors = [req.userId];
+
+			// ...or their contacts
+			if (sentContacts) {
+				authors = authors.concat(
+					sentContacts.map((contact) => {
+						return contact.receiver;
+					})
+				);
+			}
+
+			if (receivedContacts) {
+				authors = authors.concat(
+					receivedContacts.map((contact) => {
+						return contact.sender;
+					})
+				);
+			}
+
+			filter = { $or: [{ poster: { $in: authors } }, { interestNotes: { $in: authors } }] };
+		}
+
+		const articles = await Article.find(filter)
+			.sort({ createdAt: "desc" })
+			.sort({ "comments.createdAt": "asc" })
 			.populate("poster", "_id name img")
 			.populate("interestNotes", "_id name")
 			.populate("comments.poster", "_id name img");
 
-		if (article) res.status(200).json(article);
-		else res.status(404).json({ error: "Δεν βρέθηκε το άρθρο" });
-	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η αναζήτηση άρθρων: " + err });
-	}
-};
-
-exports.getFromUser = async (req, res) => {
-	try {
-		res.status(200).json(await Article.find({ poster: req.query.from })
-			.sort({ postDate: "desc" })
-			.sort({ "comments.postDate": "asc" })
-			.populate("poster", "_id name img")
-			.populate("interestNotes", "_id name")
-			.populate("comments.poster", "_id name img"));
-	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η αναζήτηση άρθρων: " + err });
-	}
-};
-
-exports.getAll = async (req, res) => {
-	try {
-		const sentContacts = await Contact.find({ sender: req.userId, accepted: true }, "receiver -_id");
-		const receivedContacts = await Contact.find({ receiver: req.userId, accepted: true }, "sender -_id");
-
-		// Articles posted by the user...
-		let authors = [req.userId];
-
-		// ...or their contacts
-		if (sentContacts) {
-			authors = authors.concat(
-				sentContacts.map((contact) => {
-					return contact.receiver;
-				})
-			);
+		if (req.params.articleId) {
+			if (articles)
+				return res.status(200).json(articles[0]);
+			else
+				return res.status(404).json({ error: "Δεν βρέθηκε το άρθρο" })
 		}
-
-		if (receivedContacts) {
-			authors = authors.concat(
-				receivedContacts.map((contact) => {
-					return contact.sender;
-				})
-			);
-		}
-
-		const articles = await Article.find({ $or: [{ poster: { $in: authors } }, { interestNotes: { $in: authors } }] })
-			.sort({ postDate: "desc" })
-			.sort({ "comments.postDate": "asc" })
-			.populate("poster", "_id name img")
-			.populate("interestNotes", "_id name")
-			.populate("comments.poster", "_id name img");
 
 		res.status(200).json(articles);
 	} catch (err) {
@@ -97,7 +87,7 @@ exports.delete = async (req, res) => {
 		let article = await Article.findOneAndDelete({ _id: req.params.articleId, poster: req.userId });
 
 		if (article)
-			article.media.forEach(file => fs.unlinkSync('./uploads/' + file.id));
+			await article.media.forEach(file => fs.unlinkSync('./uploads/' + file.id));
 
 		res.status(204).json({ message: "Το άρθρο διεγράφη" });
 	} catch (err) {
@@ -107,14 +97,9 @@ exports.delete = async (req, res) => {
 
 increaseInteractionCount = (userId1, userId2) => {
 	Contact.findOne({
-		$and: [
-			{ accepted: true },
-			{
-				$or: [
- 					{ sender: userId1, receiver: userId2 },
-					{ sender: userId2, receiver: userId1 },
-				],
-			},
+		$or: [
+			{ sender: userId1, receiver: userId2 },
+			{ sender: userId2, receiver: userId1 },
 		]
 	}).then(contact => {
 		contact.interactions++;
@@ -146,7 +131,7 @@ exports.unlike = async (req, res) => {
 
 exports.comment = async (req, res) => {
 	try {
-		const comment = new Comment({ poster: req.userId, text: req.body.text });
+		const comment = await Comment.create({ poster: req.userId, text: req.body.text });
 		const article = await Article.findByIdAndUpdate(req.params.articleId, { $push: { comments: comment } });
 
 		await increaseInteractionCount(req.userId, article.poster);

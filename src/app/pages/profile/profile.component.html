@@ -1,1 +1,14 @@
-<p>profile works!</p>
+<mat-sidenav-container>
+	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
+		<app-sidenav [user]="user" [viewedUser]="viewedUser" (errorEmitter)="onError($event)"></app-sidenav>
+	</mat-sidenav>
+	<mat-sidenav-content>
+		<div class="container">
+			<mat-card>
+				<mat-error *ngIf="error">{{error}}</mat-error>
+				<!-- TODO Work experience etc -->
+			</mat-card>
+			<app-article-list [user]="user" [articles]="articles" (errorEmitter)="onError($event)"></app-article-list>
+		</div>
+	</mat-sidenav-content>
+</mat-sidenav-container>

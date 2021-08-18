@@ -4,7 +4,7 @@ export class Comment {
 	_id: string;
 	poster: User;
 	text: string;
-	postDate: Date;
+	createdAt: Date;
 }
 
 export class Article {
@@ -15,7 +15,7 @@ export class Article {
 		id: string,
 		type: string
 	}];
-	postDate: Date;
+	createdAt: Date;
 	interestNotes: [User];
 	comments: [Comment];
 	commentDraft: string;

@@ -24,15 +24,15 @@ router.post("/login", [
 ], validationHandler, usersController.login);
 
 // Profiles
-// The same controller handler for getting single id
 router.get("/", verifyToken, usersController.get);
+router.get("/:userId", verifyToken, usersController.get);
 //TODO router.put("/:userId", verifyToken, userController.update);
 
 // Contacts
 router.post("/:userId/contact-requests", verifyToken, usersController.addContactRequest);
 router.get("/:userId/contact-requests", verifyToken, usersController.getContactRequests);
 router.put("/:userId/contact-requests/:requestId", verifyToken, usersController.acceptContactRequest);
-router.delete("/:userId/contact-requests/:requestId", verifyToken, usersController.rejectContactRequest);
+router.delete("/:userId/contact-requests/:requestId", verifyToken, usersController.deleteContactRequest);
 
 router.get("/:userId/contacts", verifyToken, usersController.getContacts);
 

@@ -39,12 +39,6 @@ span {
 	background-color: #eee;
 }
 
-.comments input {
-	box-sizing: border-box;
-	background-color: white;
-	padding: 8px;
-}
-
 .comment {
 	display: flex;
 	align-items: center;

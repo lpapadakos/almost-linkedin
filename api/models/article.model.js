@@ -3,8 +3,7 @@ const mongoose = require("mongoose");
 const commentSchema = mongoose.Schema({
 	poster: { type: mongoose.Types.ObjectId, ref: 'User' },
 	text: String,
-	postDate: { type: Date, default: Date.now }
-});
+}, { timestamps: true });
 
 const articleSchema = mongoose.Schema({
 	poster: { type: mongoose.Types.ObjectId, ref: 'User' },
@@ -13,10 +12,9 @@ const articleSchema = mongoose.Schema({
 		id: { type: String },
 		type: { type: String }
 	}],
-	postDate: { type: Date, default: Date.now },
 	interestNotes: [{ type: mongoose.Types.ObjectId, ref: 'User' }],
 	comments: [commentSchema]
-});
+}, { timestamps: true });
 
 module.exports = {
 	Comment: mongoose.model("Comment", commentSchema),

@@ -22,6 +22,14 @@ export class ArticleService {
 		return this.http.post(`${environment.apiUrl}/articles`, formData);
 	}
 
+	getById(articleId:String) {
+		return this.http.get<Article>(`${environment.apiUrl}/articles/${articleId}`);
+	}
+
+	getFromUser(posterId: string) {
+		return this.http.get<Article[]>(`${environment.apiUrl}/articles?from=${posterId}`);
+	}
+
 	getAll() {
 		return this.http.get<Article[]>(`${environment.apiUrl}/articles`);
 	}

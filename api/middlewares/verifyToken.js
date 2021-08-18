@@ -19,7 +19,7 @@ module.exports = async (req, res, next) => {
 
 	const requestingUser = await User.findById(req.userId);
 
-	if (requestingUser && requestingUser.role !== "admin")
+	if (requestingUser && requestingUser.role === "admin")
 		req.fromAdmin = true;
 
 	next();

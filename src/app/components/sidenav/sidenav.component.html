@@ -1,19 +1,30 @@
-<a mat-card-title-group class="profile-area" routerLink="/profile">
-	<img mat-card-avatar *ngIf="viewedUser.img" [src]="viewedUser.img | secure | async" />
+<div *ngIf="viewedUser">
+	<a mat-card-title-group class="profile-area" [routerLink]="'/profile/' + viewedUser._id">
+		<img mat-card-avatar [src]="viewedUser.img | secure | async" />
 		<h1>{{viewedUser.name}}</h1>
-	<mat-card-subtitle *ngIf="viewedUser._id === user._id">{{viewedUser.email}}</mat-card-subtitle>
-</a>
-<a *ngIf="viewedUser._id === user._id" mat-raised-button color="accent" routerLink="/network">Το Δίκτυό μου</a>
-<div *ngIf="viewedUser._id !== user._id">
-	<button *ngIf="!viewedUser.contact" mat-raised-button color="primary">Αίτημα Σύνδεσης</button>
-	<button *ngIf="viewedUser.contact" mat-raised-button color="warn">ΤΔιαγραφή Σύνδεσης</button>
+		<mat-card-subtitle>{{ viewedUser._id === user._id ? viewedUser.email : 'Μέλος από ' + viewedUser.createdAt}}</mat-card-subtitle>
+	</a>
+	<a *ngIf="viewedUser._id === user._id" mat-raised-button color="accent" routerLink="/network">Το Δίκτυό μου</a>
+	<div *ngIf="viewedUser._id !== user._id">
+		<button *ngIf="!viewedUser.contact; else deleteContact" mat-raised-button color="primary" (click)="addContactRequest()">Αίτημα Σύνδεσης</button>
+		<ng-template #deleteContact class="delete-area">
+			<button *ngIf="!viewedUser.delete" mat-raised-button color="warn" (click)="viewedUser.delete = true">
+				Διαγραφή {{ viewedUser.contact.accepted === false ? 'Αιτήματος' : 'Επαφής' }}
+			</button>
+			<span *ngIf="viewedUser.delete">
+				Σίγουρα?
+				<button mat-raised-button color="warn" (click)="_deleteContact()">Ναι</button>
+				<button mat-raised-button color="primary" (click)="viewedUser.delete = false">Όχι</button>
+			</span>
+		</ng-template>
+	</div>
+	<mat-card *ngIf="topContacts && topContacts.length > 0">
+		<h2 mat-card-title>Συχνές Επαφές</h2>
+		<mat-list>
+			<mat-list-item *ngFor="let contact of topContacts">
+				<img matListAvatar [src]="contact.img | secure | async" />
+				<a matLine [routerLink]="'/profile/' + contact._id">{{contact.name}}</a>
+			</mat-list-item>
+		</mat-list>
+	</mat-card>
 </div>
-<mat-card *ngIf="viewedUser._id === user._id && topContacts && topContacts.length > 0">
-	<h2 mat-card-title>Συχνές Επαφές</h2>
-	<mat-list>
-		<mat-list-item *ngFor="let contact of topContacts">
-			<img matListAvatar [src]="contact.img | secure | async" />
-			<a matLine [routerLink]="'/profile/' + contact._id">{{contact.name}}</a>
-		</mat-list-item>
-	</mat-list>
-</mat-card>

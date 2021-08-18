@@ -1,6 +1,6 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
 
-import { User } from '../../models/user.model';
+import { User, ContactRequest } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -17,6 +17,31 @@ export class SidenavComponent implements OnInit {
 	constructor(private userService: UserService) {}
 
 	ngOnInit(): void {
-		this.userService.getContacts().subscribe((contacts) => (this.topContacts = contacts.splice(0, 5)));
+		if (this.viewedUser)
+			this.userService.getContacts(this.viewedUser._id).subscribe((contacts) => (this.topContacts = contacts.splice(0, 5)));
+	}
+
+	addContactRequest() {
+		this.userService.addContactRequest(this.viewedUser._id).subscribe({
+			next: (obj) => {
+				let contactRequest = <ContactRequest> obj;
+				this.viewedUser.contact = { _id: contactRequest._id, accepted: false };
+			},
+			error: (error) => {
+				this.errorEvent.emit(error);
+			},
+		});
+	}
+
+	_deleteContact() {
+		console.log("delete run");
+		this.userService.deleteContact(this.viewedUser.contact._id).subscribe({
+			next: () => {
+				this.viewedUser.contact = null;
+			},
+			error: (error) => {
+				this.errorEvent.emit(error);
+			},
+		});
 	}
 }

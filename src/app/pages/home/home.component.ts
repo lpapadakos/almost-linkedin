@@ -28,7 +28,6 @@ export class HomeComponent implements OnInit {
 		});
 
 		this.userService.userEmitter().subscribe((user) => (this.user = user));
-
 		this.articleService.getAll().subscribe((articles) => (this.articles = articles));
 	}
 
@@ -53,7 +52,7 @@ export class HomeComponent implements OnInit {
 				this.error = '';
 			},
 			error: (error) => {
-				this.error = error;
+				this.onError(error);
 			},
 		});
 	}

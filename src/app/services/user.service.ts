@@ -71,11 +71,11 @@ export class UserService {
 		return this.http.put(`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests/${requestId}`, {});
 	}
 
-	rejectContactRequest(requestId: string) {
+	deleteContact(requestId: string) {
 		return this.http.delete(`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests/${requestId}`);
 	}
 
-	getContacts() {
-		return this.http.get<User[]>(`${environment.apiUrl}/users/${this.userSubject.value._id}/contacts`);
+	getContacts(userId: string) {
+		return this.http.get<User[]>(`${environment.apiUrl}/users/${userId}/contacts`);
 	}
 }

@@ -7,10 +7,10 @@
 			<button mat-raised-button color="warn" (click)="searchText = ''">Καθαρισμός</button>
 		</div>
 	</mat-card>
-	<!-- TODO list -->
 	<mat-grid-list *ngIf="!searchText || searchText == ''" cols="4" rowHeight="1:1">
 		<h2>Το Δίκτυο μου</h2>
 		<a mat-grid-tile *ngFor="let user of contacts" [routerLink]="'/profile/' + user._id">
+			<!-- TODO better grid -->
 			<!-- <mat-card> -->
 				<img mat-card-avatar [src]="user.img | secure | async" />
 				<mat-card-title>{{user.name}}</mat-card-title>

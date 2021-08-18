@@ -9,9 +9,8 @@ const articlesController = require("../controllers/articles.controller");
 // Articles
 router.post("/", verifyToken, upload.array("media", 10), articlesController.post);
 
-router.get("/:articleId", verifyToken, articlesController.getById);
-router.get("/?from=:posterId", verifyToken, articlesController.getFromUser);
-router.get("/", verifyToken, articlesController.getAll);
+router.get("/", verifyToken, articlesController.get);
+router.get("/:articleId", verifyToken, articlesController.get);
 
 router.delete("/:articleId", verifyToken, articlesController.delete);
 

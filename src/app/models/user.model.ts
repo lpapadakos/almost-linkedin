@@ -12,11 +12,14 @@ export class User {
 	email: string;
 	img: string;
 	role: string;
-	joinDate: Date;
+	createdAt: Date;
 	experience: [Entry];
 	education: [Entry];
 	skills: [string];
-	contact: boolean;
+	contact: {
+		_id: string;
+		accepted: boolean;
+	};
 }
 
 export class ContactRequest {
