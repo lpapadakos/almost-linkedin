@@ -37,7 +37,7 @@ server.use((req, res, next) => {
 });
 
 // Set API endpoint routes
-server.get("/file/:id", require("./middlewares/verifyToken"), (req, res) => {
+server.get("/files/:id", require("./middlewares/verifyToken"), (req, res) => {
 	res.download("./uploads/" + req.params.id, (err) => {
 		if (err) {
 			res.status(500).send({

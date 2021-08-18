@@ -1,1 +1,32 @@
-<p>network works!</p>
+<div class="container">
+	<mat-card>
+		<mat-form-field>
+			<input matInput type="search" [(ngModel)]="searchText" placeholder="Αναζήτηση στους χρήστες της εφαρμογής" />
+		</mat-form-field>
+		<div>
+			<button mat-raised-button color="warn" (click)="searchText = ''">Καθαρισμός</button>
+		</div>
+	</mat-card>
+	<!-- TODO list -->
+	<mat-grid-list *ngIf="!searchText || searchText == ''" cols="4" rowHeight="1:1">
+		<h2>Το Δίκτυο μου</h2>
+		<a mat-grid-tile *ngFor="let user of contacts" [routerLink]="'/profile/' + user._id">
+			<!-- <mat-card> -->
+				<img mat-card-avatar [src]="user.img | secure | async" />
+				<mat-card-title>{{user.name}}</mat-card-title>
+				<mat-card-subtitle></mat-card-subtitle>
+			<!-- </mat-card> -->
+		</a>
+	</mat-grid-list>
+	<mat-list *ngIf="searchText && searchText != ''">
+		<h2>Αποτελέσματα Αναζήτησης</h2>
+		<a mat-list-item *ngFor="let user of otherUsers | filter: searchText" [routerLink]="'/profile/' + user._id">
+			<img matListAvatar [src]="user.img | secure | async" />
+			<h3 matLine>{{user.name}}</h3>
+			<p>
+				<!-- TODO company stuff -->
+				<mat-icon>work</mat-icon> TITLE στην εταιρία COMPANY
+			</p>
+		</a>
+	</mat-list>
+</div>

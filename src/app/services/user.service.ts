@@ -4,10 +4,10 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { User } from '../models/user.model';
+import { User, ContactRequest } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
-export class UserService { // TODO Rename to user service?
+export class UserService {
 	private userSubject: BehaviorSubject<User>;
 	public _user: Observable<User>;
 
@@ -55,8 +55,24 @@ export class UserService { // TODO Rename to user service?
 		return this.http.get<User[]>(`${environment.apiUrl}/users`);
 	}
 
-	getById(id: string) {
-		return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
+	getById(userId: string) {
+		return this.http.get<User>(`${environment.apiUrl}/users/${userId}`);
+	}
+
+	addContactRequest(receiverId: string) {
+		return this.http.post(`${environment.apiUrl}/users/${receiverId}/contact-requests`, {});
+	}
+
+	getContactRequests() {
+		return this.http.get<ContactRequest[]>(`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests`);
+	}
+
+	acceptContactRequest(requestId: string) {
+		return this.http.put(`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests/${requestId}`, {});
+	}
+
+	rejectContactRequest(requestId: string) {
+		return this.http.delete(`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests/${requestId}`);
 	}
 
 	getContacts() {

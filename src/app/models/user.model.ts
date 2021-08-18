@@ -16,5 +16,10 @@ export class User {
 	experience: [Entry];
 	education: [Entry];
 	skills: [string];
-	contact: string;
+	contact: boolean;
+}
+
+export class ContactRequest {
+	_id: string;
+	sender: User;
 }

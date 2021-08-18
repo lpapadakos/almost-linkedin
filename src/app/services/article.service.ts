@@ -22,8 +22,8 @@ export class ArticleService {
 		return this.http.post(`${environment.apiUrl}/articles`, formData);
 	}
 
-	getAll(): Observable<any> {
-		return this.http.get(`${environment.apiUrl}/articles`);
+	getAll() {
+		return this.http.get<Article[]>(`${environment.apiUrl}/articles`);
 	}
 
 	delete(articleId: string) {

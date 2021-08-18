@@ -1,0 +1,22 @@
+mat-card {
+	text-align: center;
+	display: flex;
+	align-items: center;
+}
+
+mat-card button {
+	margin: 0 1em;
+}
+
+.tile img {
+	width: 200px;
+	height: 200px;
+}
+
+mat-list a {
+	text-decoration: inherit;
+}
+
+mat-list a:hover {
+	background-color: #eee;
+}
