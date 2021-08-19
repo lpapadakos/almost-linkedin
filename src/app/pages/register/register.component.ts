@@ -13,14 +13,10 @@ import { UserService } from '../../services/user.service';
 export class RegisterComponent implements OnInit {
 	public registerForm: FormGroup;
 	public error = '';
-	//TODO returnurl needed?
-	private returnUrl: String;
 	userImage: File | null = null;
 	imageData: any;
 
-	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private userService: UserService) {
-		this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
-	}
+	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private userService: UserService) {}
 
 	// Custom validator: Compare password fields to see if they match
 	private matchControls(controlName: string, matchingControlName: string) {

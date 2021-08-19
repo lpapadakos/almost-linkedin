@@ -12,13 +12,18 @@ mat-card button {
 }
 
 mat-grid-tile a {
-	margin: auto;
+	text-decoration: none;
 	display: block;
 	width: calc(100% - 70px);
 	height: calc(100% - 70px);
 }
 
+mat-grid-tile mat-card:hover {
+	background-color: #eee;
+}
+
 mat-grid-tile mat-card  {
+	margin: 0;
 	width: 100%;
 	height: 100%;
 }

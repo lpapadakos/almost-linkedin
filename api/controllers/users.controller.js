@@ -11,9 +11,13 @@ exports.register = async (req, res) => {
 			name: req.body.name,
 			email: req.body.email,
 			password: await bcrypt.hash(req.body.password, 10),
-			phone: req.body.phone,
-			img: req.file.filename,
+			phone: req.body.phone
 		});
+
+		if (req.file)
+			user.img = req.file.filename;
+		else
+			user.img = "default_avatar";
 
 		await user.save();
 		res.status(201).json({ message: "Επιτυχής εγγραφή χρήστη" });

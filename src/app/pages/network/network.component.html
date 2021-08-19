@@ -10,7 +10,7 @@
 	<mat-grid-list *ngIf="!searchText || searchText == ''" cols="4" rowHeight="1:1">
 		<h2>Το Δίκτυο μου</h2>
 		<mat-grid-tile *ngFor="let user of contacts">
-			<!-- TODO better grid -->
+			<!-- TODO company stuff grid -->
 			<a [routerLink]="'/profile/' + user._id">
 				<mat-card>
 					<img mat-card-avatar [src]="user.img | secure | async" />
@@ -26,7 +26,7 @@
 			<img matListAvatar [src]="user.img | secure | async" />
 			<h3 matLine>{{user.name}}</h3>
 			<p>
-				<!-- TODO company stuff -->
+				<!-- TODO company stuff list -->
 				<mat-icon>work</mat-icon> TITLE στην εταιρία COMPANY
 			</p>
 		</a>
