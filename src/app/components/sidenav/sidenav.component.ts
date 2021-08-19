@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
 
 import { User, ContactRequest } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -8,7 +8,7 @@ import { UserService } from '../../services/user.service';
 	templateUrl: './sidenav.component.html',
 	styleUrls: ['./sidenav.component.css'],
 })
-export class SidenavComponent implements OnInit {
+export class SidenavComponent implements OnChanges {
 	topContacts: User[];
 	@Input() user: User;
 	@Input() viewedUser: User;
@@ -16,9 +16,15 @@ export class SidenavComponent implements OnInit {
 
 	constructor(private userService: UserService) {}
 
-	ngOnInit(): void {
-		if (this.viewedUser)
-			this.userService.getContacts(this.viewedUser._id).subscribe((contacts) => (this.topContacts = contacts.splice(0, 5)));
+	ngOnChanges(changes: SimpleChanges): void {
+		this.userService.getContacts(this.viewedUser._id).subscribe({
+			next: (contacts) => {
+				this.topContacts = contacts.splice(0, 5);
+			},
+			error: (error) => {
+				this.topContacts = null;
+			}
+		});
 	}
 
 	addContactRequest() {

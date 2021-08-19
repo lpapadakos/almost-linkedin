@@ -24,9 +24,22 @@ mat-form-field {
 	width: 100%;
 }
 
+mat-card {
+	margin: 2em auto;
+	padding: 0;
+}
+
 mat-card-actions {
 	margin-left: 0 !important;
 	margin-right: 0 !important;
+}
+
+mat-list-item button, .delete-area button {
+	margin: 0 5px;
+}
+
+p {
+	white-space: pre-wrap;
 }
 
 a {

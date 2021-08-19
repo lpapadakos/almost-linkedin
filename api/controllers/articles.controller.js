@@ -62,10 +62,10 @@ exports.get = async (req, res) => {
 		}
 
 		const articles = await Article.find(filter)
-			.sort({ createdAt: "desc" })
+			.sort({ updatedAt: "desc" })
 			.sort({ "comments.createdAt": "asc" })
 			.populate("poster", "_id name img")
-			.populate("interestNotes", "_id name")
+			.populate("interestNotes", "_id name img")
 			.populate("comments.poster", "_id name img");
 
 		if (req.params.articleId) {
@@ -131,12 +131,12 @@ exports.unlike = async (req, res) => {
 
 exports.comment = async (req, res) => {
 	try {
-		const comment = await Comment.create({ poster: req.userId, text: req.body.text });
-		const article = await Article.findByIdAndUpdate(req.params.articleId, { $push: { comments: comment } });
+		const comment = new Comment({ poster: req.userId, text: req.body.text });
+		const article = await Article.findByIdAndUpdate(req.params.articleId, { $push: { comments: comment } }, { new: true });
 
 		await increaseInteractionCount(req.userId, article.poster);
 
-		res.status(201).json(comment);
+		res.status(201).json(article.comments.pop());
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η προσθήκη σχολίου στο άρθρο: " + err });
 	}

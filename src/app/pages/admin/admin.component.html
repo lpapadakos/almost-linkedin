@@ -43,9 +43,9 @@
 				<a fxFlexFill [routerLink]="'/profile/' + row._id" class="mat-row-link"></a>
 			</mat-cell>
 		</ng-container>
-		<ng-container matColumnDef="joinDate">
+		<ng-container matColumnDef="createdAt">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Ημερομηνία Εγγραφής</mat-header-cell>
-			<mat-cell *matCellDef="let row">{{row.joinDate}}
+			<mat-cell *matCellDef="let row">{{row.createdAt}}
 				<a fxFlexFill [routerLink]="'/profile/' + row._id" class="mat-row-link"></a>
 			</mat-cell>
 		</ng-container>

@@ -4,21 +4,23 @@
 		<h1>{{viewedUser.name}}</h1>
 		<mat-card-subtitle>{{ viewedUser._id === user._id ? viewedUser.email : 'Μέλος από ' + viewedUser.createdAt}}</mat-card-subtitle>
 	</a>
-	<a *ngIf="viewedUser._id === user._id" mat-raised-button color="accent" routerLink="/network">Το Δίκτυό μου</a>
-	<div *ngIf="viewedUser._id !== user._id">
-		<button *ngIf="!viewedUser.contact; else deleteContact" mat-raised-button color="primary" (click)="addContactRequest()">Αίτημα Σύνδεσης</button>
-		<ng-template #deleteContact class="delete-area">
-			<button *ngIf="!viewedUser.delete" mat-raised-button color="warn" (click)="viewedUser.delete = true">
-				Διαγραφή {{ viewedUser.contact.accepted === false ? 'Αιτήματος' : 'Επαφής' }}
-			</button>
-			<span *ngIf="viewedUser.delete">
-				Σίγουρα?
-				<button mat-raised-button color="warn" (click)="_deleteContact()">Ναι</button>
-				<button mat-raised-button color="primary" (click)="viewedUser.delete = false">Όχι</button>
-			</span>
-		</ng-template>
+	<div *ngIf="user.role !== 'admin'">
+		<a *ngIf="viewedUser._id === user._id" mat-raised-button color="accent" routerLink="/network">Το Δίκτυό μου</a>
+		<div *ngIf="viewedUser._id !== user._id">
+			<button *ngIf="!viewedUser.contact; else deleteContact" mat-raised-button color="primary" (click)="addContactRequest()">Αίτημα Σύνδεσης</button>
+			<ng-template #deleteContact class="delete-area">
+				<button *ngIf="!viewedUser.delete" mat-raised-button color="warn" (click)="viewedUser.delete = true">
+					Διαγραφή {{ viewedUser.contact.accepted === false ? 'Αιτήματος' : 'Επαφής' }}
+				</button>
+				<span *ngIf="viewedUser.delete">
+					Σίγουρα?
+					<button mat-raised-button color="warn" (click)="_deleteContact()">Ναι</button>
+					<button mat-raised-button color="primary" (click)="viewedUser.delete = false">Όχι</button>
+				</span>
+			</ng-template>
+		</div>
 	</div>
-	<mat-card *ngIf="topContacts && topContacts.length > 0">
+	<div id="top-contacts" *ngIf="topContacts && topContacts.length > 0">
 		<h2 mat-card-title>Συχνές Επαφές</h2>
 		<mat-list>
 			<mat-list-item *ngFor="let contact of topContacts">
@@ -26,5 +28,5 @@
 				<a matLine [routerLink]="'/profile/' + contact._id">{{contact.name}}</a>
 			</mat-list-item>
 		</mat-list>
-	</mat-card>
+	</div>
 </div>

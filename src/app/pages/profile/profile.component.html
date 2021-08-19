@@ -1,6 +1,6 @@
 <mat-sidenav-container>
 	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<app-sidenav [user]="user" [viewedUser]="viewedUser" (errorEmitter)="onError($event)"></app-sidenav>
+		<app-sidenav *ngIf="viewedUser" [user]="user" [viewedUser]="viewedUser" (errorEmitter)="onError($event)"></app-sidenav>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<div class="container">

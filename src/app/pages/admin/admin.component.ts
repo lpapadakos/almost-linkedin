@@ -12,7 +12,7 @@ import { AdminService } from '../../services/admin.service';
 })
 export class AdminComponent implements OnInit {
 	users: User[];
-	displayedColumns = ['select', '_id', 'name', 'email', 'joinDate'];
+	displayedColumns = ['select', '_id', 'name', 'email', 'createdAt'];
 	selection = new SelectionModel<User>(true, []);
 
 	constructor(private route: ActivatedRoute, private router: Router, private adminService: AdminService) {}

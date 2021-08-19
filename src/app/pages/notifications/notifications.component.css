@@ -1,0 +1,11 @@
+mat-list-item button, .delete-area button {
+	margin: 0 0.5em;
+}
+
+mat-list-item a {
+	font-weight: bold;
+}
+
+p mat-icon {
+	font-size: 1.2em;
+}

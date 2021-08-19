@@ -213,15 +213,15 @@ exports.getContacts = async (req, res) => {
 
 		let contacts = [].concat(sentContacts).concat(receivedContacts);
 
-		// Sort contacts by number of interactions
+		// Sort contacts descending by number of interactions
 		contacts.sort((a, b) => {
-			return (a.interactions < b.interactions ? -1 : (a.interactions > b.interactions ? 1 : 0));
+			return (a.interactions < b.interactions ? 1 : (a.interactions > b.interactions ? -1 : 0));
 		})
 
 		// Send user info cleanly
 		let usersOnly = contacts.map(contact => {
 			// return the defined field
-			return (contact.sender ? sender : receiver);
+			return (contact.sender ? contact.sender : contact.receiver);
 		});
 
 		res.status(200).json(usersOnly);

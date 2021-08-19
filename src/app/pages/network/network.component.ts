@@ -21,7 +21,7 @@ export class NetworkComponent implements OnInit {
 		this.userService.userEmitter().subscribe((user) => (this.user = user));
 		this.userService.getAll().subscribe((users) => {
 			this.otherUsers = users;
-			this.contacts = this.otherUsers.filter(u => u.contact);
+			this.contacts = this.otherUsers.filter(u => u.contact && u.contact.accepted);
 		});
 	}
 }
