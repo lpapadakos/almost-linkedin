@@ -23,8 +23,7 @@ export class ArticleListComponent implements AfterViewInit {
 	ngAfterViewInit(): void {
 		setTimeout(() => {
 			this.route.fragment.subscribe((fragment) => {
-				if (fragment)
-					this.viewportScroller.scrollToAnchor(fragment);
+				if (fragment) this.viewportScroller.scrollToAnchor(fragment);
 			});
 		}, 500);
 	}
@@ -33,8 +32,7 @@ export class ArticleListComponent implements AfterViewInit {
 		this.articleService.delete(article._id).subscribe({
 			next: () => {
 				const index = this.articles.findIndex((a) => a._id === article._id);
-				if (index > -1)
-					this.articles.splice(index, 1);
+				if (index > -1) this.articles.splice(index, 1);
 			},
 			error: (error) => {
 				this.errorEvent.emit(error);
@@ -51,8 +49,7 @@ export class ArticleListComponent implements AfterViewInit {
 			this.articleService.unlike(article._id).subscribe({
 				next: () => {
 					const index = article.interestNotes.findIndex((u) => u._id === this.user._id);
-					if (index > -1)
-						article.interestNotes.splice(index, 1);
+					if (index > -1) article.interestNotes.splice(index, 1);
 				},
 				error: (error) => {
 					this.errorEvent.emit(error);

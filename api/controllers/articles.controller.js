@@ -33,7 +33,7 @@ exports.get = async (req, res) => {
 		if (req.params.articleId) {
 			filter._id = req.params.articleId;
 		} else if (req.query.from) {
-			filter.poster = req.query.from
+			filter.poster = req.query.from;
 		} else {
 			const sentContacts = await Contact.find({ sender: req.userId, accepted: true }, "receiver -_id");
 			const receivedContacts = await Contact.find({ receiver: req.userId, accepted: true }, "sender -_id");
@@ -61,18 +61,11 @@ exports.get = async (req, res) => {
 			filter = { $or: [{ poster: { $in: authors } }, { interestNotes: { $in: authors } }] };
 		}
 
-		const articles = await Article.find(filter)
-			.sort({ updatedAt: "desc" })
-			.sort({ "comments.createdAt": "asc" })
-			.populate("poster", "_id name img")
-			.populate("interestNotes", "_id name img")
-			.populate("comments.poster", "_id name img");
+		const articles = await Article.find(filter).sort({ updatedAt: "desc" }).sort({ "comments.createdAt": "asc" }).populate("poster", "_id name img").populate("interestNotes", "_id name img").populate("comments.poster", "_id name img");
 
 		if (req.params.articleId) {
-			if (articles)
-				return res.status(200).json(articles[0]);
-			else
-				return res.status(404).json({ error: "Δεν βρέθηκε το άρθρο" })
+			if (articles) return res.status(200).json(articles[0]);
+			else return res.status(404).json({ error: "Δεν βρέθηκε το άρθρο" });
 		}
 
 		res.status(200).json(articles);
@@ -86,8 +79,7 @@ exports.delete = async (req, res) => {
 		// Can only delete own articles
 		let article = await Article.findOneAndDelete({ _id: req.params.articleId, poster: req.userId });
 
-		if (article)
-			await article.media.forEach(file => fs.unlinkSync('./uploads/' + file.id));
+		if (article) await article.media.forEach((file) => fs.unlinkSync("./uploads/" + file.id));
 
 		res.status(204).json({ message: "Το άρθρο διεγράφη" });
 	} catch (err) {
@@ -100,14 +92,16 @@ increaseInteractionCount = (userId1, userId2) => {
 		$or: [
 			{ sender: userId1, receiver: userId2 },
 			{ sender: userId2, receiver: userId1 },
-		]
-	}).then(contact => {
-		contact.interactions++;
-		contact.save();
-	}).catch(err => {
-		console.log("No contact, cannot update interactions");
-	});
-}
+		],
+	})
+		.then((contact) => {
+			contact.interactions++;
+			contact.save();
+		})
+		.catch((err) => {
+			console.log("No contact, cannot update interactions");
+		});
+};
 
 exports.like = async (req, res) => {
 	try {

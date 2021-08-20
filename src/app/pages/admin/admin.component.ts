@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
+import { first, take } from 'rxjs/operators';
 
 import { User } from '../../models/user.model';
 import { AdminService } from '../../services/admin.service';
@@ -18,7 +19,10 @@ export class AdminComponent implements OnInit {
 	constructor(private route: ActivatedRoute, private router: Router, private adminService: AdminService) {}
 
 	ngOnInit(): void {
-		this.adminService.getAll().subscribe((users) => (this.users = users));
+		this.adminService
+			.getAll()
+			.pipe(take(1))
+			.subscribe((users) => (this.users = users));
 	}
 
 	isAllSelected() {
@@ -26,7 +30,7 @@ export class AdminComponent implements OnInit {
 	}
 
 	masterToggle() {
-		this.isAllSelected() ? this.selection.clear() : this.users.forEach(user => this.selection.select(user));
+		this.isAllSelected() ? this.selection.clear() : this.users.forEach((user) => this.selection.select(user));
 	}
 
 	extractUserData(fileType: String) {

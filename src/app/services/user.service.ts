@@ -26,22 +26,22 @@ export class UserService {
 
 	register(user: User, img: File) {
 		const formData = new FormData();
-		formData.append("user", JSON.stringify(user));
+		formData.append('user', JSON.stringify(user));
 
-		if (img)
-			formData.append("image", img);
+		if (img) formData.append('image', img);
 
 		return this.http.post(`${environment.apiUrl}/users/register`, formData);
 	}
 
 	login(email: string, password: string) {
-		return this.http.post<any>(`${environment.apiUrl}/users/login`, { email, password })
-			.pipe(map(user => {
+		return this.http.post<any>(`${environment.apiUrl}/users/login`, { email, password }).pipe(
+			map((user) => {
 				// store user details and jwt token in local storage to keep user logged in between page refreshes
 				localStorage.setItem('user', JSON.stringify(user));
 				this.userSubject.next(user);
 				return user;
-			}));
+			})
+		);
 	}
 
 	logout() {

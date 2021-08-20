@@ -5,8 +5,13 @@
 	<mat-sidenav-content>
 		<div class="container">
 			<mat-card>
-				<mat-error *ngIf="error">{{error}}</mat-error>
-				<!-- TODO Work experience etc -->
+				<mat-error *ngIf="error">{{ error }}</mat-error>
+				<div *ngIf="viewedUser.experience">
+					<!-- TODO Work experience etc -->
+					<form *ngIf="viewedUser._id === user._id" [formGroup]="experienceForm" (ngSubmit)="onSubmitExperience()">
+						<h2>Εισαγωγή επαγγελματικής εμπειρίας</h2>
+					</form>
+				</div>
 			</mat-card>
 			<app-article-list [user]="user" [articles]="articles" (errorEmitter)="onError($event)"></app-article-list>
 		</div>

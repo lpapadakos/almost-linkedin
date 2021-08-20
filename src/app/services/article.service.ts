@@ -14,15 +14,14 @@ export class ArticleService {
 	post(text: string, files: File[]) {
 		const formData = new FormData();
 
-		formData.append("text", text);
+		formData.append('text', text);
 
-		if (files)
-			files.forEach(file => formData.append("media", file));
+		if (files) files.forEach((file) => formData.append('media', file));
 
 		return this.http.post(`${environment.apiUrl}/articles`, formData);
 	}
 
-	getById(articleId:String) {
+	getById(articleId: String) {
 		return this.http.get<Article>(`${environment.apiUrl}/articles/${articleId}`);
 	}
 
@@ -39,7 +38,7 @@ export class ArticleService {
 	}
 
 	like(articleId: string) {
-	 	return this.http.post(`${environment.apiUrl}/articles/${articleId}/like`, {});
+		return this.http.post(`${environment.apiUrl}/articles/${articleId}/like`, {});
 	}
 
 	unlike(articleId: string) {

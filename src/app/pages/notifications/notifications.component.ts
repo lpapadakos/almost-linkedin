@@ -20,7 +20,7 @@ export class NotificationsComponent implements OnInit {
 	constructor(private userService: UserService, private articleService: ArticleService) {}
 
 	ngOnInit(): void {
-		this.userService.getContactRequests().subscribe((requests) => this.requests = requests);
+		this.userService.getContactRequests().subscribe((requests) => (this.requests = requests));
 
 		this.userService.userEmitter().subscribe((user) => {
 			this.user = user;
@@ -35,9 +35,8 @@ export class NotificationsComponent implements OnInit {
 	acceptContactRequest(request: ContactRequest) {
 		this.userService.acceptContactRequest(request._id).subscribe({
 			next: () => {
-				const index = this.requests.findIndex(r => r._id === request._id);
-				if (index > -1)
-					this.requests.splice(index, 1);
+				const index = this.requests.findIndex((r) => r._id === request._id);
+				if (index > -1) this.requests.splice(index, 1);
 			},
 			error: (error) => {
 				this.onError(error);
@@ -48,9 +47,8 @@ export class NotificationsComponent implements OnInit {
 	deleteContact(request: ContactRequest) {
 		this.userService.deleteContact(request._id).subscribe({
 			next: () => {
-				const index = this.requests.findIndex(r => r._id === request._id);
-				if (index > -1)
-					this.requests.splice(index, 1);
+				const index = this.requests.findIndex((r) => r._id === request._id);
+				if (index > -1) this.requests.splice(index, 1);
 			},
 			error: (error) => {
 				this.onError(error);

@@ -9,12 +9,14 @@ export class Comment {
 
 export class Article {
 	_id: string;
- 	poster: User;
+	poster: User;
 	text: string;
-	media: [{
-		id: string,
-		type: string
-	}];
+	media: [
+		{
+			id: string;
+			type: string;
+		}
+	];
 	createdAt: Date;
 	interestNotes: [User];
 	comments: [Comment];

@@ -23,14 +23,14 @@ export class SidenavComponent implements OnChanges {
 			},
 			error: (error) => {
 				this.topContacts = null;
-			}
+			},
 		});
 	}
 
 	addContactRequest() {
 		this.userService.addContactRequest(this.viewedUser._id).subscribe({
 			next: (obj) => {
-				let contactRequest = <ContactRequest> obj;
+				let contactRequest = <ContactRequest>obj;
 				this.viewedUser.contact = { _id: contactRequest._id, accepted: false };
 			},
 			error: (error) => {
@@ -40,7 +40,7 @@ export class SidenavComponent implements OnChanges {
 	}
 
 	_deleteContact() {
-		console.log("delete run");
+		console.log('delete run');
 		this.userService.deleteContact(this.viewedUser.contact._id).subscribe({
 			next: () => {
 				this.viewedUser.contact = null;

@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 
 const verifyToken = require("../middlewares/verifyToken");
-const upload = require('../middlewares/multerStorage');
+const upload = require("../middlewares/multerStorage");
 
 const articlesController = require("../controllers/articles.controller");
 

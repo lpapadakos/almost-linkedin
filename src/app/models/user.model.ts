@@ -4,7 +4,7 @@ export class Entry {
 	what: string;
 	fromYear: number;
 	toYear: number;
-};
+}
 export class User {
 	_id: string;
 	token?: string;

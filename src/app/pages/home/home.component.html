@@ -7,10 +7,10 @@
 			<mat-card>
 				<mat-card-content>
 					<form [formGroup]="articleForm" (ngSubmit)="onPost()">
-						<mat-error *ngIf="error">{{error}}</mat-error>
+						<mat-error *ngIf="error">{{ error }}</mat-error>
 						<h2>Ανάρτηση άρθρου</h2>
 						<mat-form-field>
- 							<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
+							<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
 							<textarea matInput matTextareaAutosize placeholder="Τι σκέφτεστε;" formControlName="text" required></textarea>
 						</mat-form-field>
 						<label for="media">Μπορείτε να επισυνάψετε αρχεία πολυμέσων: </label>

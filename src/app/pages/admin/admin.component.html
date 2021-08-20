@@ -1,59 +1,49 @@
 <div class="container">
 	<div id="extract-buttons">
-		<button mat-raised-button color="primary"
-			[disabled]="!selection.hasValue()"
-			(click)="extractUserData('xml')">Εξαγωγή επιλεγμένων σε XML</button>
-		<button mat-raised-button color="accent"
-			[disabled]="!selection.hasValue()"
-			(click)="extractUserData('json')">Εξαγωγή επιλεγμένων σε JSON</button>
+		<button mat-raised-button color="primary" [disabled]="!selection.hasValue()" (click)="extractUserData('xml')">Εξαγωγή επιλεγμένων σε XML</button>
+		<button mat-raised-button color="accent" [disabled]="!selection.hasValue()" (click)="extractUserData('json')">Εξαγωγή επιλεγμένων σε JSON</button>
 	</div>
 	<!-- TODO avatar img, sort data? and SEARCH BAR -->
 	<mat-table [dataSource]="users" matSort class="mat-elevation-z8">
 		<!-- Checkbox Column -->
 		<ng-container matColumnDef="select">
 			<mat-header-cell *matHeaderCellDef>
-				<mat-checkbox (change)="$event ? masterToggle() : null"
-					[checked]="selection.hasValue() && isAllSelected()"
-					[indeterminate]="selection.hasValue() && !isAllSelected()">
-					Επιλογή
-				</mat-checkbox>
+				<mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"> Επιλογή </mat-checkbox>
 			</mat-header-cell>
 			<mat-cell *matCellDef="let row" (click)="selection.toggle(row)">
-				<mat-checkbox (click)="$event.stopPropagation()"
-					(change)="$event ? selection.toggle(row) : null"
-					[checked]="selection.isSelected(row)">
-				</mat-checkbox>
+				<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"> </mat-checkbox>
 			</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="_id">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Αναγνωριστικό</mat-header-cell>
-			<mat-cell *matCellDef="let row">{{row._id}}
+			<mat-cell *matCellDef="let row"
+				>{{ row._id }}
 				<a fxFlexFill [routerLink]="'/profile/' + row._id" class="mat-row-link"></a>
 			</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="name">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Όνοματεπώνυμο</mat-header-cell>
-			<mat-cell *matCellDef="let row">{{row.name}}
+			<mat-cell *matCellDef="let row"
+				>{{ row.name }}
 				<a fxFlexFill [routerLink]="'/profile/' + row._id" class="mat-row-link"></a>
 			</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="email">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Διεύθυνση Email</mat-header-cell>
-			<mat-cell *matCellDef="let row">{{row.email}}
+			<mat-cell *matCellDef="let row"
+				>{{ row.email }}
 				<a fxFlexFill [routerLink]="'/profile/' + row._id" class="mat-row-link"></a>
 			</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="createdAt">
 			<mat-header-cell *matHeaderCellDef mat-sort-header>Ημερομηνία Εγγραφής</mat-header-cell>
-			<mat-cell *matCellDef="let row">{{row.createdAt}}
+			<mat-cell *matCellDef="let row"
+				>{{ row.createdAt }}
 				<a fxFlexFill [routerLink]="'/profile/' + row._id" class="mat-row-link"></a>
 			</mat-cell>
 		</ng-container>
 
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-		<mat-row *matRowDef="let row; columns: displayedColumns;"
-			[ngClass]="{ hovered: row.hovered, highlighted: selection.isSelected(row) }"
-			(mouseover)="row.hovered = true"
-			(mouseout)="row.hovered = false"></mat-row>
+		<mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="{ hovered: row.hovered, highlighted: selection.isSelected(row) }" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"></mat-row>
 	</mat-table>
 </div>

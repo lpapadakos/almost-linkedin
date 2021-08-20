@@ -7,7 +7,7 @@ import { UserService } from '../services/user.service';
 
 @Injectable()
 export class JwtInterceptor implements HttpInterceptor {
-	constructor(private userService: UserService) { }
+	constructor(private userService: UserService) {}
 
 	intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<unknown>> {
 		// add auth header with jwt if user is logged in and request is to the api url
@@ -17,8 +17,8 @@ export class JwtInterceptor implements HttpInterceptor {
 		if (isLoggedIn && isApiUrl) {
 			request = request.clone({
 				setHeaders: {
-					Authorization: `Bearer ${user.token}`
-				}
+					Authorization: `Bearer ${user.token}`,
+				},
 			});
 		}
 

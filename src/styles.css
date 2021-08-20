@@ -1,6 +1,7 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body {
+html,
+body {
 	height: 100%;
 }
 
@@ -18,7 +19,9 @@ mat-sidenav {
 	text-align: center;
 }
 
-textarea { width: 100% }
+textarea {
+	width: 100%;
+}
 
 mat-form-field {
 	width: 100%;
@@ -34,7 +37,8 @@ mat-card-actions {
 	margin-right: 0 !important;
 }
 
-mat-list-item button, .delete-area button {
+mat-list-item button,
+.delete-area button {
 	margin: 0 5px;
 }
 
@@ -65,5 +69,5 @@ a:hover {
 }
 
 .mat-row.highlighted {
-	background: rgba(0,0,0,.12);
+	background: rgba(0, 0, 0, 0.12);
 }

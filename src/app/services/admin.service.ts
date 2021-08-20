@@ -12,7 +12,6 @@ export class AdminService {
 	constructor(private http: HttpClient, private userService: UserService) {}
 
 	getAll() {
-		if (this.userService.user.role == "admin")
-			return this.http.get<User[]>(`${environment.apiUrl}/users`);
+		if (this.userService.user.role == 'admin') return this.http.get<User[]>(`${environment.apiUrl}/users`);
 	}
 }

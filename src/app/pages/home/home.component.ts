@@ -16,7 +16,7 @@ export class HomeComponent implements OnInit {
 	articleForm: FormGroup;
 	files: File[];
 	error = ''; // TODO error alert service?
-	user: User;
+	user: User = this.userService.user;
 	articles: Article[];
 
 	constructor(private formBuilder: FormBuilder, private userService: UserService, private articleService: ArticleService) {}
@@ -27,7 +27,6 @@ export class HomeComponent implements OnInit {
 			media: [''],
 		});
 
-		this.userService.userEmitter().subscribe((user) => (this.user = user));
 		this.articleService.getAll().subscribe((articles) => (this.articles = articles));
 	}
 
@@ -39,12 +38,11 @@ export class HomeComponent implements OnInit {
 	}
 
 	onPost(): void {
-		if (this.articleForm.invalid)
-			return;
+		if (this.articleForm.invalid) return;
 
 		this.articleService.post(this.articleForm.get('text').value.trim(), this.files).subscribe({
 			next: (obj) => {
-				let article = <Article> obj;
+				let article = <Article>obj;
 				article.poster = this.user;
 				this.articles.unshift(article);
 

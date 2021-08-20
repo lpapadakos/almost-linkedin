@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
 
 import { UserService } from '../../services/user.service';
 
@@ -11,9 +10,9 @@ import { UserService } from '../../services/user.service';
 	styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
+	private returnUrl: string;
 	loginForm: FormGroup;
 	error = '';
-	private returnUrl: string;
 
 	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private userService: UserService) {
 		this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
@@ -21,8 +20,7 @@ export class LoginComponent implements OnInit {
 
 	ngOnInit() {
 		// Don't be here if you're logged in, boi
-		if (this.userService.user)
-			this.router.navigate([this.returnUrl]);
+		if (this.userService.user) this.router.navigate([this.returnUrl]);
 
 		this.loginForm = this.formBuilder.group({
 			email: ['', Validators.email],
@@ -31,18 +29,15 @@ export class LoginComponent implements OnInit {
 	}
 
 	onSubmit() {
-		if (this.loginForm.invalid)
-			return;
+		if (this.loginForm.invalid) return;
 
-		this.userService.login(this.loginForm.get('email')?.value, this.loginForm.get('password')?.value)
-			.pipe(first())
-			.subscribe({
-				next: () => {
-					this.router.navigate([this.returnUrl]);
-				},
-				error: (error) => {
-					this.error = error;
-				}
-			});
+		this.userService.login(this.loginForm.get('email')?.value, this.loginForm.get('password')?.value).subscribe({
+			next: () => {
+				this.router.navigate([this.returnUrl]);
+			},
+			error: (error) => {
+				this.error = error;
+			},
+		});
 	}
 }

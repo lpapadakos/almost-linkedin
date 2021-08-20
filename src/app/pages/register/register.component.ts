@@ -1,7 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { first } from 'rxjs/operators';
 
 import { UserService } from '../../services/user.service';
 
@@ -11,8 +10,8 @@ import { UserService } from '../../services/user.service';
 	styleUrls: ['./register.component.css'],
 })
 export class RegisterComponent implements OnInit {
-	public registerForm: FormGroup;
-	public error = '';
+	registerForm: FormGroup;
+	error = '';
 	userImage: File | null = null;
 	imageData: any;
 
@@ -35,19 +34,22 @@ export class RegisterComponent implements OnInit {
 			} else {
 				matchingControl.setErrors(null);
 			}
-		}
+		};
 	}
 
 	ngOnInit() {
-		this.registerForm = this.formBuilder.group({
-			name: ['',  Validators.required],
-			email: ['', [Validators.required, Validators.email]],
- 			phone: ['', Validators.pattern('[- +()0-9]+')],
-			password: ['', [Validators.required, Validators.minLength(8)]],
-			repeat_password: ['', Validators.required]
-		}, {
-			validator: this.matchControls('password', 'repeat_password')
-		});
+		this.registerForm = this.formBuilder.group(
+			{
+				name: ['', Validators.required],
+				email: ['', [Validators.required, Validators.email]],
+				phone: ['', Validators.pattern('[- +()0-9]+')],
+				password: ['', [Validators.required, Validators.minLength(8)]],
+				repeat_password: ['', Validators.required],
+			},
+			{
+				validator: this.matchControls('password', 'repeat_password'),
+			}
+		);
 	}
 
 	onFileChange(event): void {
@@ -55,25 +57,22 @@ export class RegisterComponent implements OnInit {
 			this.userImage = event.target.files[0];
 
 			const reader = new FileReader();
-			reader.onload = e => this.imageData = reader.result;
+			reader.onload = (e) => (this.imageData = reader.result);
 
 			reader.readAsDataURL(this.userImage);
 		}
 	}
 
 	onSubmit() {
-		if (this.registerForm.invalid)
-			return;
+		if (this.registerForm.invalid) return;
 
-		this.userService.register(this.registerForm.value, this.userImage)
-			.pipe(first())
-			.subscribe({
-				next: () => {
-					this.router.navigate(['/login']);
-				},
-				error: (error) => {
-					this.error = error;
-				}
-			});
+		this.userService.register(this.registerForm.value, this.userImage).subscribe({
+			next: () => {
+				this.router.navigate(['/login']);
+			},
+			error: (error) => {
+				this.error = error;
+			},
+		});
 	}
 }

@@ -31,11 +31,11 @@ const routes: Routes = [
 	{ path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
 	{ path: 'profile/:userId', component: ProfileComponent },
 	{ path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
-	{ path: '**', component: NotFoundComponent }
+	{ path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({
 	imports: [RouterModule.forRoot(routes, { anchorScrolling: 'enabled' })],
 	exports: [RouterModule],
 })
-export class AppRoutingModule { }
+export class AppRoutingModule {}
