@@ -15,7 +15,11 @@ const userSchema = mongoose.Schema(
 		password: { type: String, required: true },
 		phone: String,
 		img: String,
-		role: { type: String, enum: ["user", "admin"], default: "user" },
+		role: {
+			type: String,
+			enum: ["user", "admin"],
+			default: "user",
+		},
 		experience: {
 			public: { type: Boolean, default: true },
 			entries: [entrySchema],
@@ -32,7 +36,9 @@ const userSchema = mongoose.Schema(
 	{ timestamps: true }
 );
 
-userSchema.plugin(uniqueValidator, { message: "Ο χρήστης με αυτό το email υπάρχει ήδη" });
+userSchema.plugin(uniqueValidator, {
+	message: "Ο χρήστης με αυτό το email υπάρχει ήδη",
+});
 
 const contactSchema = mongoose.Schema({
 	sender: { type: mongoose.Types.ObjectId, ref: "User" },

@@ -28,7 +28,8 @@
 					<a matLine [routerLink]="'/profile/' + comment.poster._id">{{ comment.poster.name }}</a>
 					<p>
 						<mat-icon>comment</mat-icon>
-						Ο χρήστης έγγραψε <a routerLink="/profile" [fragment]="comment._id">ένα σχόλιο στο άρθρο σας</a>.
+						Ο χρήστης έγγραψε
+						<a routerLink="/profile" [fragment]="comment._id">ένα σχόλιο στο άρθρο σας</a>.
 					</p>
 				</mat-list-item>
 			</ng-container>

@@ -34,14 +34,19 @@ export class UserService {
 	}
 
 	login(email: string, password: string) {
-		return this.http.post<any>(`${environment.apiUrl}/users/login`, { email, password }).pipe(
-			map((user) => {
-				// store user details and jwt token in local storage to keep user logged in between page refreshes
-				localStorage.setItem('user', JSON.stringify(user));
-				this.userSubject.next(user);
-				return user;
+		return this.http
+			.post<any>(`${environment.apiUrl}/users/login`, {
+				email,
+				password,
 			})
-		);
+			.pipe(
+				map((user) => {
+					// store user details and jwt token in local storage to keep user logged in between page refreshes
+					localStorage.setItem('user', JSON.stringify(user));
+					this.userSubject.next(user);
+					return user;
+				})
+			);
 	}
 
 	logout() {

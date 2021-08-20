@@ -6,12 +6,22 @@
 		<div class="container">
 			<mat-card>
 				<mat-error *ngIf="error">{{ error }}</mat-error>
-				<div *ngIf="viewedUser.experience">
+				<div *ngIf="viewedUser.experience.entries">
 					<!-- TODO Work experience etc -->
-					<form *ngIf="viewedUser._id === user._id" [formGroup]="experienceForm" (ngSubmit)="onSubmitExperience()">
-						<h2>Εισαγωγή επαγγελματικής εμπειρίας</h2>
-					</form>
 				</div>
+				<form *ngIf="viewedUser._id === user._id" [formGroup]="experienceForm" (ngSubmit)="onSubmitExperience()">
+					<h2>Εισαγωγή επαγγελματικής εμπειρίας</h2>
+				</form>
+
+				<div *ngIf="viewedUser.education"></div>
+				<form *ngIf="viewedUser._id === user._id" [formGroup]="educationForm" (ngSubmit)="onSubmitEducation()">
+					<h2>Εισαγωγή εκπαίδευσης</h2>
+				</form>
+
+				<div *ngIf="viewedUser.skills"></div>
+				<form *ngIf="viewedUser._id === user._id" [formGroup]="skillsForm" (ngSubmit)="onSubmitSkills()">
+					<h2>Εισαγωγή ικανότητας</h2>
+				</form>
 			</mat-card>
 			<app-article-list [user]="user" [articles]="articles" (errorEmitter)="onError($event)"></app-article-list>
 		</div>

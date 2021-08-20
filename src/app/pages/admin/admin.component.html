@@ -8,10 +8,17 @@
 		<!-- Checkbox Column -->
 		<ng-container matColumnDef="select">
 			<mat-header-cell *matHeaderCellDef>
-				<mat-checkbox (change)="$event ? masterToggle() : null" [checked]="selection.hasValue() && isAllSelected()" [indeterminate]="selection.hasValue() && !isAllSelected()"> Επιλογή </mat-checkbox>
+				<mat-checkbox
+					(change)="$event ? masterToggle() : null"
+					[checked]="selection.hasValue() && isAllSelected()"
+					[indeterminate]="selection.hasValue() && !isAllSelected()"
+				>
+					Επιλογή
+				</mat-checkbox>
 			</mat-header-cell>
 			<mat-cell *matCellDef="let row" (click)="selection.toggle(row)">
-				<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)"> </mat-checkbox>
+				<mat-checkbox (click)="$event.stopPropagation()" (change)="$event ? selection.toggle(row) : null" [checked]="selection.isSelected(row)">
+				</mat-checkbox>
 			</mat-cell>
 		</ng-container>
 		<ng-container matColumnDef="_id">
@@ -44,6 +51,14 @@
 		</ng-container>
 
 		<mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
-		<mat-row *matRowDef="let row; columns: displayedColumns" [ngClass]="{ hovered: row.hovered, highlighted: selection.isSelected(row) }" (mouseover)="row.hovered = true" (mouseout)="row.hovered = false"></mat-row>
+		<mat-row
+			*matRowDef="let row; columns: displayedColumns"
+			[ngClass]="{
+				hovered: row.hovered,
+				highlighted: selection.isSelected(row)
+			}"
+			(mouseover)="row.hovered = true"
+			(mouseout)="row.hovered = false"
+		></mat-row>
 	</mat-table>
 </div>

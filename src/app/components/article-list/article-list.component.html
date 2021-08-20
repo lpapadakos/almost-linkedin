@@ -9,13 +9,27 @@
 		<div class="article-media">
 			<div *ngFor="let file of article.media">
 				<img *ngIf="file.type.startsWith('image')" [src]="file.id | secure | async" />
-				<audio controls *ngIf="file.type.startsWith('audio')" [src]="file.id | secure | async">Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{ file.type }}</audio>
-				<video controls *ngIf="file.type.startsWith('video')" [src]="file.id | secure | async">Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{ file.type }}</video>
+				<audio controls *ngIf="file.type.startsWith('audio')" [src]="file.id | secure | async">
+					Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{ file.type }}
+				</audio>
+				<video controls *ngIf="file.type.startsWith('video')" [src]="file.id | secure | async">
+					Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{ file.type }}
+				</video>
 			</div>
 		</div>
 	</mat-card-content>
 	<mat-card-actions>
-		<button mat-button class="like" [ngClass]="{ 'mat-primary': isInterested(user, article) }" (click)="toggleInterest(article)"><mat-icon>thumb_up</mat-icon> {{ isInterested(user, article) ? "Σας ενδιαφέρει" : "Σημείωση Ενδιαφέροντος" }}</button>
+		<button
+			mat-button
+			class="like"
+			[ngClass]="{
+				'mat-primary': isInterested(user, article)
+			}"
+			(click)="toggleInterest(article)"
+		>
+			<mat-icon>thumb_up</mat-icon>
+			{{ isInterested(user, article) ? "Σας ενδιαφέρει" : "Σημείωση Ενδιαφέροντος" }}
+		</button>
 		<span *ngIf="article.interestNotes.length > 0">{{ article.interestNotes.length }} χρήστες βρήκαν το άρθρο ενδιαφέρον</span>
 		<div *ngIf="article.poster._id === user._id" class="delete-area">
 			<button *ngIf="!article.delete" mat-button color="warn" (click)="article.delete = true"><mat-icon>delete_forever</mat-icon> Διαγραφή Άρθρου</button>

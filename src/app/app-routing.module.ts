@@ -17,20 +17,53 @@ import { SettingsComponent } from './pages/settings/settings.component';
 import { NotFoundComponent } from './pages/not-found/not-found.component';
 
 const routes: Routes = [
-	{ path: 'admin', component: AdminComponent, canActivate: [AuthGuard], data: { adminOnly: true } },
+	{
+		path: 'admin',
+		component: AdminComponent,
+		canActivate: [AuthGuard],
+		data: { adminOnly: true },
+	},
 	{ path: '', redirectTo: '/home', pathMatch: 'full' },
 	{ path: 'dashboard', redirectTo: '/home', pathMatch: 'full' },
 	{ path: 'home', component: HomeComponent, canActivate: [AuthGuard] },
 	{ path: 'login', component: LoginComponent },
 	{ path: 'register', component: RegisterComponent },
-	{ path: 'network', component: NetworkComponent, canActivate: [AuthGuard] },
-	{ path: 'job-ads', component: JobAdsComponent, canActivate: [AuthGuard] },
-	{ path: 'discussions', component: DiscussionsComponent, canActivate: [AuthGuard] },
-	{ path: 'discussions/:discussionId', component: DiscussionsComponent, canActivate: [AuthGuard] },
-	{ path: 'notifications', component: NotificationsComponent, canActivate: [AuthGuard] },
-	{ path: 'profile', component: ProfileComponent, canActivate: [AuthGuard] },
+	{
+		path: 'network',
+		component: NetworkComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'job-ads',
+		component: JobAdsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'discussions',
+		component: DiscussionsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'discussions/:discussionId',
+		component: DiscussionsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'notifications',
+		component: NotificationsComponent,
+		canActivate: [AuthGuard],
+	},
+	{
+		path: 'profile',
+		component: ProfileComponent,
+		canActivate: [AuthGuard],
+	},
 	{ path: 'profile/:userId', component: ProfileComponent },
-	{ path: 'settings', component: SettingsComponent, canActivate: [AuthGuard] },
+	{
+		path: 'settings',
+		component: SettingsComponent,
+		canActivate: [AuthGuard],
+	},
 	{ path: '**', component: NotFoundComponent },
 ];
 

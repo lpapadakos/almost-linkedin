@@ -121,8 +121,6 @@ exports.addContactRequest = async (req, res) => {
 
 exports.getContactRequests = async (req, res) => {
 	try {
-		if (req.params.userId !== req.userId) return res.status(403).json({ error: "Δεν έχετε την άδεια για προβολή αιτημάτων σύνδεσης του χρήστη" });
-
 		res.status(200).json(await Contact.find({ receiver: req.params.userId, accepted: false }, "_id sender").populate("sender", "_id name img"));
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η προβολή αιτημάτων σύνδεσης: " + err });
@@ -131,8 +129,6 @@ exports.getContactRequests = async (req, res) => {
 
 exports.acceptContactRequest = async (req, res) => {
 	try {
-		if (req.params.userId !== req.userId) return res.status(403).json({ error: "Δεν έχετε την άδεια για αποδοχή αιτημάτων σύνδεσης του χρήστη" });
-
 		// Can only accept requests sent to us
 		await Contact.updateOne({ _id: req.params.requestId, receiver: req.params.userId }, { accepted: true });
 
@@ -144,8 +140,6 @@ exports.acceptContactRequest = async (req, res) => {
 
 exports.deleteContactRequest = async (req, res) => {
 	try {
-		if (req.params.userId !== req.userId) return res.status(403).json({ error: "Δεν έχετε την άδεια για απόρριψη αιτημάτων σύνδεσης του χρήστη" });
-
 		// Can only delete requests sent to us or received by us (to end contact)
 		await Contact.deleteOne({
 			$and: [
@@ -181,9 +175,15 @@ exports.getContacts = async (req, res) => {
 			if (!isContact) return res.status(403).json({ error: "Δεν έχετε την άδεια για προβολή δικτύου του χρήστη" });
 		}
 
-		const sentContacts = await Contact.find({ sender: req.params.userId, accepted: true }, "receiver interactions").populate("receiver", "_id name img createdAt experience education skills");
+		const sentContacts = await Contact.find({ sender: req.params.userId, accepted: true }, "receiver interactions").populate(
+			"receiver",
+			"_id name img createdAt experience education skills"
+		);
 
-		const receivedContacts = await Contact.find({ receiver: req.params.userId, accepted: true }, "sender interactions").populate("sender", "_id name img createdAt experience education skills");
+		const receivedContacts = await Contact.find({ receiver: req.params.userId, accepted: true }, "sender interactions").populate(
+			"sender",
+			"_id name img createdAt experience education skills"
+		);
 
 		let contacts = [].concat(sentContacts).concat(receivedContacts);
 
@@ -201,19 +201,6 @@ exports.getContacts = async (req, res) => {
 		res.status(200).json(usersOnly);
 	} catch (err) {
 		res.status(500).json({ error: "Απέτυχε η αναζήτηση επαφών: " + err });
-	}
-};
-
-exports.deleteContact = async (req, res) => {
-	try {
-		if (req.params.userId !== req.userId) return res.status(403).json({ error: "Δεν έχετε την άδεια για απόρριψη αιτημάτων σύνδεσης του χρήστη" });
-
-		// Can only reject requests sent to us
-		await Contact.deleteOne({ _id: req.params.requestId, receiver: req.params.userId });
-
-		res.status(204).json({ message: "Απόρριψη αιτήματος σύνδεσης" });
-	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η απόρριψη αιτημάτος σύνδεσης: " + err });
 	}
 };
 

@@ -12,7 +12,7 @@ import { ArticleService } from '../../services/article.service';
 	styleUrls: ['./notifications.component.css'],
 })
 export class NotificationsComponent implements OnInit {
-	user: User;
+	user: User = this.userService.user;
 	requests: ContactRequest[];
 	recentArticles: Article[];
 	error = '';
@@ -22,13 +22,9 @@ export class NotificationsComponent implements OnInit {
 	ngOnInit(): void {
 		this.userService.getContactRequests().subscribe((requests) => (this.requests = requests));
 
-		this.userService.userEmitter().subscribe((user) => {
-			this.user = user;
-
-			this.articleService.getFromUser(this.user._id).subscribe((articles) => {
-				// Use the 10 most recently updated articles (sorted by activity, essentially)
-				this.recentArticles = articles.splice(0, 10);
-			});
+		this.articleService.getFromUser(this.user._id).subscribe((articles) => {
+			// Use the 10 most recently updated articles (sorted by activity, essentially)
+			this.recentArticles = articles.splice(0, 10);
 		});
 	}
 

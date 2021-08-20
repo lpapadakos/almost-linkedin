@@ -6,7 +6,7 @@ charset = utf-8
 indent_style = tab
 indent_size = 8
 insert_final_newline = true
-max_line_length = 1200
+max_line_length = 180
 trim_trailing_whitespace = true
 
 [*.ts]
