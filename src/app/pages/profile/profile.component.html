@@ -19,9 +19,9 @@
 					<mat-list>
 						<mat-list-item *ngFor="let entry of viewedUser[entryType.name].entries">
 							<img matListAvatar [src]="'/assets/' + entryType.name + '.png'" />
-							<h3 matLine>{{ entry.what ? entry.what : entry.where }}</h3>
+							<h3 matLine>{{ entry.what || entry.where }}</h3>
 							<span *ngIf="entry.what" matLine>{{ entry.where }}</span>
-							<p *ngIf="entryType.name !== 'skills'">{{ entry.fromYear }} - {{ entry.toYear ? entry.toYear : "Σήμερα" }}</p>
+							<p *ngIf="entryType.name !== 'skills'">{{ entry.fromYear }} - {{ entry.toYear || "Σήμερα" }}</p>
 							<div *ngIf="viewedUser._id === user._id" class="delete-area">
 								<button *ngIf="!entry.delete" mat-icon-button color="warn" (click)="entry.delete = true">
 									<mat-icon>delete_forever</mat-icon>

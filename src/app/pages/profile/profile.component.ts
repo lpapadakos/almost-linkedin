@@ -21,25 +21,25 @@ export class ProfileComponent implements OnInit {
 	form = {};
 	entryTypes = [
 		{
-			name: "experience",
-			label: "Επαγγελματική εμπειρία",
-			form: "Εισαγωγή επαγγελματικής εμπειρίας",
-			form_what: "Περιγραφή Θέσης",
-			form_where: "Επωνυμία Εταιρίας/Οργανισμού"
+			name: 'experience',
+			label: 'Επαγγελματική εμπειρία',
+			form: 'Εισαγωγή επαγγελματικής εμπειρίας',
+			form_what: 'Περιγραφή Θέσης',
+			form_where: 'Επωνυμία Εταιρίας/Οργανισμού',
 		},
 		{
-			name: "education",
-			label: "Εκπαίδευση",
-			form: "Εισαγωγή εκπαίδευσης",
-			form_where: "Όνομα ιδρύματος/σχολής"
+			name: 'education',
+			label: 'Εκπαίδευση',
+			form: 'Εισαγωγή εκπαίδευσης',
+			form_where: 'Όνομα ιδρύματος/σχολής',
 		},
 		{
-			name: "skills",
-			label: "Δεξιότητες",
-			form: "Εισαγωγή δεξιότητας",
-			form_what: "Δεξιότητα"
-		}
-	]
+			name: 'skills',
+			label: 'Δεξιότητες',
+			form: 'Εισαγωγή δεξιότητας',
+			form_what: 'Δεξιότητα',
+		},
+	];
 
 	constructor(
 		private formBuilder: FormBuilder,
@@ -87,7 +87,7 @@ export class ProfileComponent implements OnInit {
 			});
 		});
 
-		this.form["experience"] = this.formBuilder.group(
+		this.form['experience'] = this.formBuilder.group(
 			{
 				what: ['', Validators.required],
 				where: ['', Validators.required],
@@ -99,7 +99,7 @@ export class ProfileComponent implements OnInit {
 			}
 		);
 
-		this.form["education"] = this.formBuilder.group(
+		this.form['education'] = this.formBuilder.group(
 			{
 				where: ['', Validators.required],
 				fromYear: ['', Validators.required],
@@ -110,7 +110,7 @@ export class ProfileComponent implements OnInit {
 			}
 		);
 
-		this.form["skills"] = this.formBuilder.group({
+		this.form['skills'] = this.formBuilder.group({
 			what: ['', Validators.required],
 		});
 	}
@@ -126,8 +126,8 @@ export class ProfileComponent implements OnInit {
 				array.push(obj);
 
 				// Sort results by fromYear descending
-				if (entryType !== "skills") {
-					<Entry[]> array.sort((e1, e2) => e2.fromYear - e1.fromYear);
+				if (entryType !== 'skills') {
+					<Entry[]>array.sort((e1, e2) => e2.fromYear - e1.fromYear);
 				}
 
 				form.reset();
@@ -135,7 +135,7 @@ export class ProfileComponent implements OnInit {
 			},
 			error: (err) => {
 				this.onError(err);
-			}
+			},
 		});
 	}
 
@@ -146,7 +146,7 @@ export class ProfileComponent implements OnInit {
 				// revert check on error
 				this.viewedUser[entryType].public = !isPublic;
 				this.onError(err);
-			}
+			},
 		});
 	}
 

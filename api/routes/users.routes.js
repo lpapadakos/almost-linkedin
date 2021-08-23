@@ -39,13 +39,8 @@ router.get("/:userId?", usersController.get);
 // TODO router.put("/:userId", sameUserOnly, usersController.update);
 
 // Contacts
-router.route("/:userId/contact-requests")
-	.post(usersController.addContactRequest)
-	.get(sameUserOnly, usersController.getContactRequests)
-router.route("/:userId/contact-requests/:requestId")
-	.all(sameUserOnly)
-	.put(usersController.acceptContactRequest)
-	.delete(usersController.deleteContactRequest);
+router.route("/:userId/contact-requests").post(usersController.addContactRequest).get(sameUserOnly, usersController.getContactRequests);
+router.route("/:userId/contact-requests/:requestId").all(sameUserOnly).put(usersController.acceptContactRequest).delete(usersController.deleteContactRequest);
 
 router.get("/:userId/contacts", usersController.getContacts);
 
@@ -58,9 +53,7 @@ router.use("/:userId/:entryType", sameUserOnly, (req, res, next) => {
 	next();
 });
 
-router.route("/:userId/:entryType")
-	.post(usersController.addEntry)
-	.put(usersController.changeEntryStatus);
+router.route("/:userId/:entryType").post(usersController.addEntry).put(usersController.changeEntryStatus);
 
 router.delete("/:userId/:entryType/:entryId", usersController.deleteEntry);
 

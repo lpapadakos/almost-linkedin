@@ -14,21 +14,24 @@ export class User {
 	role: string;
 	createdAt: Date;
 	experience: {
-		public: boolean,
-		entries: [Entry]
+		public: boolean;
+		entries: [Entry];
 	};
 	education: {
-		public: boolean,
-		entries: [Entry]
+		public: boolean;
+		entries: [Entry];
 	};
 	skills: {
-		public: boolean,
-		entries: [string]
+		public: boolean;
+		entries: [string];
 	};
+
+	// Frontend only vars: Helpful
 	contact: {
 		_id: string;
 		accepted: boolean;
 	};
+	currentStatus: Entry;
 }
 
 export class ContactRequest {

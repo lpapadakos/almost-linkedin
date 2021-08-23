@@ -88,7 +88,7 @@ exports.get = async (req, res, next) => {
 					user.education.entries = [];
 				}
 
-				if (!daijobu && !user.skills.public) user.skills = [];
+				if (!daijobu && !user.skills.public) user.skills.entries = [];
 			})
 		);
 
@@ -202,7 +202,7 @@ exports.getContacts = async (req, res, next) => {
 		// Send user info cleanly
 		let usersOnly = contacts.map((contact) => {
 			// return the defined field
-			return contact.sender ? contact.sender : contact.receiver;
+			return contact.sender || contact.receiver;
 		});
 
 		res.status(200).json(usersOnly);

@@ -45,6 +45,11 @@ p {
 	white-space: pre-wrap;
 }
 
+mat-icon {
+	vertical-align: middle;
+	font-size: 1.2em;
+}
+
 a {
 	color: inherit; /* blue colors for links too */
 	text-decoration: inherit; /* no underline */

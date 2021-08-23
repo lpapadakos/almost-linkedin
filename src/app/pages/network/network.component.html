@@ -10,12 +10,14 @@
 	<mat-grid-list *ngIf="!searchText || searchText == ''" cols="4" rowHeight="1:1">
 		<h2>Το Δίκτυο μου</h2>
 		<mat-grid-tile *ngFor="let user of contacts">
-			<!-- TODO company stuff grid -->
 			<a [routerLink]="'/profile/' + user._id">
 				<mat-card>
 					<img mat-card-avatar [src]="user.img | secure | async" />
 					<mat-card-title>{{ user.name }}</mat-card-title>
-					<mat-card-subtitle></mat-card-subtitle>
+					<mat-card-subtitle *ngIf="user.currentStatus">
+						<mat-icon>{{ user.currentStatus.what ? "work" : "school" }}</mat-icon> {{ user.currentStatus.what || "Σπουδάζει" }}<br />
+						@<strong>{{ user.currentStatus.where }}</strong>
+					</mat-card-subtitle>
 				</mat-card>
 			</a>
 		</mat-grid-tile>
@@ -25,9 +27,10 @@
 		<a mat-list-item *ngFor="let user of otherUsers | filter: searchText" [routerLink]="'/profile/' + user._id">
 			<img matListAvatar [src]="user.img | secure | async" />
 			<h3 matLine>{{ user.name }}</h3>
-			<p>
-				<!-- TODO company stuff list -->
-				<mat-icon>work</mat-icon> TITLE στην εταιρία COMPANY
+			<p *ngIf="user.currentStatus">
+				<mat-icon>{{ user.currentStatus.what ? "work" : "school" }}</mat-icon> {{ user.currentStatus.what || "Σπουδάζει" }} @<strong>{{
+					user.currentStatus.where
+				}}</strong>
 			</p>
 		</a>
 	</mat-list>
