@@ -3,7 +3,7 @@ const fs = require("fs");
 const { Article, Comment } = require("../models/article.model");
 const { Contact } = require("../models/user.model");
 
-exports.post = async (req, res) => {
+exports.post = async (req, res, next) => {
 	try {
 		// role is not defined during registration. It's 'user'. Admin is preinstalled
 		let article = new Article({
@@ -22,13 +22,11 @@ exports.post = async (req, res) => {
 		await article.save();
 		res.status(201).json(article);
 	} catch (err) {
-		res.status(500).json({
-			error: "Απέτυχε η ανάρτηση άρθρου: " + err,
-		});
+		next(err);
 	}
 };
 
-exports.get = async (req, res) => {
+exports.get = async (req, res, next) => {
 	try {
 		let filter = {};
 
@@ -82,13 +80,11 @@ exports.get = async (req, res) => {
 
 		res.status(200).json(articles);
 	} catch (err) {
-		res.status(500).json({
-			error: "Απέτυχε η αναζήτηση άρθρων: " + err,
-		});
+		next(err);
 	}
 };
 
-exports.delete = async (req, res) => {
+exports.delete = async (req, res, next) => {
 	try {
 		// Can only delete own articles
 		let article = await Article.findOneAndDelete({
@@ -100,9 +96,7 @@ exports.delete = async (req, res) => {
 
 		res.status(204).json({ message: "Το άρθρο διεγράφη" });
 	} catch (err) {
-		res.status(500).json({
-			error: "Απέτυχε η διαγραφή άρθρου: " + err,
-		});
+		next(err);
 	}
 };
 
@@ -122,7 +116,7 @@ increaseInteractionCount = (userId1, userId2) => {
 		});
 };
 
-exports.like = async (req, res) => {
+exports.like = async (req, res, next) => {
 	try {
 		const article = await Article.findByIdAndUpdate(req.params.articleId, {
 			$addToSet: { interestNotes: req.userId },
@@ -133,26 +127,22 @@ exports.like = async (req, res) => {
 			message: "Δηλώθηκε ενδιαφέρον για το άρθρο",
 		});
 	} catch (err) {
-		res.status(500).json({
-			error: "Απέτυχε η δήλωση ενδιαφέροντος για το άρθρο: " + err,
-		});
+		next(err);
 	}
 };
 
-exports.unlike = async (req, res) => {
+exports.unlike = async (req, res, next) => {
 	try {
 		await Article.updateOne({ _id: req.params.articleId }, { $pull: { interestNotes: req.userId } });
 		res.status(204).json({
 			message: "Αφαιρέθηκε η δήλωση ενδιαφέροντος για το άρθρο",
 		});
 	} catch (err) {
-		res.status(500).json({
-			error: "Απέτυχε η αφαίρεση της δήλωσης ενδιαφέροντος για το άρθρο: " + err,
-		});
+		next(err);
 	}
 };
 
-exports.comment = async (req, res) => {
+exports.comment = async (req, res, next) => {
 	try {
 		const comment = new Comment({
 			poster: req.userId,
@@ -164,13 +154,11 @@ exports.comment = async (req, res) => {
 
 		res.status(201).json(article.comments.pop());
 	} catch (err) {
-		res.status(500).json({
-			error: "Απέτυχε η προσθήκη σχολίου στο άρθρο: " + err,
-		});
+		next(err);
 	}
 };
 
-exports.deleteComment = async (req, res) => {
+exports.deleteComment = async (req, res, next) => {
 	try {
 		// Can only delete own comments
 		await Article.updateOne(
@@ -188,8 +176,6 @@ exports.deleteComment = async (req, res) => {
 			message: "Αφαιρέθηκε το σχόλιο από το άρθρο",
 		});
 	} catch (err) {
-		res.status(500).json({
-			error: "Απέτυχε η αφαίρεση του σχολίου από το άρθρο: " + err,
-		});
+		next(err);
 	}
 };

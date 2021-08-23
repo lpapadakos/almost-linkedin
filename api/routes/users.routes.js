@@ -4,11 +4,11 @@ const { body } = require("express-validator");
 
 const upload = require("../middlewares/multerStorage");
 const validationHandler = require("../middlewares/validationHandler");
-const verifyToken = require("../middlewares/verifyToken");
 const adminOnly = require("../middlewares/adminOnly");
-
-const sameUserOnly = async (req, res, next) => {
-	if (req.params.userId !== req.userId) return res.status(403).json({ error: "Διαθέσιμο μόνο για τον ίδιο χρήστη" });
+const sameUserOnly = (req, res, next) => {
+	if (req.params.userId !== req.userId) {
+		return res.status(403).json({ error: "Διαθέσιμο μόνο για τον ίδιο χρήστη" });
+	}
 
 	next();
 };
@@ -35,31 +35,37 @@ router.post(
 router.post("/login", [body("email", "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail()], validationHandler, usersController.login);
 
 // Profiles
-router.get("/", verifyToken, usersController.get);
-router.get("/:userId", verifyToken, usersController.get);
-
-router.post("/:userId/experience", verifyToken, sameUserOnly, userController.addExperience);
-router.put("/:userId/experience", verifyToken, sameUserOnly, userController.changeExperienceStatus);
-router.delete("/:userId/experience", verifyToken, sameUserOnly, userController.deleteExperience);
-
-router.post("/:userId/education", verifyToken, sameUserOnly, userController.addEducation);
-router.put("/:userId/education", verifyToken, sameUserOnly, userController.changeEducationStatus);
-router.delete("/:userId/education", verifyToken, sameUserOnly, userController.deleteEducation);
-
-router.post("/:userId/skills", verifyToken, sameUserOnly, userController.addSkills);
-router.put("/:userId/skills", verifyToken, sameUserOnly, userController.changeSkillsStatus);
-router.delete("/:userId/skills", verifyToken, sameUserOnly, userController.deleteSkills);
+router.get("/:userId?", usersController.get);
+// TODO router.put("/:userId", sameUserOnly, usersController.update);
 
 // Contacts
-router.post("/:userId/contact-requests", verifyToken, usersController.addContactRequest);
-router.get("/:userId/contact-requests", verifyToken, sameUserOnly, usersController.getContactRequests);
-router.put("/:userId/contact-requests/:requestId", verifyToken, sameUserOnly, usersController.acceptContactRequest);
-router.delete("/:userId/contact-requests/:requestId", verifyToken, sameUserOnly, usersController.deleteContactRequest);
+router.route("/:userId/contact-requests")
+	.post(usersController.addContactRequest)
+	.get(sameUserOnly, usersController.getContactRequests)
+router.route("/:userId/contact-requests/:requestId")
+	.all(sameUserOnly)
+	.put(usersController.acceptContactRequest)
+	.delete(usersController.deleteContactRequest);
 
-router.get("/:userId/contacts", verifyToken, usersController.getContacts);
+router.get("/:userId/contacts", usersController.getContacts);
+
+// Profile Entries
+router.use("/:userId/:entryType", sameUserOnly, (req, res, next) => {
+	if (!["experience", "education", "skills"].includes(req.params.entryType)) {
+		return res.status(400).json({ error: "Δεν ορίζεται αυτός ο τύπος δεδομένων προφίλ" });
+	}
+
+	next();
+});
+
+router.route("/:userId/:entryType")
+	.post(usersController.addEntry)
+	.put(usersController.changeEntryStatus);
+
+router.delete("/:userId/:entryType/:entryId", usersController.deleteEntry);
 
 // Admin stuff
-// TODO router.delete("/:userId", verifyToken, adminOnly usersController.deactivate);
-router.get("/export", verifyToken, adminOnly, usersController.export);
+// TODO router.delete("/:userId", adminOnly, usersController.deactivate);
+router.get("/export", adminOnly, usersController.export);
 
 module.exports = router;

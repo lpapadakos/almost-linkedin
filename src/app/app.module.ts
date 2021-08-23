@@ -28,7 +28,7 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 
-import { NgPipesModule } from 'ngx-pipes';
+import { NgDatePipesModule } from 'ngx-pipes';
 import { SecurePipe } from './helpers/secure.pipe';
 import { FilterPipe } from './helpers/filter.pipe';
 
@@ -69,7 +69,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		AdminComponent,
 		SecurePipe,
 		FilterPipe,
-		// NgPipesModule
+		// NgDatePipesModule
 	],
 	imports: [
 		BrowserModule,

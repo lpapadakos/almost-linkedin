@@ -4,7 +4,7 @@ import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
-import { User, ContactRequest } from '../models/user.model';
+import { Entry, User, ContactRequest } from '../models/user.model';
 
 @Injectable({ providedIn: 'root' })
 export class UserService {
@@ -82,5 +82,17 @@ export class UserService {
 
 	getContacts(userId: string) {
 		return this.http.get<User[]>(`${environment.apiUrl}/users/${userId}/contacts`);
+	}
+
+	addEntry(entryType: string, entry: Entry) {
+		return this.http.post(`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}`, entry);
+	}
+
+	changeEntryStatus(entryType: string, isPublic: boolean) {
+		return this.http.put(`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}`, { public: isPublic });
+	}
+
+	deleteEntry(entryType: string, entryId: string) {
+		return this.http.delete(`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}/${entryId}`);
 	}
 }

@@ -13,9 +13,18 @@ export class User {
 	img: string;
 	role: string;
 	createdAt: Date;
-	experience: [Entry];
-	education: [Entry];
-	skills: [string];
+	experience: {
+		public: boolean,
+		entries: [Entry]
+	};
+	education: {
+		public: boolean,
+		entries: [Entry]
+	};
+	skills: {
+		public: boolean,
+		entries: [string]
+	};
 	contact: {
 		_id: string;
 		accepted: boolean;

@@ -1,0 +1,25 @@
+.entry-years mat-form-field {
+	width: 50%;
+	padding: 0 1em;
+	box-sizing: border-box;
+}
+
+.entry-years mat-form-field:first-child {
+	padding-left: 0;
+}
+
+.entry-years mat-form-field:last-child {
+	padding-right: 0;
+}
+
+mat-checkbox {
+	float: right;
+}
+
+mat-list-item img {
+	border-radius: inherit !important;
+}
+
+.delete-area {
+	margin-left: 2em;
+}

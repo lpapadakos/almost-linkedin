@@ -1,11 +1,12 @@
 // Include Packages
 const express = require("express");
-const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const logger = require("morgan");
 const fs = require("fs");
 const https = require("https");
+
+const unless = require("./middlewares/unless");
 
 // Server Configuration
 const config = require("./config");
@@ -13,13 +14,6 @@ const httpsOptions = {
 	key: fs.readFileSync("./certs/selfsigned.key"),
 	cert: fs.readFileSync("./certs/selfsigned.crt"),
 };
-
-// Initialize the application
-var server = express();
-server.use(cors());
-server.use(logger("dev"));
-server.use(bodyParser.json());
-server.use(bodyParser.urlencoded({ extended: true }));
 
 // Connect to MongoDB
 mongoose.connect(config.MONGO_URI, {
@@ -29,28 +23,40 @@ mongoose.connect(config.MONGO_URI, {
 	useFindAndModify: false,
 });
 mongoose.connection.on("error", (err) => {
-	console.log("Could not connect to MongoDB");
+	console.error("Could not connect to MongoDB: " + err);
 });
 
-// Allowed headers
+// Initialize the server itself
+var server = express();
+
+// Middleware
+server.use(cors());
+server.use(logger("dev"));
+server.use(express.json());
+server.use(express.urlencoded({ extended: true }));
+
 server.use((req, res, next) => {
 	res.header("Access-Control-Allow-Headers", "Authorization, Origin, Content-Type, Accept");
 	next();
 });
 
-// Set API endpoint routes
-server.get("/files/:id", require("./middlewares/verifyToken"), (req, res) => {
-	res.download("./uploads/" + req.params.id, (err) => {
-		if (err) {
-			res.status(500).send({
-				error: err,
-			});
-		}
-	});
-});
+// Require JWT token for all routes except login and register
+server.use(unless(require("./middlewares/verifyToken"), "/users/register", "/users/login"));
 
+// Set API endpoint routes
+server.use("/files", express.static("uploads"));
 server.use("/users", require("./routes/users.routes"));
 server.use("/articles", require("./routes/articles.routes"));
+// TODO server.use("/job-ads", require("./routes/job-ads.routes"));
+
+// Error handler
+server.use((err, req, res, next) => {
+	// delegate to the default Express error handler, when the headers have already been sent to the client
+	if (res.headersSent) return next(err);
+
+	console.error(err.stack);
+	res.status(500).json({ error: "Something happened: " + err });
+});
 
 // Start the server (HTTPS)
 https.createServer(httpsOptions, server).listen(config.LISTEN_PORT, () => {

@@ -2,9 +2,10 @@ const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
 
 const config = require("../config");
-const { User, Contact } = require("../models/user.model");
+const { Entry, User, Contact } = require("../models/user.model");
 
-exports.register = async (req, res) => {
+// TODO use brackets on most ifs
+exports.register = async (req, res, next) => {
 	try {
 		// role is not defined during registration. It's 'user'. Admin is preinstalled
 		const user = new User({
@@ -20,11 +21,11 @@ exports.register = async (req, res) => {
 		await user.save();
 		res.status(201).json({ message: "Επιτυχής εγγραφή χρήστη" });
 	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η εγγραφή χρήστη: " + err });
+		next(err);
 	}
 };
 
-exports.login = async (req, res) => {
+exports.login = async (req, res, next) => {
 	try {
 		const user = await User.findOne({ email: req.body.email });
 
@@ -43,11 +44,11 @@ exports.login = async (req, res) => {
 			token: await jwt.sign({ id: user._id }, config.TOKEN_SECRET, { expiresIn: "1d" }),
 		});
 	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η σύνδεση χρήστη: " + err });
+		next(err);
 	}
 };
 
-exports.get = async (req, res) => {
+exports.get = async (req, res, next) => {
 	try {
 		let filter = { role: "user" };
 
@@ -55,11 +56,11 @@ exports.get = async (req, res) => {
 		if (req.params.userId) filter._id = req.params.userId;
 		else filter._id = { $ne: req.userId };
 
-		let users = await User.find(filter, "_id name email img createdAt experience education skills").lean();
+		let users = await User.find(filter, "_id name email img createdAt experience education skills").sort({ name: "asc" }).lean();
 
 		await Promise.all(
 			users.map(async (user) => {
-				if (user._id !== req.userId && !req.fromAdmin) delete user.email;
+				if (user._id != req.userId && !req.fromAdmin) delete user.email;
 
 				// Find if requesting user and user we're GETting are in the same network
 				const contact = await Contact.findOne({
@@ -73,13 +74,21 @@ exports.get = async (req, res) => {
 				if (contact) user.contact = { _id: contact._id, accepted: contact.accepted };
 
 				// Keep protected info from public view
-				if (!contact || contact.accepted == false) {
-					if (!user.experience.public) delete user.experience;
+				const daijobu = user._id == req.userId || (contact && contact.accepted);
 
-					if (!user.education.public) delete user.education;
-
-					if (!user.skills.public) delete user.skills;
+				if (daijobu || user.experience.public) {
+					await user.experience.entries.sort((e1, e2) => e2.fromYear - e1.fromYear);
+				} else {
+					user.experience.entries = [];
 				}
+
+				if (daijobu || user.education.public) {
+					await user.education.entries.sort((e1, e2) => e2.fromYear - e1.fromYear);
+				} else {
+					user.education.entries = [];
+				}
+
+				if (!daijobu && !user.skills.public) user.skills = [];
 			})
 		);
 
@@ -90,11 +99,11 @@ exports.get = async (req, res) => {
 
 		res.status(200).json(users);
 	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η αναζήτηση χρηστών: " + err });
+		next(err);
 	}
 };
 
-exports.addContactRequest = async (req, res) => {
+exports.addContactRequest = async (req, res, next) => {
 	try {
 		if (req.params.userId === req.userId) return res.status(400).json({ error: "Δεν χρειάζεται να γίνει αίτημα σύνδεσης προς τον ίδιο το χρήστη" });
 
@@ -115,30 +124,30 @@ exports.addContactRequest = async (req, res) => {
 		await request.save();
 		res.status(201).json(request);
 	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η δημιουργία αιτήματος σύνδεσης: " + err });
+		next(err);
 	}
 };
 
-exports.getContactRequests = async (req, res) => {
+exports.getContactRequests = async (req, res, next) => {
 	try {
 		res.status(200).json(await Contact.find({ receiver: req.params.userId, accepted: false }, "_id sender").populate("sender", "_id name img"));
 	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η προβολή αιτημάτων σύνδεσης: " + err });
+		next(err);
 	}
 };
 
-exports.acceptContactRequest = async (req, res) => {
+exports.acceptContactRequest = async (req, res, next) => {
 	try {
 		// Can only accept requests sent to us
 		await Contact.updateOne({ _id: req.params.requestId, receiver: req.params.userId }, { accepted: true });
 
 		res.status(200).json({ message: "Αποδοχή αιτήματος σύνδεσης" });
 	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η αποδοχή αιτημάτος σύνδεσης: " + err });
+		next(err);
 	}
 };
 
-exports.deleteContactRequest = async (req, res) => {
+exports.deleteContactRequest = async (req, res, next) => {
 	try {
 		// Can only delete requests sent to us or received by us (to end contact)
 		await Contact.deleteOne({
@@ -152,11 +161,11 @@ exports.deleteContactRequest = async (req, res) => {
 
 		res.status(204).json({ message: "Διαγραφή αιτήματος σύνδεσης" });
 	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η διαγραφή αιτημάτος σύνδεσης: " + err });
+		next(err);
 	}
 };
 
-exports.getContacts = async (req, res) => {
+exports.getContacts = async (req, res, next) => {
 	try {
 		// Can peep only at the network of ourselves or our contacts
 		if (req.params.userId !== req.userId) {
@@ -188,9 +197,7 @@ exports.getContacts = async (req, res) => {
 		let contacts = [].concat(sentContacts).concat(receivedContacts);
 
 		// Sort contacts descending by number of interactions
-		contacts.sort((a, b) => {
-			return a.interactions < b.interactions ? 1 : a.interactions > b.interactions ? -1 : 0;
-		});
+		await contacts.sort((c1, c2) => c2.interactions - c1.interactions);
 
 		// Send user info cleanly
 		let usersOnly = contacts.map((contact) => {
@@ -200,13 +207,51 @@ exports.getContacts = async (req, res) => {
 
 		res.status(200).json(usersOnly);
 	} catch (err) {
-		res.status(500).json({ error: "Απέτυχε η αναζήτηση επαφών: " + err });
+		next(err);
 	}
 };
 
-exports.export = async (req, res) => {
-	const type = req.query.type || "xml";
+exports.addEntry = async (req, res, next) => {
+	try {
+		const entry = new Entry({
+			where: req.body.where,
+			what: req.body.what,
+			fromYear: req.body.fromYear,
+			toYear: req.body.toYear,
+		});
 
-	console.log(type);
-	// TODO export users that were requested, XML/JSON
+		await User.updateOne({ _id: req.params.userId }, { $push: { [`${req.params.entryType}.entries`]: entry } });
+		res.status(201).json(entry);
+	} catch (err) {
+		next(err);
+	}
+};
+
+exports.changeEntryStatus = async (req, res, next) => {
+	try {
+		await User.updateOne({ _id: req.params.userId }, { [`${req.params.entryType}.public`]: req.body.public });
+		res.status(200).json({ message: "Επιτυχής αλλαγή ιδιωτικότητας δεδομένων προφίλ" });
+	} catch (err) {
+		next(err);
+	}
+};
+
+exports.deleteEntry = async (req, res, next) => {
+	try {
+		await User.updateOne({ _id: req.params.userId }, { $pull: { [`${req.params.entryType}.entries`]: { _id: req.params.entryId } } });
+		res.status(204).json({ message: "Διαγράφτηκε το δεδομένο προφίλ" });
+	} catch (err) {
+		next(err);
+	}
+};
+
+exports.export = async (req, res, next) => {
+	try {
+		const type = req.query.type || "xml";
+
+		console.log(type);
+		// TODO export users that were requested, XML/JSON
+	} catch (err) {
+		next(err);
+	}
 };

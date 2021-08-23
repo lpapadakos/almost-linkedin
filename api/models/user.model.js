@@ -30,7 +30,7 @@ const userSchema = mongoose.Schema(
 		},
 		skills: {
 			public: { type: Boolean, default: true },
-			entries: [String],
+			entries: [entrySchema],
 		},
 	},
 	{ timestamps: true }

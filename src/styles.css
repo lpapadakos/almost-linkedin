@@ -10,13 +10,12 @@ body {
 	font-family: "Open Sans", Roboto, "Helvetica Neue", sans-serif;
 }
 
-mat-sidenav-container {
-	min-height: 100vh;
-}
-
 mat-sidenav {
 	width: 20%;
+	height: 100vh;
 	text-align: center;
+	position: fixed !important;
+	margin-top: 64px;
 }
 
 textarea {

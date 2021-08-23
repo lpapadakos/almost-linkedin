@@ -1,25 +1,27 @@
 const express = require("express");
 const router = express.Router();
 
-const verifyToken = require("../middlewares/verifyToken");
 const upload = require("../middlewares/multerStorage");
 
 const articlesController = require("../controllers/articles.controller");
 
 // Articles
-router.post("/", verifyToken, upload.array("media", 10), articlesController.post);
+router.route("/")
+	.post(upload.array("media", 10), articlesController.post)
+	.get(articlesController.get);
 
-router.get("/", verifyToken, articlesController.get);
-router.get("/:articleId", verifyToken, articlesController.get);
-
-router.delete("/:articleId", verifyToken, articlesController.delete);
+router.route("/:articleId")
+	.get(articlesController.get)
+	.delete(articlesController.delete);
 
 // Likes (Interest Notes)
-router.post("/:articleId/like", verifyToken, articlesController.like);
-router.delete("/:articleId/like", verifyToken, articlesController.unlike);
+router.route("/:articleId/like")
+	.post(articlesController.like)
+	.delete(articlesController.unlike);
 
 // Comments
-router.post("/:articleId/comment", verifyToken, articlesController.comment);
-router.delete("/:articleId/comment/:commentId", verifyToken, articlesController.deleteComment);
+router.route("/:articleId/comment")
+	.post(articlesController.comment)
+	.delete(articlesController.deleteComment);
 
 module.exports = router;
