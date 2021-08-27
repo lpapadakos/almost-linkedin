@@ -2,7 +2,7 @@
 
 ## AlmostLinkedin
 
-![home](https://user-images.githubusercontent.com/67466872/129423984-d818944e-d3e0-4bfc-abda-4279ba66de96.png)
+![Screenshot 2021-08-27 at 20-39-21 AlmostLinkedin](https://user-images.githubusercontent.com/67466872/131167719-9964afd3-1a9a-4970-a126-cf951fecbc69.png)
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 11.2.8.
 
