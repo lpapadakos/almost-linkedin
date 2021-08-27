@@ -1,8 +1,11 @@
-import { NgModule } from '@angular/core';
+import { NgModule, LOCALE_ID } from '@angular/core';
+import { registerLocaleData } from '@angular/common';
+import localeEl from '@angular/common/locales/el'
+registerLocaleData(localeEl);
+
 import { BrowserModule } from '@angular/platform-browser';
 import { AppRoutingModule } from './app-routing.module';
 import { HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
-// import { FlexLayoutModule } from '@angular/flex-layout';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 
@@ -28,7 +31,6 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { ErrorInterceptor } from './helpers/error.interceptor';
 import { JwtInterceptor } from './helpers/jwt.interceptor';
 
-import { NgDatePipesModule } from 'ngx-pipes';
 import { SecurePipe } from './helpers/secure.pipe';
 import { FilterPipe } from './helpers/filter.pipe';
 
@@ -69,13 +71,11 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		AdminComponent,
 		SecurePipe,
 		FilterPipe,
-		// NgDatePipesModule
 	],
 	imports: [
 		BrowserModule,
 		AppRoutingModule,
 		HttpClientModule,
-		// FlexLayoutModule,
 		FormsModule,
 		ReactiveFormsModule,
 		BrowserAnimationsModule,
@@ -98,6 +98,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		MatToolbarModule,
 	],
 	providers: [
+		{ provide: LOCALE_ID, useValue: "el-GR" },
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: JwtInterceptor,

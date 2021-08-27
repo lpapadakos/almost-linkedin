@@ -1,6 +1,6 @@
 <mat-sidenav-container>
 	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<app-sidenav [user]="user" [viewedUser]="user" (errorEmitter)="onError($event)"></app-sidenav>
+		<app-sidenav [viewedUser]="user" (errorEmitter)="onError($event)"></app-sidenav>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<div class="container">
@@ -13,7 +13,7 @@
 							<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
 							<textarea matInput matTextareaAutosize placeholder="Τι σκέφτεστε;" formControlName="text" required></textarea>
 						</mat-form-field>
-						<label for="media">Μπορείτε να επισυνάψετε αρχεία πολυμέσων: </label>
+						<label for="media">Μπορείτε να επισυνάψετε αρχεία πολυμέσων:</label>
 						<input id="media" type="file" multiple accept="image/*,audio/*,video/*" formControlName="media" (change)="onFileChange($event)" />
 						<mat-card-actions>
 							<button mat-raised-button type="submit" color="primary">Δημοσίευση</button>

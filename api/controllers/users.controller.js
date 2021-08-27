@@ -40,6 +40,7 @@ exports.login = async (req, res, next) => {
 			email: user.email,
 			role: user.role,
 			img: user.img,
+			lastDiscussion: user.lastDiscussion,
 			createdAt: user.createdAt,
 			token: await jwt.sign({ id: user._id }, config.TOKEN_SECRET, { expiresIn: "1d" }),
 		});
@@ -52,16 +53,12 @@ exports.get = async (req, res, next) => {
 	try {
 		let filter = { role: "user" };
 
-		// When getting all users, exclude requesting user from the list
 		if (req.params.userId) filter._id = req.params.userId;
-		else filter._id = { $ne: req.userId };
 
-		let users = await User.find(filter, "_id name email img createdAt experience education skills").sort({ name: "asc" }).lean();
+		let users = await User.find(filter, "_id name email phone img experience education skills createdAt").sort({ name: "asc" }).lean();
 
 		await Promise.all(
 			users.map(async (user) => {
-				if (user._id != req.userId && !req.fromAdmin) delete user.email;
-
 				// Find if requesting user and user we're GETting are in the same network
 				const contact = await Contact.findOne({
 					$or: [
@@ -71,10 +68,12 @@ exports.get = async (req, res, next) => {
 				});
 
 				// Add non-db field to make frontend client's life easier
-				if (contact) user.contact = { _id: contact._id, accepted: contact.accepted };
+				if (contact) {
+					user.contact = { _id: contact._id, accepted: contact.accepted };
+				}
 
-				// Keep protected info from public view
-				const daijobu = user._id == req.userId || (contact && contact.accepted);
+				// Keep protected info from public view, with 3 exceptions
+				const daijobu = req.fromAdmin || user._id == req.userId || (contact && contact.accepted);
 
 				if (daijobu || user.experience.public) {
 					await user.experience.entries.sort((e1, e2) => e2.fromYear - e1.fromYear);
@@ -105,7 +104,9 @@ exports.get = async (req, res, next) => {
 
 exports.addContactRequest = async (req, res, next) => {
 	try {
-		if (req.params.userId === req.userId) return res.status(400).json({ error: "Δεν χρειάζεται να γίνει αίτημα σύνδεσης προς τον ίδιο το χρήστη" });
+		if (req.params.userId === req.userId) {
+			return res.status(400).json({ error: "Δεν χρειάζεται να γίνει αίτημα σύνδεσης προς τον ίδιο το χρήστη" });
+		}
 
 		const existingRequest = await Contact.exists({
 			$or: [

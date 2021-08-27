@@ -19,7 +19,12 @@
 				<mat-list-item *ngIf="interestedUser._id != user._id">
 					<img matListAvatar [src]="interestedUser.img | secure | async" />
 					<a matLine [routerLink]="'/profile/' + interestedUser._id">{{ interestedUser.name }}</a>
-					<p><mat-icon>thumb_up</mat-icon> Ο χρήστης βρήκε ενδιαφέρον <a routerLink="/profile" [fragment]="article._id">το άρθρο σας</a>.</p>
+					<p>
+						<mat-icon>thumb_up</mat-icon>
+						Ο χρήστης βρήκε ενδιαφέρον
+						<a routerLink="/profile" [fragment]="article._id">το άρθρο σας</a>
+						.
+					</p>
 				</mat-list-item>
 			</ng-container>
 			<ng-container *ngFor="let comment of article.comments">
@@ -29,7 +34,8 @@
 					<p>
 						<mat-icon>comment</mat-icon>
 						Ο χρήστης έγγραψε
-						<a routerLink="/profile" [fragment]="comment._id">ένα σχόλιο στο άρθρο σας</a>.
+						<a routerLink="/profile" [fragment]="comment._id">ένα σχόλιο στο άρθρο σας</a>
+						.
 					</p>
 				</mat-list-item>
 			</ng-container>

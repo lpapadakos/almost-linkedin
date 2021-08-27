@@ -35,11 +35,6 @@ server.use(logger("dev"));
 server.use(express.json());
 server.use(express.urlencoded({ extended: true }));
 
-server.use((req, res, next) => {
-	res.header("Access-Control-Allow-Headers", "Authorization, Origin, Content-Type, Accept");
-	next();
-});
-
 // Require JWT token for all routes except login and register
 server.use(unless(require("./middlewares/verifyToken"), "/users/register", "/users/login"));
 
@@ -48,6 +43,7 @@ server.use("/files", express.static("uploads"));
 server.use("/users", require("./routes/users.routes"));
 server.use("/articles", require("./routes/articles.routes"));
 // TODO server.use("/job-ads", require("./routes/job-ads.routes"));
+server.use("/discussions", require("./routes/discussions.routes"));
 
 // Error handler
 server.use((err, req, res, next) => {

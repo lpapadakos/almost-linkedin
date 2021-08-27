@@ -8,6 +8,14 @@
 	height: 200px;
 }
 
+h1 {
+	margin: 0;
+}
+
+mat-list {
+	margin-bottom: 1em;
+}
+
 #top-contacts {
 	margin: 2em 0;
 }

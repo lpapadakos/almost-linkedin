@@ -1,0 +1,9 @@
+#new {
+	padding: 1em;
+	background-color: #eee;
+}
+
+.selected {
+	background-color: red;
+	font-weight: bold;
+}

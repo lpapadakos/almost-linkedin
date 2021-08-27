@@ -1,6 +1,6 @@
 <mat-sidenav-container>
 	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<app-sidenav *ngIf="viewedUser" [user]="user" [viewedUser]="viewedUser" (errorEmitter)="onError($event)"></app-sidenav>
+		<app-sidenav *ngIf="viewedUser" [viewedUser]="viewedUser" (errorEmitter)="onError($event)"></app-sidenav>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<div *ngIf="viewedUser" class="container">
@@ -13,8 +13,9 @@
 							*ngIf="viewedUser._id === user._id"
 							[(ngModel)]="viewedUser[entryType.name].public"
 							(change)="onStatusChange(entryType.name, $event.checked)"
-							>Δημόσιο</mat-checkbox
 						>
+							Δημόσιο
+						</mat-checkbox>
 					</h2>
 					<mat-list>
 						<mat-list-item *ngFor="let entry of viewedUser[entryType.name].entries">

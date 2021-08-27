@@ -13,7 +13,7 @@ const sameUserOnly = (req, res, next) => {
 	next();
 };
 
-const usersController = require("../controllers/users.controller");
+const user = require("../controllers/users.controller");
 
 router.post(
 	"/register",
@@ -29,20 +29,20 @@ router.post(
 		body("password", "Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες").isLength({ min: 8 }),
 	],
 	validationHandler,
-	usersController.register
+	user.register
 );
 
-router.post("/login", [body("email", "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail()], validationHandler, usersController.login);
+router.post("/login", [body("email", "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail()], validationHandler, user.login);
 
 // Profiles
-router.get("/:userId?", usersController.get);
+router.get("/:userId?", user.get);
 // TODO router.put("/:userId", sameUserOnly, usersController.update);
 
 // Contacts
-router.route("/:userId/contact-requests").post(usersController.addContactRequest).get(sameUserOnly, usersController.getContactRequests);
-router.route("/:userId/contact-requests/:requestId").all(sameUserOnly).put(usersController.acceptContactRequest).delete(usersController.deleteContactRequest);
+router.route("/:userId/contact-requests").post(user.addContactRequest).get(sameUserOnly, user.getContactRequests);
+router.route("/:userId/contact-requests/:requestId").all(sameUserOnly).put(user.acceptContactRequest).delete(user.deleteContactRequest);
 
-router.get("/:userId/contacts", usersController.getContacts);
+router.get("/:userId/contacts", user.getContacts);
 
 // Profile Entries
 router.use("/:userId/:entryType", sameUserOnly, (req, res, next) => {
@@ -52,13 +52,11 @@ router.use("/:userId/:entryType", sameUserOnly, (req, res, next) => {
 
 	next();
 });
-
-router.route("/:userId/:entryType").post(usersController.addEntry).put(usersController.changeEntryStatus);
-
-router.delete("/:userId/:entryType/:entryId", usersController.deleteEntry);
+router.route("/:userId/:entryType").post(user.addEntry).put(user.changeEntryStatus);
+router.delete("/:userId/:entryType/:entryId", user.deleteEntry);
 
 // Admin stuff
 // TODO router.delete("/:userId", adminOnly, usersController.deactivate);
-router.get("/export", adminOnly, usersController.export);
+router.get("/export", adminOnly, user.export);
 
 module.exports = router;

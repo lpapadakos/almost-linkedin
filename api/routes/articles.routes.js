@@ -2,18 +2,19 @@ const express = require("express");
 const router = express.Router();
 
 const upload = require("../middlewares/multerStorage");
+const interaction = require("../middlewares/interaction");
 
-const articlesController = require("../controllers/articles.controller");
+const article = require("../controllers/articles.controller");
 
 // Articles
-router.route("/").post(upload.array("media", 10), articlesController.post).get(articlesController.get);
+router.route("/").post(upload.array("media", 10), article.post).get(article.get);
 
-router.route("/:articleId").get(articlesController.get).delete(articlesController.delete);
+router.route("/:articleId").get(article.get).delete(article.delete);
 
 // Likes (Interest Notes)
-router.route("/:articleId/like").post(articlesController.like).delete(articlesController.unlike);
+router.route("/:articleId/like").post(article.like, interaction).delete(article.unlike);
 
 // Comments
-router.route("/:articleId/comment").post(articlesController.comment).delete(articlesController.deleteComment);
+router.route("/:articleId/comment").post(article.comment, interaction).delete(article.deleteComment);
 
 module.exports = router;

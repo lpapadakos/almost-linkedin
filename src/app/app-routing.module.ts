@@ -44,7 +44,7 @@ const routes: Routes = [
 		canActivate: [AuthGuard],
 	},
 	{
-		path: 'discussions/:discussionId',
+		path: 'discussions/:userId',
 		component: DiscussionsComponent,
 		canActivate: [AuthGuard],
 	},

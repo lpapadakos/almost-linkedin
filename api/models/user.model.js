@@ -32,6 +32,7 @@ const userSchema = mongoose.Schema(
 			public: { type: Boolean, default: true },
 			entries: [entrySchema],
 		},
+		lastDiscussion: { type: mongoose.Types.ObjectId, ref: "User" },
 	},
 	{ timestamps: true }
 );

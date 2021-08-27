@@ -23,26 +23,32 @@ export class NavComponent implements OnInit, OnDestroy {
 				link: '/home',
 			},
 			{
+				icon: 'contacts',
 				label: 'Δίκτυο',
 				link: '/network',
 			},
 			{
+				icon: 'business',
 				label: 'Αγγελίες',
 				link: '/job-ads',
 			},
 			{
+				icon: 'chat',
 				label: 'Συζητήσεις',
 				link: '/discussions',
 			},
 			{
+				icon: 'notifications',
 				label: 'Ειδοποιήσεις',
 				link: '/notifications',
 			},
 			{
+				icon: 'account_circle',
 				label: 'Προσωπικά Στοιχεία',
 				link: '/profile',
 			},
 			{
+				icon: 'settings',
 				label: 'Ρυθμίσεις',
 				link: '/settings',
 			},

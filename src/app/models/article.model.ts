@@ -17,8 +17,11 @@ export class Article {
 			type: string;
 		}
 	];
-	createdAt: Date;
 	interestNotes: [User];
 	comments: [Comment];
+	createdAt: Date;
+	updatedAt: Date;
+
+	// helper fields
 	commentDraft: string;
 }

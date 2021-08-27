@@ -1,2 +1,32 @@
-<p>discussions works!</p>
-<!-- TODO discussions -->
+<mat-sidenav-container>
+	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
+		<div id="new">
+			<button *ngIf="!newDiscussion" mat-raised-button color="primary" (click)="newDiscussion = true">
+				<mat-icon>message</mat-icon>
+				Νέα Συζήτηση
+			</button>
+			<button *ngIf="newDiscussion" mat-raised-button color="warn" (click)="newDiscussion = false">Ακύρωση</button>
+			<mat-list *ngIf="newDiscussion">
+				<mat-form-field>
+					<input matInput type="search" [(ngModel)]="searchText" placeholder="Αναζήτηση στις επαφές" />
+				</mat-form-field>
+				<a mat-list-item *ngFor="let user of contacts | filter: searchText" [routerLink]="'/discussions/' + user._id">
+					<img matListAvatar [src]="user.img | secure | async" />
+					<h3 matLine>{{ user.name }}</h3>
+				</a>
+			</mat-list>
+		</div>
+		<mat-list *ngIf="discussions && discussions.length">
+			<h2>Υφιστάμενες συζητήσεις</h2>
+			<a mat-list-item *ngFor="let user of discussions" [routerLink]="'/discussions/' + user._id" [class.selected]="user._id === viewedDiscussionId">
+				<img matListAvatar [src]="user.img | secure | async" />
+				<h3 matLine>{{ user.name }}</h3>
+			</a>
+		</mat-list>
+	</mat-sidenav>
+	<mat-sidenav-content>
+		<div class="container">
+			<mat-error *ngIf="error">{{ error }}</mat-error>
+		</div>
+	</mat-sidenav-content>
+</mat-sidenav-container>

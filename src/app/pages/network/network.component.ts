@@ -11,7 +11,7 @@ import { UserService } from '../../services/user.service';
 export class NetworkComponent implements OnInit {
 	error = '';
 	user: User = this.userService.user;
-	otherUsers: User[];
+	allUsers: User[];
 	contacts: User[];
 	searchText: string;
 
@@ -19,9 +19,9 @@ export class NetworkComponent implements OnInit {
 
 	ngOnInit(): void {
 		this.userService.getAll().subscribe((users) => {
-			this.otherUsers = users;
+			this.allUsers = users;
 
-			this.otherUsers.forEach((user) => {
+			this.allUsers.forEach((user) => {
 				let toYear: number;
 				const currentYear = new Date().getFullYear();
 
@@ -50,7 +50,7 @@ export class NetworkComponent implements OnInit {
 				// If we reach here, we cannot determine the current status
 			});
 
-			this.contacts = this.otherUsers.filter((u) => u.contact && u.contact.accepted);
+			this.contacts = this.allUsers.filter((u) => u.contact && u.contact.accepted);
 		});
 	}
 }

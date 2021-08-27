@@ -36,9 +36,9 @@ mat-card-actions {
 	margin-right: 0 !important;
 }
 
-mat-list-item button,
-.delete-area button {
-	margin: 0 5px;
+a + button,
+button + button {
+	margin-left: 5px !important;
 }
 
 p {
@@ -48,11 +48,12 @@ p {
 mat-icon {
 	vertical-align: middle;
 	font-size: 1.2em;
+	margin-right: 5px;
 }
 
 a {
-	color: inherit; /* blue colors for links too */
-	text-decoration: inherit; /* no underline */
+	color: inherit;
+	text-decoration: inherit;
 }
 
 a:hover {

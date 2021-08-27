@@ -5,6 +5,7 @@ export class Entry {
 	fromYear: number;
 	toYear: number;
 }
+
 export class User {
 	_id: string;
 	token?: string;
@@ -25,6 +26,7 @@ export class User {
 		public: boolean;
 		entries: [string];
 	};
+	lastDiscussion: string;
 
 	// Frontend only vars: Helpful
 	contact: {
