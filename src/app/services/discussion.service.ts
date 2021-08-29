@@ -22,4 +22,8 @@ export class DiscussionService {
 	get(userId: string) {
 		return this.http.get<Message[]>(`${environment.apiUrl}/discussions/${userId}`);
 	}
+
+	getSince(userId: string, moment: number) {
+		return this.http.get<Message[]>(`${environment.apiUrl}/discussions/${userId}?since=${moment}`);
+	}
 }

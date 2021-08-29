@@ -28,11 +28,6 @@ span {
 	float: right;
 }
 
-.comments {
-	padding: 16px;
-	background-color: #eee;
-}
-
 .comment {
 	display: flex;
 	align-items: center;

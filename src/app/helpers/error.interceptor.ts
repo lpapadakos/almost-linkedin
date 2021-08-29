@@ -19,7 +19,7 @@ export class ErrorInterceptor implements HttpInterceptor {
 					location.reload(true);
 				}
 
-				const error = err.error.error || err.error.errors[0].msg || err.error.message || err.statusText;
+				const error = err.error.error || (err.error.errors && err.error.errors[0].msg) || err.error.message || err.statusText || 'Κάτι πήγε στραβα...';
 				return throwError(error);
 			})
 		);

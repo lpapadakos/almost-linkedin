@@ -82,7 +82,7 @@ export class ProfileComponent implements OnInit {
 				},
 				error: (error) => {
 					this.onError(error);
-					this.router.navigate(['/404']);
+					this.router.navigate(['/404'], { skipLocationChange: true });
 				},
 			});
 		});

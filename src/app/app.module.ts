@@ -1,6 +1,6 @@
 import { NgModule, LOCALE_ID } from '@angular/core';
 import { registerLocaleData } from '@angular/common';
-import localeEl from '@angular/common/locales/el'
+import localeEl from '@angular/common/locales/el';
 registerLocaleData(localeEl);
 
 import { BrowserModule } from '@angular/platform-browser';
@@ -98,7 +98,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		MatToolbarModule,
 	],
 	providers: [
-		{ provide: LOCALE_ID, useValue: "el-GR" },
+		{ provide: LOCALE_ID, useValue: 'el-GR' },
 		{
 			provide: HTTP_INTERCEPTORS,
 			useClass: JwtInterceptor,

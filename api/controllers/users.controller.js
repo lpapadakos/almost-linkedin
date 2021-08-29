@@ -38,6 +38,7 @@ exports.login = async (req, res, next) => {
 			_id: user._id,
 			name: user.name,
 			email: user.email,
+			phone: user.phone,
 			role: user.role,
 			img: user.img,
 			lastDiscussion: user.lastDiscussion,
@@ -141,7 +142,6 @@ exports.acceptContactRequest = async (req, res, next) => {
 	try {
 		// Can only accept requests sent to us
 		await Contact.updateOne({ _id: req.params.requestId, receiver: req.params.userId }, { accepted: true });
-
 		res.status(200).json({ message: "Αποδοχή αιτήματος σύνδεσης" });
 	} catch (err) {
 		next(err);
@@ -214,14 +214,9 @@ exports.getContacts = async (req, res, next) => {
 
 exports.addEntry = async (req, res, next) => {
 	try {
-		const entry = new Entry({
-			where: req.body.where,
-			what: req.body.what,
-			fromYear: req.body.fromYear,
-			toYear: req.body.toYear,
-		});
-
+		const entry = new Entry(req.body);
 		await User.updateOne({ _id: req.params.userId }, { $push: { [`${req.params.entryType}.entries`]: entry } });
+
 		res.status(201).json(entry);
 	} catch (err) {
 		next(err);

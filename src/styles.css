@@ -36,13 +36,21 @@ mat-card-actions {
 	margin-right: 0 !important;
 }
 
+.alt-background {
+	padding: 1em;
+	background-color: #eee;
+}
+
 a + button,
 button + button {
 	margin-left: 5px !important;
 }
 
 p {
-	white-space: pre-wrap;
+	white-space: pre-wrap; /* CSS3 */
+	white-space: -moz-pre-wrap; /* Firefox */
+	white-space: -o-pre-wrap; /* Opera 7 */
+	word-wrap: break-word; /* IE */
 }
 
 mat-icon {

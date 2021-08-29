@@ -1,6 +1,6 @@
 <mat-sidenav-container>
 	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<div id="new">
+		<div class="alt-background">
 			<button *ngIf="!newDiscussion" mat-raised-button color="primary" (click)="newDiscussion = true">
 				<mat-icon>message</mat-icon>
 				Νέα Συζήτηση
@@ -10,7 +10,7 @@
 				<mat-form-field>
 					<input matInput type="search" [(ngModel)]="searchText" placeholder="Αναζήτηση στις επαφές" />
 				</mat-form-field>
-				<a mat-list-item *ngFor="let user of contacts | filter: searchText" [routerLink]="'/discussions/' + user._id">
+				<a mat-list-item *ngFor="let user of contacts | filter: searchText" [routerLink]="'/discussions/' + user._id" (click)="newDiscussion = false">
 					<img matListAvatar [src]="user.img | secure | async" />
 					<h3 matLine>{{ user.name }}</h3>
 				</a>
@@ -18,15 +18,41 @@
 		</div>
 		<mat-list *ngIf="discussions && discussions.length">
 			<h2>Υφιστάμενες συζητήσεις</h2>
-			<a mat-list-item *ngFor="let user of discussions" [routerLink]="'/discussions/' + user._id" [class.selected]="user._id === viewedDiscussionId">
+			<a
+				mat-list-item
+				*ngFor="let user of discussions"
+				[routerLink]="'/discussions/' + user._id"
+				[class.selected]="viewedDiscussion && user._id === viewedDiscussion._id"
+			>
 				<img matListAvatar [src]="user.img | secure | async" />
 				<h3 matLine>{{ user.name }}</h3>
+				<p *ngIf="user.lastMessage" matLine>
+					<mat-icon>message</mat-icon>
+					{{ user.lastMessage }}
+				</p>
 			</a>
 		</mat-list>
 	</mat-sidenav>
 	<mat-sidenav-content>
-		<div class="container">
-			<mat-error *ngIf="error">{{ error }}</mat-error>
-		</div>
+		<mat-error *ngIf="error">{{ error }}</mat-error>
+		<section *ngIf="viewedDiscussion">
+			<div id="discussion">
+				<div *ngFor="let message of messages" class="row" [ngClass]="{ sent: message.sender._id === user._id }">
+					<mat-card class="message">
+						<mat-card-content>
+							<img mat-card-avatar [src]="message.sender.img | secure | async" />
+							<p>{{ message.text }}</p>
+						</mat-card-content>
+						<mat-card-subtitle>{{ message.createdAt | date: "medium" }}</mat-card-subtitle>
+					</mat-card>
+				</div>
+			</div>
+			<div id="new-message" class="alt-background">
+				<mat-form-field>
+					<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
+					<textarea matInput matTextareaAutosize placeholder="Μήνυμα" [(ngModel)]="message" (keydown.enter)="sendMessage()"></textarea>
+				</mat-form-field>
+			</div>
+		</section>
 	</mat-sidenav-content>
 </mat-sidenav-container>

@@ -43,9 +43,9 @@
 			</span>
 		</div>
 	</mat-card-actions>
-	<section class="comments">
+	<section class="alt-background">
 		<mat-form-field>
-			<input matInput [(ngModel)]="article.commentDraft" type="text" placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article, $event.target.value)" />
+			<input matInput [(ngModel)]="article.commentDraft" type="text" placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article)" />
 		</mat-form-field>
 		<div class="comment" [id]="comment._id" *ngFor="let comment of article.comments">
 			<img mat-card-avatar [src]="comment.poster.img | secure | async" />

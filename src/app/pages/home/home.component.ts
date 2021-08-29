@@ -31,10 +31,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	onFileChange(event) {
-		this.files = [];
-		for (var i = 0; i < event.target.files.length; i++) {
-			this.files.push(event.target.files[i]);
-		}
+		this.files = event.target.files;
 	}
 
 	onPost(): void {

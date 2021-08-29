@@ -1,14 +1,47 @@
+const mongoose = require("mongoose");
+
 const Message = require("../models/message.model");
-const { Contact } = require("../models/user.model");
+const { User, Contact } = require("../models/user.model");
 
 exports.summary = async (req, res, next) => {
 	try {
-		// TODO provide last sent message as well?
-		let discussions = await Message.aggregate([{ $match: { receiver: req.userId } }, { $group: { _id: "$sender" } }]);
-		await Message.populate(discussions, { path: "_id", select: "_id name img" });
+		// BUG https://github.com/Automattic/mongoose/issues/1399
+		const userObjectId = mongoose.Types.ObjectId(req.userId);
 
-		// We only want the users we've communicated with, in the summary
-		res.status(200).json(discussions.map((message) => message._id));
+		// TODO add contact field for warning on message line
+		const discussions = await Message.aggregate([
+			{ $match: { $or: [{ sender: userObjectId }, { receiver: userObjectId }] } },
+			{
+				// Treat messages sent by us as if they were sent by the other party, in order to group correctly
+				$project: {
+					sender: {
+						$cond: [{ $eq: ["$receiver", userObjectId] }, "$sender", "$receiver"],
+					},
+					text: 1,
+					createdAt: 1,
+				},
+			},
+			{ $sort: { createdAt: -1 } },
+			{ $group: { _id: "$sender", lastMessage: { $first: "$text" } } },
+			{
+				$lookup: {
+					from: User.collection.name,
+					localField: "_id",
+					foreignField: "_id",
+					as: "user",
+				},
+			},
+			{ $unwind: "$user" },
+			{
+				$project: {
+					name: "$user.name",
+					img: "$user.img",
+					lastMessage: 1,
+				},
+			},
+		]);
+
+		res.status(200).json(discussions);
 	} catch (err) {
 		next(err);
 	}
@@ -52,13 +85,21 @@ exports.sendMessage = async (req, res, next) => {
 
 exports.get = async (req, res, next) => {
 	try {
-		let messages = await Message.find({
+		// In general, GET all messages sent or received in this discussion
+		let filter = {
 			$or: [
 				{ sender: req.userId, receiver: req.params.userId },
 				{ sender: req.params.userId, receiver: req.userId },
 			],
-		}).sort({ createdAt: "asc" });
+		};
 
+		// If a timestamp is specified, GET only the messages sent to us since then
+		if (req.query.since) {
+			// TODO check if need to be converted to date
+			filter = { sender: req.params.userId, receiver: req.userId, createdAt: { $gte: req.query.since } };
+		}
+
+		const messages = await Message.find(filter).sort({ createdAt: "asc" });
 		res.status(200).json(messages);
 	} catch (err) {
 		next(err);

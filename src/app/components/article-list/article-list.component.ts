@@ -67,8 +67,8 @@ export class ArticleListComponent implements AfterViewInit {
 		}
 	}
 
-	comment(article: Article, text: string) {
-		text = text.trim();
+	comment(article: Article) {
+		let text = article.commentDraft.trim();
 
 		if (!text) return;
 

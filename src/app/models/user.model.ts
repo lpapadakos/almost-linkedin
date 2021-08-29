@@ -34,6 +34,7 @@ export class User {
 		accepted: boolean;
 	};
 	currentStatus: Entry;
+	lastMessage: string;
 }
 
 export class ContactRequest {
