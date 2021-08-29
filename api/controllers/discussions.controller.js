@@ -75,6 +75,9 @@ exports.sendMessage = async (req, res, next) => {
 
 		res.status(201).json(message);
 
+		await User.updateOne({ _id: req.userId }, { lastDiscussion: req.params.userId });
+
+		// TODO fix interaction not updating
 		// For interaction
 		req.partnerId = req.params.userId;
 		next();

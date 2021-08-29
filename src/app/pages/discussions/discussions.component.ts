@@ -97,7 +97,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 			},
 		});
 
-		// Update conversation with sent messages
+		// Update conversation with received messages
 		this.intervalId = setInterval(() => {
 			this.discussionService.getSince(this.viewedDiscussion._id, this.lastUpdate).subscribe({
 				next: (messages) => {
@@ -125,6 +125,8 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 				message.sender = this.user;
 				this.messages.push(message);
 				this.viewedDiscussion.lastMessage = message.text;
+
+				this.user.lastDiscussion = this.viewedDiscussion._id;
 
 				this.message = '';
 				this.scrollToBottom();
