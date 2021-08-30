@@ -6,7 +6,7 @@ module.exports = async (req, res, next) => {
 			{
 				$or: [
 					{ sender: req.userId, receiver: req.partnerId },
-					{ sender: req.partnerId, receiver: req.UserId },
+					{ sender: req.partnerId, receiver: req.userId },
 				],
 			},
 			{ $inc: { interactions: 1 } }
