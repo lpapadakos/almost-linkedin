@@ -1,7 +1,12 @@
 <div class="container">
 	<mat-card id="search-area">
 		<mat-form-field>
-			<input matInput type="search" [(ngModel)]="searchText" placeholder="Αναζήτηση στους χρήστες της εφαρμογής" />
+			<input
+				matInput
+				type="search"
+				[(ngModel)]="searchText"
+				placeholder="Αναζήτηση στους χρήστες της εφαρμογής"
+			/>
 		</mat-form-field>
 		<div>
 			<button mat-raised-button color="warn" (click)="searchText = ''">Καθαρισμός</button>
@@ -27,7 +32,11 @@
 	</mat-grid-list>
 	<mat-list *ngIf="searchText && searchText != ''">
 		<h2>Αποτελέσματα Αναζήτησης</h2>
-		<a mat-list-item *ngFor="let user of allUsers | filter: searchText" [routerLink]="'/profile/' + user._id">
+		<a
+			mat-list-item
+			*ngFor="let user of allUsers | filter: searchText"
+			[routerLink]="'/profile/' + user._id"
+		>
 			<img matListAvatar [src]="user.img | secure | async" />
 			<h3 matLine>{{ user.name }}</h3>
 			<p *ngIf="user.currentStatus">

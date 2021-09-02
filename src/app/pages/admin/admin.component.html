@@ -1,7 +1,21 @@
 <div class="container">
 	<div id="extract-buttons">
-		<button mat-raised-button color="primary" [disabled]="!selection.hasValue()" (click)="extractUserData('xml')">Εξαγωγή επιλεγμένων σε XML</button>
-		<button mat-raised-button color="accent" [disabled]="!selection.hasValue()" (click)="extractUserData('json')">Εξαγωγή επιλεγμένων σε JSON</button>
+		<button
+			mat-raised-button
+			color="primary"
+			[disabled]="!selection.hasValue()"
+			(click)="extractUserData('xml')"
+		>
+			Εξαγωγή επιλεγμένων σε XML
+		</button>
+		<button
+			mat-raised-button
+			color="accent"
+			[disabled]="!selection.hasValue()"
+			(click)="extractUserData('json')"
+		>
+			Εξαγωγή επιλεγμένων σε JSON
+		</button>
 	</div>
 	<!-- TODO avatar sort data? and SEARCH BAR -->
 	<mat-table [dataSource]="users" matSort class="mat-elevation-z8">

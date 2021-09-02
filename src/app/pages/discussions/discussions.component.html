@@ -1,16 +1,28 @@
 <mat-sidenav-container>
 	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
 		<div class="alt-background">
-			<button *ngIf="!newDiscussion" mat-raised-button color="primary" (click)="newDiscussion = true">
+			<button *ngIf="!newDiscussion" mat-raised-button color="primary" (click)="startDiscussion()">
 				<mat-icon>message</mat-icon>
 				Νέα Συζήτηση
 			</button>
-			<button *ngIf="newDiscussion" mat-raised-button color="warn" (click)="newDiscussion = false">Ακύρωση</button>
+			<button *ngIf="newDiscussion" mat-raised-button color="warn" (click)="newDiscussion = false">
+				Ακύρωση
+			</button>
 			<mat-list *ngIf="newDiscussion">
 				<mat-form-field>
-					<input matInput type="search" [(ngModel)]="searchText" placeholder="Αναζήτηση στις επαφές" />
+					<input
+						matInput
+						type="search"
+						[(ngModel)]="searchText"
+						placeholder="Αναζήτηση στις επαφές"
+					/>
 				</mat-form-field>
-				<a mat-list-item *ngFor="let user of contacts | filter: searchText" [routerLink]="'/discussions/' + user._id" (click)="newDiscussion = false">
+				<a
+					mat-list-item
+					*ngFor="let user of contacts | filter: searchText"
+					[routerLink]="'/discussions/' + user._id"
+					(click)="newDiscussion = false"
+				>
 					<img matListAvatar [src]="user.img | secure | async" />
 					<h3 matLine>{{ user.name }}</h3>
 				</a>
@@ -37,20 +49,35 @@
 		<mat-error *ngIf="error">{{ error }}</mat-error>
 		<section *ngIf="viewedDiscussion">
 			<div id="discussion">
-				<div *ngFor="let message of messages" class="row" [ngClass]="{ sent: message.sender._id === user._id }">
+				<div
+					*ngFor="let message of messages"
+					class="row"
+					[ngClass]="{ sent: message.sender._id === user._id }"
+				>
 					<mat-card class="message">
 						<mat-card-content>
-							<img mat-card-avatar [src]="message.sender.img | secure | async" />
+							<img
+								mat-card-avatar
+								[src]="message.sender.img | secure | async"
+							/>
 							<p>{{ message.text }}</p>
 						</mat-card-content>
-						<mat-card-subtitle>{{ message.createdAt | date: "medium" }}</mat-card-subtitle>
+						<mat-card-subtitle>
+							{{ message.createdAt | date: "medium" }}
+						</mat-card-subtitle>
 					</mat-card>
 				</div>
 			</div>
 			<div id="new-message" class="alt-background">
 				<mat-form-field>
 					<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
-					<textarea matInput matTextareaAutosize placeholder="Μήνυμα" [(ngModel)]="message" (keydown.enter)="sendMessage()"></textarea>
+					<textarea
+						matInput
+						matTextareaAutosize
+						placeholder="Μήνυμα"
+						[(ngModel)]="message"
+						(keydown.enter)="sendMessage()"
+					></textarea>
 				</mat-form-field>
 			</div>
 		</section>

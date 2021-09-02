@@ -1,23 +1,25 @@
 const fs = require("fs");
+const mongoose = require("mongoose");
 
 const { Article, Comment } = require("../models/article.model");
 const { Contact } = require("../models/user.model");
 
 exports.post = async (req, res, next) => {
 	try {
-		// role is not defined during registration. It's 'user'. Admin is preinstalled
 		let article = new Article({
 			poster: req.userId,
 			text: req.body.text,
 		});
 
 		// Save ids of any uploaded media (photos, e.t.c.)
-		article.media = req.files.map((file) => {
-			return {
-				id: file.filename,
-				type: file.mimetype,
-			};
-		});
+		article.media = await Promise.all(
+			req.files.map(async (file) => {
+				return {
+					id: file.filename,
+					type: file.mimetype,
+				};
+			})
+		);
 
 		await article.save();
 		res.status(201).json(article);
@@ -28,6 +30,7 @@ exports.post = async (req, res, next) => {
 
 exports.get = async (req, res, next) => {
 	try {
+		let authors = [];
 		let filter = {};
 
 		if (req.params.articleId) {
@@ -35,28 +38,33 @@ exports.get = async (req, res, next) => {
 		} else if (req.query.from) {
 			filter.poster = req.query.from;
 		} else {
-			const sentContacts = await Contact.find({ sender: req.userId, accepted: true }, "receiver -_id");
-			const receivedContacts = await Contact.find({ receiver: req.userId, accepted: true }, "sender -_id");
+			// BUG https://github.com/Automattic/mongoose/issues/1399
+			const userObjectId = mongoose.Types.ObjectId(req.userId);
 
-			// Articles posted by the user...
-			let authors = [req.userId];
+			const contacts = await Contact.aggregate([
+				{
+					$match: {
+						$or: [
+							{ accepted: true, sender: userObjectId },
+							{ accepted: true, receiver: userObjectId },
+						],
+					},
+				},
+				{
+					$project: {
+						_id: {
+							$cond: [
+								{ $eq: ["$receiver", userObjectId] },
+								"$sender",
+								"$receiver",
+							],
+						},
+					},
+				},
+			]);
 
-			// ...or their contacts
-			if (sentContacts) {
-				authors = authors.concat(
-					sentContacts.map((contact) => {
-						return contact.receiver;
-					})
-				);
-			}
-
-			if (receivedContacts) {
-				authors = authors.concat(
-					receivedContacts.map((contact) => {
-						return contact.sender;
-					})
-				);
-			}
+			// We want articles posted by the user or their contacts
+			authors = contacts.map((user) => user._id).concat(req.userId);
 
 			filter = {
 				$or: [{ poster: { $in: authors } }, { interestNotes: { $in: authors } }],
@@ -74,9 +82,7 @@ exports.get = async (req, res, next) => {
 			if (articles) {
 				return res.status(200).json(articles[0]);
 			} else {
-				return res.status(404).json({
-					error: "Δεν βρέθηκε το άρθρο",
-				});
+				return res.status(404).json({ error: "Δεν βρέθηκε το άρθρο" });
 			}
 		}
 
@@ -88,13 +94,21 @@ exports.get = async (req, res, next) => {
 
 exports.delete = async (req, res, next) => {
 	try {
-		// Can only delete own articles
-		let article = await Article.findOneAndDelete({
-			_id: req.params.articleId,
-			poster: req.userId,
-		});
+		let article = await Article.findById(req.params.articleId);
 
-		if (article) await article.media.forEach((file) => fs.unlinkSync("./uploads/" + file.id));
+		if (article) {
+			// Can only delete own articles
+			if (!article.poster.equals(req.userId)) {
+				return res
+					.status(403)
+					.json({ error: "Λειτουργία διαθέσιμη μόνο για τον συγγραφέα του άρθρου" });
+			}
+
+			await Promise.all(
+				article.media.map(async (file) => fs.promises.unlink("./uploads/" + file.id))
+			);
+			await article.delete();
+		}
 
 		res.status(204).json({ message: "Το άρθρο διεγράφη" });
 	} catch (err) {
@@ -108,9 +122,7 @@ exports.like = async (req, res, next) => {
 			$addToSet: { interestNotes: req.userId },
 		});
 
-		res.status(201).json({
-			message: "Δηλώθηκε ενδιαφέρον για το άρθρο",
-		});
+		res.status(201).json({ message: "Δηλώθηκε ενδιαφέρον για το άρθρο" });
 
 		// For interaction
 		req.partnerId = article.poster;
@@ -123,9 +135,7 @@ exports.like = async (req, res, next) => {
 exports.unlike = async (req, res, next) => {
 	try {
 		await Article.updateOne({ _id: req.params.articleId }, { $pull: { interestNotes: req.userId } });
-		res.status(204).json({
-			message: "Αφαιρέθηκε η δήλωση ενδιαφέροντος για το άρθρο",
-		});
+		res.status(204).json({ message: "Αφαιρέθηκε η δήλωση ενδιαφέροντος για το άρθρο" });
 	} catch (err) {
 		next(err);
 	}
@@ -137,7 +147,11 @@ exports.comment = async (req, res, next) => {
 			poster: req.userId,
 			text: req.body.text,
 		});
-		const article = await Article.findByIdAndUpdate(req.params.articleId, { $push: { comments: comment } }, { new: true });
+		const article = await Article.findByIdAndUpdate(
+			req.params.articleId,
+			{ $push: { comments: comment } },
+			{ new: true }
+		);
 
 		res.status(201).json(article.comments.pop());
 
@@ -151,7 +165,7 @@ exports.comment = async (req, res, next) => {
 
 exports.deleteComment = async (req, res, next) => {
 	try {
-		// Can only delete own comments
+		// TODO Can only delete own comments
 		await Article.updateOne(
 			{ _id: req.params.articleId },
 			{

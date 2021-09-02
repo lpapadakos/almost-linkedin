@@ -11,17 +11,36 @@
 						<h2>Ανάρτηση άρθρου</h2>
 						<mat-form-field>
 							<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
-							<textarea matInput matTextareaAutosize placeholder="Τι σκέφτεστε;" formControlName="text" required></textarea>
+							<textarea
+								matInput
+								matTextareaAutosize
+								placeholder="Τι σκέφτεστε;"
+								formControlName="text"
+								required
+							></textarea>
 						</mat-form-field>
 						<label for="media">Μπορείτε να επισυνάψετε αρχεία πολυμέσων:</label>
-						<input id="media" type="file" multiple accept="image/*,audio/*,video/*" formControlName="media" (change)="onFileChange($event)" />
+						<input
+							id="media"
+							type="file"
+							multiple
+							accept="image/*,audio/*,video/*"
+							formControlName="media"
+							(change)="onFileChange($event)"
+						/>
 						<mat-card-actions>
-							<button mat-raised-button type="submit" color="primary">Δημοσίευση</button>
+							<button mat-raised-button type="submit" color="primary">
+								Δημοσίευση
+							</button>
 						</mat-card-actions>
 					</form>
 				</mat-card-content>
 			</mat-card>
-			<app-article-list [user]="user" [articles]="articles" (errorEmitter)="onError($event)"></app-article-list>
+			<app-article-list
+				[user]="user"
+				[articles]="articles"
+				(errorEmitter)="onError($event)"
+			></app-article-list>
 		</div>
 	</mat-sidenav-content>
 </mat-sidenav-container>

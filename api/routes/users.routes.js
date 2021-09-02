@@ -7,7 +7,7 @@ const validationHandler = require("../middlewares/validationHandler");
 const adminOnly = require("../middlewares/adminOnly");
 const sameUserOnly = (req, res, next) => {
 	if (req.params.userId !== req.userId) {
-		return res.status(403).json({ error: "Διαθέσιμο μόνο για τον ίδιο χρήστη" });
+		return res.status(403).json({ error: "Λειτουργία διαθέσιμη μόνο για τον ίδιοκτήτη του πόρου" });
 	}
 
 	next();
@@ -25,14 +25,21 @@ router.post(
 	[
 		body("name", "Παρακαλώ εισάγετε το ονοματεπώνυμό σας").exists(),
 		body("email", "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail(),
-		body("phone", "Παρακαλώ εισάγετε έναν έγκυρο αριθμό τηλεφώνου").isMobilePhone().optional({ nullable: true, checkFalsy: true }),
+		body("phone", "Παρακαλώ εισάγετε έναν έγκυρο αριθμό τηλεφώνου")
+			.isMobilePhone()
+			.optional({ nullable: true, checkFalsy: true }),
 		body("password", "Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες").isLength({ min: 8 }),
 	],
 	validationHandler,
 	user.register
 );
 
-router.post("/login", [body("email", "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail()], validationHandler, user.login);
+router.post(
+	"/login",
+	[body("email", "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail()],
+	validationHandler,
+	user.login
+);
 
 // Profiles
 router.get("/:userId?", user.get);
@@ -40,7 +47,10 @@ router.get("/:userId?", user.get);
 
 // Contacts
 router.route("/:userId/contact-requests").post(user.addContactRequest).get(sameUserOnly, user.getContactRequests);
-router.route("/:userId/contact-requests/:requestId").all(sameUserOnly).put(user.acceptContactRequest).delete(user.deleteContactRequest);
+router.route("/:userId/contact-requests/:requestId")
+	.all(sameUserOnly)
+	.put(user.acceptContactRequest)
+	.delete(user.deleteContactRequest);
 
 router.get("/:userId/contacts", user.getContacts);
 

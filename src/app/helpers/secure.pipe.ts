@@ -14,6 +14,8 @@ export class SecurePipe implements PipeTransform {
 
 	transform(fileId): Observable<SafeUrl> {
 		let url = environment.apiUrl + '/files/' + fileId;
-		return this.http.get(url, { responseType: 'blob' }).pipe(map((val) => this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(val))));
+		return this.http
+			.get(url, { responseType: 'blob' })
+			.pipe(map((val) => this.sanitizer.bypassSecurityTrustUrl(URL.createObjectURL(val))));
 	}
 }

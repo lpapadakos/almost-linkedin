@@ -14,7 +14,12 @@ export class LoginComponent implements OnInit {
 	loginForm: FormGroup;
 	error = '';
 
-	constructor(private formBuilder: FormBuilder, private route: ActivatedRoute, private router: Router, private userService: UserService) {
+	constructor(
+		private formBuilder: FormBuilder,
+		private route: ActivatedRoute,
+		private router: Router,
+		private userService: UserService
+	) {
 		this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
 	}
 
@@ -31,13 +36,15 @@ export class LoginComponent implements OnInit {
 	onSubmit() {
 		if (this.loginForm.invalid) return;
 
-		this.userService.login(this.loginForm.get('email')?.value, this.loginForm.get('password')?.value).subscribe({
-			next: () => {
-				this.router.navigate([this.returnUrl]);
-			},
-			error: (error) => {
-				this.error = error;
-			},
-		});
+		this.userService
+			.login(this.loginForm.get('email')?.value, this.loginForm.get('password')?.value)
+			.subscribe({
+				next: () => {
+					this.router.navigate([this.returnUrl]);
+				},
+				error: (error) => {
+					this.error = error;
+				},
+			});
 	}
 }

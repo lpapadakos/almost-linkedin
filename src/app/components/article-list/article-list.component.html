@@ -2,7 +2,9 @@
 	<mat-card-title-group>
 		<img mat-card-sm-image [src]="article.poster.img | secure | async" />
 		<a mat-card-title [routerLink]="'/profile/' + article.poster._id">{{ article.poster.name }}</a>
-		<mat-card-subtitle>{{ article.createdAt | date: "medium" }}</mat-card-subtitle>
+		<a mat-card-subtitle [routerLink]="'/profile/' + article.poster._id" [fragment]="article._id">
+			{{ article.createdAt | date: "medium" }}
+		</a>
 	</mat-card-title-group>
 	<mat-card-content>
 		<p class="article-text">{{ article.text }}</p>
@@ -22,15 +24,15 @@
 		<button
 			mat-button
 			class="like"
-			[ngClass]="{
-				'mat-primary': isInterested(user, article)
-			}"
+			[ngClass]="{ 'mat-primary': isInterested(user, article) }"
 			(click)="toggleInterest(article)"
 		>
 			<mat-icon>thumb_up</mat-icon>
 			{{ isInterested(user, article) ? "Σας ενδιαφέρει" : "Σημείωση Ενδιαφέροντος" }}
 		</button>
-		<span *ngIf="article.interestNotes.length > 0">{{ article.interestNotes.length }} χρήστες βρήκαν το άρθρο ενδιαφέρον</span>
+		<span *ngIf="article.interestNotes.length">
+			{{ article.interestNotes.length }} χρήστες βρήκαν το άρθρο ενδιαφέρον
+		</span>
 		<div *ngIf="article.poster._id === user._id" class="delete-area">
 			<button *ngIf="!article.delete" mat-button color="warn" (click)="article.delete = true">
 				<mat-icon>delete_forever</mat-icon>
@@ -45,24 +47,45 @@
 	</mat-card-actions>
 	<section class="alt-background">
 		<mat-form-field>
-			<input matInput [(ngModel)]="article.commentDraft" type="text" placeholder="Αφήστε ένα σχόλιο..." (keyup.enter)="comment(article)" />
+			<input
+				matInput
+				[(ngModel)]="article.commentDraft"
+				type="text"
+				placeholder="Αφήστε ένα σχόλιο..."
+				(keyup.enter)="comment(article)"
+			/>
 		</mat-form-field>
 		<div class="comment" [id]="comment._id" *ngFor="let comment of article.comments">
 			<img mat-card-avatar [src]="comment.poster.img | secure | async" />
 			<div class="comment-header">
-				<a mat-card-title [routerLink]="'/profile/' + comment.poster._id">{{ comment.poster.name }}</a>
+				<a mat-card-title [routerLink]="'/profile/' + comment.poster._id">
+					{{ comment.poster.name }}
+				</a>
 				<mat-card-subtitle>{{ comment.createdAt | date: "medium" }}</mat-card-subtitle>
 			</div>
 			<p>{{ comment.text }}</p>
 			<span class="flexExpand"></span>
 			<div *ngIf="comment.poster._id === user._id" class="delete-area">
-				<button *ngIf="!comment.delete" mat-icon-button color="warn" (click)="comment.delete = true">
+				<button
+					*ngIf="!comment.delete"
+					mat-icon-button
+					color="warn"
+					(click)="comment.delete = true"
+				>
 					<mat-icon>delete_forever</mat-icon>
 				</button>
 				<span *ngIf="comment.delete">
 					Σίγουρα?
-					<button mat-raised-button color="warn" (click)="deleteComment(article, comment)">Ναι</button>
-					<button mat-raised-button color="primary" (click)="comment.delete = false">Όχι</button>
+					<button
+						mat-raised-button
+						color="warn"
+						(click)="deleteComment(article, comment)"
+					>
+						Ναι
+					</button>
+					<button mat-raised-button color="primary" (click)="comment.delete = false">
+						Όχι
+					</button>
 				</span>
 			</div>
 		</div>

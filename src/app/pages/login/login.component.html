@@ -10,11 +10,23 @@
 				<h2>Σύνδεση Χρήστη</h2>
 				<mat-error *ngIf="error">{{ error }}</mat-error>
 				<mat-form-field>
-					<input matInput type="email" placeholder="Διεύθυνση Email" formControlName="email" required />
+					<input
+						matInput
+						type="email"
+						placeholder="Διεύθυνση Email"
+						formControlName="email"
+						required
+					/>
 					<mat-error>Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email</mat-error>
 				</mat-form-field>
 				<mat-form-field>
-					<input matInput type="password" placeholder="Κωδικός Πρόσβασης" formControlName="password" required />
+					<input
+						matInput
+						type="password"
+						placeholder="Κωδικός Πρόσβασης"
+						formControlName="password"
+						required
+					/>
 					<mat-error>Παρακαλώ εισάγετε τον κωδικό πρόσβασής σας</mat-error>
 				</mat-form-field>
 				<mat-card-actions>

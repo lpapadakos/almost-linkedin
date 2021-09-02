@@ -18,7 +18,12 @@ export class ArticleListComponent implements AfterViewInit {
 	@Output() errorEvent = new EventEmitter<string>();
 	fragment: string;
 
-	constructor(private route: ActivatedRoute, private router: Router, private viewportScroller: ViewportScroller, private articleService: ArticleService) {}
+	constructor(
+		private route: ActivatedRoute,
+		private router: Router,
+		private viewportScroller: ViewportScroller,
+		private articleService: ArticleService
+	) {}
 
 	ngAfterViewInit(): void {
 		setTimeout(() => {

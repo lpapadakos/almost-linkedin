@@ -97,8 +97,11 @@ exports.get = async (req, res, next) => {
 
 		// If a timestamp is specified, GET only the messages sent to us since then
 		if (req.query.since) {
-			// TODO check if need to be converted to date
-			filter = { sender: req.params.userId, receiver: req.userId, createdAt: { $gte: req.query.since } };
+			filter = {
+				sender: req.params.userId,
+				receiver: req.userId,
+				createdAt: { $gte: req.query.since },
+			};
 		}
 
 		const messages = await Message.find(filter).sort({ createdAt: "asc" });

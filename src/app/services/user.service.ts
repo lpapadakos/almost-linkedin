@@ -69,15 +69,22 @@ export class UserService {
 	}
 
 	getContactRequests() {
-		return this.http.get<ContactRequest[]>(`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests`);
+		return this.http.get<ContactRequest[]>(
+			`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests`
+		);
 	}
 
 	acceptContactRequest(requestId: string) {
-		return this.http.put(`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests/${requestId}`, {});
+		return this.http.put(
+			`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests/${requestId}`,
+			{}
+		);
 	}
 
 	deleteContact(requestId: string) {
-		return this.http.delete(`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests/${requestId}`);
+		return this.http.delete(
+			`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests/${requestId}`
+		);
 	}
 
 	getContacts(userId: string) {
@@ -89,10 +96,14 @@ export class UserService {
 	}
 
 	changeEntryStatus(entryType: string, isPublic: boolean) {
-		return this.http.put(`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}`, { public: isPublic });
+		return this.http.put(`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}`, {
+			public: isPublic,
+		});
 	}
 
 	deleteEntry(entryType: string, entryId: string) {
-		return this.http.delete(`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}/${entryId}`);
+		return this.http.delete(
+			`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}/${entryId}`
+		);
 	}
 }

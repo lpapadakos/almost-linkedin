@@ -8,7 +8,13 @@
 				<mat-error>Παρακαλώ εισάγετε το ονοματεπώνυμό σας</mat-error>
 			</mat-form-field>
 			<mat-form-field>
-				<input matInput type="email" placeholder="Διεύθυνση Email" formControlName="email" required />
+				<input
+					matInput
+					type="email"
+					placeholder="Διεύθυνση Email"
+					formControlName="email"
+					required
+				/>
 				<mat-error>Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email</mat-error>
 			</mat-form-field>
 			<mat-form-field>
@@ -17,15 +23,29 @@
 			</mat-form-field>
 			<div id="fileArea">
 				<input #imgInput hidden type="file" accept="image/*" (change)="onFileChange($event)" />
-				<button mat-raised-button color="primary" (click)="imgInput.click()">Επιλογή μιας εικόνας προφίλ</button>
+				<button mat-raised-button color="primary" (click)="imgInput.click()">
+					Επιλογή μιας εικόνας προφίλ
+				</button>
 				<img [src]="imageData" />
 			</div>
 			<mat-form-field>
-				<input matInput type="password" placeholder="Κωδικός Πρόσβασης" formControlName="password" required />
+				<input
+					matInput
+					type="password"
+					placeholder="Κωδικός Πρόσβασης"
+					formControlName="password"
+					required
+				/>
 				<mat-error>Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες</mat-error>
 			</mat-form-field>
 			<mat-form-field>
-				<input matInput type="password" placeholder="Επανάληψη Κωδικού Πρόσβασης" formControlName="repeat_password" required />
+				<input
+					matInput
+					type="password"
+					placeholder="Επανάληψη Κωδικού Πρόσβασης"
+					formControlName="repeat_password"
+					required
+				/>
 				<mat-error>Παρακαλώ επαναλάβετε τον κωδικό πρόσβασής σας</mat-error>
 			</mat-form-field>
 			<mat-card-actions>

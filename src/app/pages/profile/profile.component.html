@@ -1,6 +1,10 @@
 <mat-sidenav-container>
 	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<app-sidenav *ngIf="viewedUser" [viewedUser]="viewedUser" (errorEmitter)="onError($event)"></app-sidenav>
+		<app-sidenav
+			*ngIf="viewedUser"
+			[viewedUser]="viewedUser"
+			(errorEmitter)="onError($event)"
+		></app-sidenav>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<div *ngIf="viewedUser" class="container">
@@ -19,50 +23,113 @@
 					</h2>
 					<mat-list>
 						<mat-list-item *ngFor="let entry of viewedUser[entryType.name].entries">
-							<img matListAvatar [src]="'/assets/' + entryType.name + '.png'" />
+							<img
+								matListAvatar
+								[src]="'/assets/' + entryType.name + '.png'"
+							/>
 							<h3 matLine>{{ entry.what || entry.where }}</h3>
 							<span *ngIf="entry.what" matLine>{{ entry.where }}</span>
-							<p *ngIf="entryType.name !== 'skills'">{{ entry.fromYear }} - {{ entry.toYear || "Σήμερα" }}</p>
+							<p *ngIf="entryType.name !== 'skills'">
+								{{ entry.fromYear }} - {{ entry.toYear || "Σήμερα" }}
+							</p>
 							<div *ngIf="viewedUser._id === user._id" class="delete-area">
-								<button *ngIf="!entry.delete" mat-icon-button color="warn" (click)="entry.delete = true">
+								<button
+									*ngIf="!entry.delete"
+									mat-icon-button
+									color="warn"
+									(click)="entry.delete = true"
+								>
 									<mat-icon>delete_forever</mat-icon>
 								</button>
 								<span *ngIf="entry.delete">
 									Σίγουρα?
-									<button mat-raised-button color="warn" (click)="deleteEntry(entryType.name, entry)">Ναι</button>
-									<button mat-raised-button color="primary" (click)="entry.delete = false">Όχι</button>
+									<button
+										mat-raised-button
+										color="warn"
+										(click)="
+											deleteEntry(
+												entryType.name,
+												entry
+											)
+										"
+									>
+										Ναι
+									</button>
+									<button
+										mat-raised-button
+										color="primary"
+										(click)="entry.delete = false"
+									>
+										Όχι
+									</button>
 								</span>
 							</div>
 						</mat-list-item>
 					</mat-list>
 				</div>
-				<form *ngIf="viewedUser._id === user._id" [formGroup]="form[entryType.name]" (ngSubmit)="onSubmit(entryType.name)">
+				<form
+					*ngIf="viewedUser._id === user._id"
+					[formGroup]="form[entryType.name]"
+					(ngSubmit)="onSubmit(entryType.name)"
+				>
 					<h3>{{ entryType.form }}</h3>
 					<mat-form-field *ngIf="entryType.form_what">
-						<input matInput type="text" [placeholder]="entryType.form_what" formControlName="what" required />
+						<input
+							matInput
+							type="text"
+							[placeholder]="entryType.form_what"
+							formControlName="what"
+							required
+						/>
 						<mat-error>Παρακαλώ εισάγετε το ζητούμενο</mat-error>
 					</mat-form-field>
 					<mat-form-field *ngIf="entryType.form_where">
-						<input matInput type="text" [placeholder]="entryType.form_where" formControlName="where" required />
+						<input
+							matInput
+							type="text"
+							[placeholder]="entryType.form_where"
+							formControlName="where"
+							required
+						/>
 						<mat-error>Παρακαλώ εισάγετε το ζητούμενο</mat-error>
 					</mat-form-field>
 					<div *ngIf="entryType.name !== 'skills'" class="entry-years">
 						<mat-form-field>
-							<input #expFromYear matInput type="number" placeholder="Από" min="1960" formControlName="fromYear" required />
+							<input
+								#expFromYear
+								matInput
+								type="number"
+								placeholder="Από"
+								min="1960"
+								formControlName="fromYear"
+								required
+							/>
 							<mat-error>Παρακαλώ εισάγετε έγκυρο έτος έναρξης</mat-error>
 						</mat-form-field>
 						<mat-form-field>
-							<input matInput type="number" [min]="expFromYear.value" placeholder="Έως" formControlName="toYear" />
+							<input
+								matInput
+								type="number"
+								[min]="expFromYear.value"
+								placeholder="Έως"
+								formControlName="toYear"
+							/>
 							<mat-error>Παρακαλώ εισάγετε έγκυρο έτος λήξης</mat-error>
 						</mat-form-field>
 					</div>
 					<mat-card-actions>
-						<button mat-raised-button type="submit" color="primary">Αποθήκευση</button>
+						<button mat-raised-button type="submit" color="primary">
+							Αποθήκευση
+						</button>
 					</mat-card-actions>
 				</form>
 			</mat-card>
 
-			<app-article-list [user]="user" [articles]="articles" (errorEmitter)="onError($event)"></app-article-list>
+			<app-article-list
+				[user]="user"
+				[articles]="articles"
+				(errorEmitter)="onError($event)"
+			></app-article-list>
 		</div>
 	</mat-sidenav-content>
 </mat-sidenav-container>

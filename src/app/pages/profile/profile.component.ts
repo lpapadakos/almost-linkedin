@@ -78,7 +78,9 @@ export class ProfileComponent implements OnInit {
 			this.userService.getById(viewedUserId).subscribe({
 				next: (user) => {
 					this.viewedUser = user;
-					this.articleService.getFromUser(this.viewedUser._id).subscribe((articles) => (this.articles = articles));
+					this.articleService
+						.getFromUser(this.viewedUser._id)
+						.subscribe((articles) => (this.articles = articles));
 				},
 				error: (error) => {
 					this.onError(error);

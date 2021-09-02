@@ -28,18 +28,18 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	messages: Message[] = [];
 	message: string;
 
-	constructor(private route: ActivatedRoute, private router: Router, private userService: UserService, private discussionService: DiscussionService) {}
+	constructor(
+		private route: ActivatedRoute,
+		private router: Router,
+		private userService: UserService,
+		private discussionService: DiscussionService
+	) {}
+
+	private scrollToBottom() {
+		setTimeout(() => window.scrollTo(0, document.scrollingElement.scrollHeight), 500);
+	}
 
 	ngOnInit(): void {
-		this.userService.getContacts(this.user._id).subscribe({
-			next: (contacts) => {
-				this.contacts = contacts;
-			},
-			error: (error) => {
-				this.onError(error);
-			},
-		});
-
 		this.discussionService.summary().subscribe({
 			next: (discussions) => {
 				this.discussions = discussions;
@@ -50,7 +50,9 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 					if (!viewedDiscussionId) viewedDiscussionId = this.user.lastDiscussion;
 
 					if (viewedDiscussionId && viewedDiscussionId !== '') {
-						this.viewedDiscussion = this.discussions.find((user) => user._id === viewedDiscussionId);
+						this.viewedDiscussion = this.discussions.find(
+							(user) => user._id === viewedDiscussionId
+						);
 
 						// If userId not found in established discussions, create entry for it
 						if (this.viewedDiscussion) {
@@ -65,7 +67,9 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 								},
 								error: (error) => {
 									this.onError(error);
-									this.router.navigate(['/404'], { skipLocationChange: true });
+									this.router.navigate(['/404'], {
+										skipLocationChange: true,
+									});
 								},
 							});
 						}
@@ -78,8 +82,17 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 		});
 	}
 
-	private scrollToBottom() {
-		setTimeout(() => window.scrollTo(0, document.scrollingElement.scrollHeight), 500);
+	startDiscussion() {
+		this.userService.getContacts(this.user._id).subscribe({
+			next: (contacts) => {
+				this.contacts = contacts;
+			},
+			error: (error) => {
+				this.onError(error);
+			},
+		});
+
+		this.newDiscussion = true;
 	}
 
 	onDiscussion() {
@@ -87,7 +100,13 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 			next: (messages) => {
 				this.lastUpdate = Date.now();
 
-				messages.forEach((message) => (message.sender = message.sender === this.user._id ? this.user : this.viewedDiscussion));
+				messages.forEach(
+					(message) =>
+						(message.sender =
+							message.sender === this.user._id
+								? this.user
+								: this.viewedDiscussion)
+				);
 				this.messages = messages;
 
 				this.scrollToBottom();
@@ -103,10 +122,17 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 				next: (messages) => {
 					this.lastUpdate = Date.now();
 
-					if (messages && messages.length > 0) {
-						messages.forEach((message) => (message.sender = message.sender === this.user._id ? this.user : this.viewedDiscussion));
+					if (messages && messages.length) {
+						messages.forEach(
+							(message) =>
+								(message.sender =
+									message.sender === this.user._id
+										? this.user
+										: this.viewedDiscussion)
+						);
 						this.messages.push.apply(this.messages, messages);
-						this.viewedDiscussion.lastMessage = this.messages[this.messages.length - 1].text;
+						this.viewedDiscussion.lastMessage =
+							this.messages[this.messages.length - 1].text;
 
 						this.scrollToBottom();
 					}
@@ -115,7 +141,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 					this.onError(error);
 				},
 			});
-		}, 2000);
+		}, 3000);
 	}
 
 	sendMessage() {

@@ -3,7 +3,9 @@
 		<img mat-card-avatar [src]="viewedUser.img | secure | async" />
 		<h1>{{ viewedUser.name }}</h1>
 	</a>
-	<mat-card-subtitle *ngIf="viewedUser.createdAt">Μέλος από {{ viewedUser.createdAt | date: "short" }}</mat-card-subtitle>
+	<mat-card-subtitle *ngIf="viewedUser.createdAt">
+		Μέλος από {{ viewedUser.createdAt | date: "short" }}
+	</mat-card-subtitle>
 	<mat-list>
 		<mat-list-item *ngIf="viewedUser.email">
 			<span matLine>
@@ -19,19 +21,42 @@
 		</mat-list-item>
 	</mat-list>
 	<div *ngIf="user.role !== 'admin'">
-		<a *ngIf="viewedUser._id === user._id" mat-raised-button color="accent" routerLink="/network">Το Δίκτυο μου</a>
+		<a *ngIf="viewedUser._id === user._id" mat-raised-button color="accent" routerLink="/network">
+			Το Δίκτυο μου
+		</a>
 		<div *ngIf="viewedUser._id !== user._id">
-			<button *ngIf="!viewedUser.contact; else deleteContact" mat-raised-button color="primary" (click)="addContactRequest()">Αίτημα Σύνδεσης</button>
+			<button
+				*ngIf="!viewedUser.contact; else deleteContact"
+				mat-raised-button
+				color="primary"
+				(click)="addContactRequest()"
+			>
+				Αίτημα Σύνδεσης
+			</button>
 			<ng-template #deleteContact>
-				<a *ngIf="!viewedUser.delete" mat-raised-button color="accent" [routerLink]="'/discussions/' + viewedUser._id">Συζήτηση</a>
-				<button *ngIf="!viewedUser.delete" mat-raised-button color="warn" (click)="viewedUser.delete = true">
+				<a
+					*ngIf="!viewedUser.delete"
+					mat-raised-button
+					color="accent"
+					[routerLink]="'/discussions/' + viewedUser._id"
+				>
+					Συζήτηση
+				</a>
+				<button
+					*ngIf="!viewedUser.delete"
+					mat-raised-button
+					color="warn"
+					(click)="viewedUser.delete = true"
+				>
 					Διαγραφή
 					{{ viewedUser.contact.accepted === false ? "Αιτήματος" : "Επαφής" }}
 				</button>
 				<span *ngIf="viewedUser.delete">
 					Σίγουρα?
 					<button mat-raised-button color="warn" (click)="_deleteContact()">Ναι</button>
-					<button mat-raised-button color="primary" (click)="viewedUser.delete = false">Όχι</button>
+					<button mat-raised-button color="primary" (click)="viewedUser.delete = false">
+						Όχι
+					</button>
 				</span>
 			</ng-template>
 		</div>

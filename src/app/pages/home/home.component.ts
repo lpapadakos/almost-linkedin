@@ -19,7 +19,11 @@ export class HomeComponent implements OnInit {
 	user: User = this.userService.user;
 	articles: Article[];
 
-	constructor(private formBuilder: FormBuilder, private userService: UserService, private articleService: ArticleService) {}
+	constructor(
+		private formBuilder: FormBuilder,
+		private userService: UserService,
+		private articleService: ArticleService
+	) {}
 
 	ngOnInit(): void {
 		this.articleForm = this.formBuilder.group({
@@ -31,7 +35,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	onFileChange(event) {
-		this.files = event.target.files;
+		this.files = [].slice.call(event.target.files);
 	}
 
 	onPost(): void {

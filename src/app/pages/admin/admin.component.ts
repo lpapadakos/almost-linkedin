@@ -30,7 +30,9 @@ export class AdminComponent implements OnInit {
 	}
 
 	masterToggle() {
-		this.isAllSelected() ? this.selection.clear() : this.users.forEach((user) => this.selection.select(user));
+		this.isAllSelected()
+			? this.selection.clear()
+			: this.users.forEach((user) => this.selection.select(user));
 	}
 
 	extractUserData(fileType: String) {
