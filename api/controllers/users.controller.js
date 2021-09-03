@@ -55,45 +55,99 @@ exports.get = async (req, res, next) => {
 	try {
 		let filter = { role: "user" };
 
-		if (req.params.userId) filter._id = req.params.userId;
+		// BUG https://github.com/Automattic/mongoose/issues/1399
+		const userObjectId = mongoose.Types.ObjectId(req.userId);
+		const paramObjectId = mongoose.Types.ObjectId(req.params.userId);
 
-		// TODO get user with aggregate? same idea as adding contact to discussion
-		let users = await User.find(filter, "_id name email phone img experience education skills createdAt")
-			.sort({ name: "asc" })
-			.lean();
+		if (req.params.userId) filter._id = paramObjectId;
+
+		const users = await User.aggregate([
+			{ $match: filter },
+			{
+				$lookup: { // add extra 'contact' field for frontend usage
+					from: Contact.collection.name,
+					let: { id: "$_id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: {
+									$or: [
+										{
+											$and: [
+												{
+													$eq: [
+														"$sender",
+														userObjectId,
+													],
+												},
+												{
+													$eq: [
+														"$receiver",
+														"$$id",
+													],
+												},
+											],
+										},
+										{
+											$and: [
+												{
+													$eq: [
+														"$sender",
+														"$$id",
+													],
+												},
+												{
+													$eq: [
+														"$receiver",
+														userObjectId,
+													],
+												},
+											],
+										},
+									],
+								},
+							},
+						},
+						{ $project: { accepted: 1 } },
+					],
+					as: "contact",
+				},
+			},
+			{ $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
+			{
+				$project: {
+					name: 1,
+					email: 1,
+					phone: 1,
+					img: 1,
+					experience: 1,
+					education: 1,
+					skills: 1,
+					createdAt: 1,
+					contact: 1,
+				},
+			},
+		]);
 
 		await Promise.all(
 			users.map(async (user) => {
-				// Find if requesting user and user we're GETting are in the same network
-				const contact = await Contact.findOne({
-					$or: [
-						{ sender: req.userId, receiver: user._id },
-						{ sender: user._id, receiver: req.userId },
-					],
-				});
-
-				// Add non-db field to make frontend client's life easier
-				if (contact) {
-					user.contact = { _id: contact._id, accepted: contact.accepted };
-				}
-
 				// Keep protected info from public view, with 3 exceptions
 				const daijobu =
-					req.fromAdmin || user._id.equals(req.userId) || (contact && contact.accepted);
+					req.fromAdmin ||
+					user._id.equals(req.userId) ||
+					(user.contact && user.contact.accepted);
 
-				if (daijobu || user.experience.public) {
-					await user.experience.entries.sort((e1, e2) => e2.fromYear - e1.fromYear);
-				} else {
-					user.experience.entries = [];
+				for (const entryType of ["experience", "education", "skills"]) {
+					if (daijobu || user[entryType].public) {
+						if (user[entryType].fromYear) {
+							await user[entryType].entries.sort(
+								(e1, e2) => e2.fromYear - e1.fromYear
+							);
+						}
+					} else {
+						delete user[entryType].entries;
+					}
 				}
-
-				if (daijobu || user.education.public) {
-					await user.education.entries.sort((e1, e2) => e2.fromYear - e1.fromYear);
-				} else {
-					user.education.entries = [];
-				}
-
-				if (!daijobu && !user.skills.public) user.skills.entries = [];
 			})
 		);
 
@@ -249,7 +303,6 @@ exports.getContacts = async (req, res, next) => {
 			{ $unwind: "$user" },
 			{
 				$project: {
-					_id: 1,
 					name: "$user.name",
 					img: "$user.img",
 				},

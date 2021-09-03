@@ -1,3 +1,5 @@
+const mongoose = require("mongoose");
+
 const jobAdSchema = mongoose.Schema(
 	{
 		poster: { type: mongoose.Types.ObjectId, ref: "User" },

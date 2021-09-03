@@ -42,7 +42,7 @@ server.use(unless(require("./middlewares/verifyToken"), "/users/register", "/use
 server.use("/files", express.static("uploads"));
 server.use("/users", require("./routes/users.routes"));
 server.use("/articles", require("./routes/articles.routes"));
-// TODO server.use("/job-ads", require("./routes/job-ads.routes"));
+server.use("/job-ads", require("./routes/job-ads.routes"));
 server.use("/discussions", require("./routes/discussions.routes"));
 
 // Error handler

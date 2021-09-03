@@ -15,6 +15,7 @@ exports.post = async (req, res, next) => {
 	}
 };
 
+// TODO here convert to job ads
 exports.get = async (req, res, next) => {
 	try {
 		let filter = {};
@@ -25,24 +26,26 @@ exports.get = async (req, res, next) => {
 			filter.poster = req.query.from;
 		}
 
-		const articles = await Article.find(filter)
-			.sort({ updatedAt: "desc" })
-			.sort({ "comments.createdAt": "asc" })
+		let jobAds = await JobAd.find(filter)
 			.populate("poster", "_id name img")
-			.populate("interestNotes", "_id name img")
-			.populate("comments.poster", "_id name img");
+			.populate("applications", "_id name img")
+			.lean();
+
+		const user = await User.findById(req.userId);
+
+		// TODO sort job ads by relevance to user skills
 
 		if (req.params.jobAdId) {
-			if (articles) {
-				return res.status(200).json(articles[0]);
+			if (jobAds) {
+				return res.status(200).json(jobAds[0]);
 			} else {
 				return res.status(404).json({
-					error: "Δεν βρέθηκε το άρθρο",
+					error: "Δεν βρέθηκε η αγγελία",
 				});
 			}
 		}
 
-		res.status(200).json(articles);
+		res.status(200).json(jobAds);
 	} catch (err) {
 		next(err);
 	}
@@ -50,52 +53,45 @@ exports.get = async (req, res, next) => {
 
 exports.delete = async (req, res, next) => {
 	try {
-		let article = await Article.findById(req.params.articleId);
+		let jobAd = await JobAd.findById(req.params.jobAdId);
 
-		if (article) {
-			// Can only delete own articles
-			if (article.poster.equals(req.userId)) {
+		if (jobAd) {
+			// Can only delete own job ads
+			if (jobAd.poster.equals(req.userId)) {
 				return res
 					.status(403)
-					.json({ error: "Λειτουργία διαθέσιμη μόνο για τον συγγραφέα του άρθρου" });
+					.json({ error: "Λειτουργία διαθέσιμη μόνο για τον συγγραφέα της αγγελίας" });
 			}
 
-			await Promise.all(
-				article.media.map(async (file) => fs.promises.unlink("./uploads/" + file.id))
-			);
-			await article.delete();
+			await jobAd.delete();
 		}
 
-		res.status(204).json({ message: "Το άρθρο διεγράφη" });
+		res.status(204).json({ message: "Η αγγελία διεγράφη" });
 	} catch (err) {
 		next(err);
 	}
 };
 
-exports.like = async (req, res, next) => {
+exports.apply = async (req, res, next) => {
 	try {
-		const article = await Article.findByIdAndUpdate(req.params.articleId, {
-			$addToSet: { interestNotes: req.userId },
+		const jobAd = await JobAd.findByIdAndUpdate(req.params.jobAdId, {
+			$addToSet: { applications: req.userId },
 		});
 
-		res.status(201).json({
-			message: "Δηλώθηκε ενδιαφέρον για το άρθρο",
-		});
+		res.status(201).json({ message: "Έγινε αίτηση για τη θέση εργασίας" });
 
 		// For interaction
-		req.partnerId = article.poster;
+		req.partnerId = jobAd.poster;
 		next();
 	} catch (err) {
 		next(err);
 	}
 };
 
-exports.unlike = async (req, res, next) => {
+exports.cancelApply = async (req, res, next) => {
 	try {
-		await Article.updateOne({ _id: req.params.articleId }, { $pull: { interestNotes: req.userId } });
-		res.status(204).json({
-			message: "Αφαιρέθηκε η δήλωση ενδιαφέροντος για το άρθρο",
-		});
+		await JobAd.updateOne({ _id: req.params.jobAdId }, { $pull: { applications: req.userId } });
+		res.status(204).json({ message: "Αφαιρέθηκε η αίτηση για τη θέση εργασίας" });
 	} catch (err) {
 		next(err);
 	}
