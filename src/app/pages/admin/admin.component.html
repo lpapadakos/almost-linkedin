@@ -4,20 +4,21 @@
 			mat-raised-button
 			color="primary"
 			[disabled]="!selection.hasValue()"
-			(click)="extractUserData('xml')"
+			(click)="exportUserData('json')"
 		>
-			Εξαγωγή επιλεγμένων σε XML
+			Εξαγωγή επιλεγμένων σε JSON
 		</button>
 		<button
 			mat-raised-button
 			color="accent"
 			[disabled]="!selection.hasValue()"
-			(click)="extractUserData('json')"
+			(click)="exportUserData('xml')"
 		>
-			Εξαγωγή επιλεγμένων σε JSON
+			Εξαγωγή επιλεγμένων σε XML
 		</button>
 	</div>
-	<!-- TODO avatar sort data? and SEARCH BAR -->
+	<!-- TODO avatar sort data? and SEARCH BAR
+	<img matListAvatar [src]="row.img | secure | async">-->
 	<mat-table [dataSource]="users" matSort class="mat-elevation-z8">
 		<!-- Checkbox Column -->
 		<ng-container matColumnDef="select">

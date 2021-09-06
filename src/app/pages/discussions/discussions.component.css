@@ -1,4 +1,4 @@
-mat-list a:hover,
+#discussion mat-list a:hover,
 .selected {
 	text-decoration: none;
 	background-color: #eee;

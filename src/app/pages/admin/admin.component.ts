@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { Router, ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
-import { first, take } from 'rxjs/operators';
+import { saveAs } from 'file-saver';
 
 import { User } from '../../models/user.model';
 import { AdminService } from '../../services/admin.service';
@@ -19,10 +19,7 @@ export class AdminComponent implements OnInit {
 	constructor(private route: ActivatedRoute, private router: Router, private adminService: AdminService) {}
 
 	ngOnInit(): void {
-		this.adminService
-			.getAll()
-			.pipe(take(1))
-			.subscribe((users) => (this.users = users));
+		this.adminService.getAll().subscribe((users) => (this.users = users));
 	}
 
 	isAllSelected() {
@@ -35,7 +32,12 @@ export class AdminComponent implements OnInit {
 			: this.users.forEach((user) => this.selection.select(user));
 	}
 
-	extractUserData(fileType: String) {
-		// TODO send ids to path, extract
+	exportUserData(fileType: string) {
+		if (fileType !== "xml" && fileType !== "json") return;
+
+		this.adminService.export(this.selection.selected.map(user => user._id), fileType).subscribe(res => {
+			const blob = new Blob([res], { type: 'application/' + fileType });
+			saveAs(blob, "extract-" + new Date().toISOString() + '.' + fileType);
+		});
 	}
 }

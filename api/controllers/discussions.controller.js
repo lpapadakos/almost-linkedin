@@ -8,7 +8,6 @@ exports.summary = async (req, res, next) => {
 		// BUG https://github.com/Automattic/mongoose/issues/1399
 		const userObjectId = mongoose.Types.ObjectId(req.userId);
 
-		// TODO add contact field for warning on message line
 		const discussions = await Message.aggregate([
 			{ $match: { $or: [{ sender: userObjectId }, { receiver: userObjectId }] } },
 			{

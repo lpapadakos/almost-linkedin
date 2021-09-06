@@ -40,6 +40,9 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit(): void {
+		//TODO load images only twice?
+		// TODO add contact field for warning on message line
+
 		this.discussionService.summary().subscribe({
 			next: (discussions) => {
 				this.discussions = discussions;

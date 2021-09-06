@@ -16,6 +16,7 @@ mat-sidenav {
 	text-align: center;
 	position: fixed !important;
 	margin-top: 64px;
+	overflow: auto;
 }
 
 textarea {

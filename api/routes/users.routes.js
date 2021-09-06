@@ -1,6 +1,7 @@
 const express = require("express");
 const router = express.Router();
 const { body } = require("express-validator");
+const compression = require("compression");
 
 const upload = require("../middlewares/multerStorage");
 const validationHandler = require("../middlewares/validationHandler");
@@ -67,6 +68,7 @@ router.delete("/:userId/:entryType/:entryId", user.deleteEntry);
 
 // Admin stuff
 // TODO router.delete("/:userId", adminOnly, usersController.deactivate);
-router.get("/export", adminOnly, user.export);
+// GET requests don't normally have a body, so use post, for list of ids in body
+router.post("/export", adminOnly, compression(), user.export);
 
 module.exports = router;

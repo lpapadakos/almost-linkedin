@@ -1,9 +1,12 @@
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
+const j2xParser = require("fast-xml-parser").j2xParser;
 
 const config = require("../config");
 const { Entry, User, Contact } = require("../models/user.model");
+const { Article } = require("../models/article.model");
+const JobAd = require("../models/job-ad.model");
 
 // TODO use brackets on most ifs
 exports.register = async (req, res, next) => {
@@ -356,10 +359,116 @@ exports.deleteEntry = async (req, res, next) => {
 
 exports.export = async (req, res, next) => {
 	try {
-		const type = req.query.type || "xml";
+		const type = req.query.type || "json";
 
-		console.log(type);
-		// TODO export users that were requested, XML/JSON
+		// BUG https://github.com/Automattic/mongoose/issues/1399
+		const userObjectIds = req.body.map((id) => mongoose.Types.ObjectId(id));
+
+		const users = await User.aggregate([
+			// Profile data
+			{ $match: { _id: { $in: userObjectIds }, role: "user" } },
+
+			// Network
+			{
+				$lookup: {
+					from: Contact.collection.name,
+					let: { id: "$_id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: {
+									$and: [
+										{ $eq: ["$accepted", true] },
+										{
+											$or: [
+												{
+													$eq: [
+														"$sender",
+														"$$id",
+													],
+												},
+												{
+													$eq: [
+														"$receiver",
+														"$$id",
+													],
+												},
+											],
+										},
+									],
+								},
+							},
+						},
+						{
+							$project: {
+								_id: {
+									$cond: [
+										{ $eq: ["$receiver", "$$id"] },
+										"$sender",
+										"$receiver",
+									],
+								},
+							},
+						},
+					],
+					as: "network",
+				},
+			},
+
+			// Articles (posted, liked, commented)
+			{
+				$lookup: {
+					from: Article.collection.name,
+					let: { id: "$_id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: {
+									$or: [
+										{ $eq: ["$poster", "$$id"] },
+										{ $in: ["$$id", "$interestNotes"] },
+										{ $in: ["$$id", "$comments.poster"] },
+									],
+								},
+							},
+						},
+						{ $unset: "__v" },
+					],
+					as: "articles",
+				},
+			},
+
+			// Job Ads (posted, applied)
+			{
+				$lookup: {
+					from: JobAd.collection.name,
+					let: { id: "$_id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: {
+									$or: [
+										{ $eq: ["$poster", "$$id"] },
+										{ $in: ["$$id", "$applications"] },
+									],
+								},
+							},
+						},
+						{ $unset: "__v" },
+					],
+					as: "job-ads",
+				},
+			},
+			{ $unset: ["password", "__v"] },
+		]);
+
+		if (type === "json") {
+			res.json(users);
+		} else {
+			// TODO ObjectIds look weird in this
+			res.set("Content-Type", "application/xml");
+			res.send(new j2xParser().parse(users));
+		}
 	} catch (err) {
 		next(err);
 	}
