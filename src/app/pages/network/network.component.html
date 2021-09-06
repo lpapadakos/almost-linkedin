@@ -1,5 +1,5 @@
 <div class="container">
-	<mat-card id="search-area">
+	<div class="search-area">
 		<mat-form-field>
 			<input
 				matInput
@@ -11,7 +11,7 @@
 		<div>
 			<button mat-raised-button color="warn" (click)="searchText = ''">Καθαρισμός</button>
 		</div>
-	</mat-card>
+	</div>
 	<mat-grid-list *ngIf="!searchText || searchText == ''" cols="4" rowHeight="1:1">
 		<h2>Το Δίκτυο μου</h2>
 		<mat-grid-tile *ngFor="let user of contacts">

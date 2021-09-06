@@ -17,8 +17,20 @@
 			Εξαγωγή επιλεγμένων σε XML
 		</button>
 	</div>
-	<!-- TODO avatar sort data? and SEARCH BAR
-	<img matListAvatar [src]="row.img | secure | async">-->
+	<div class="search-area">
+		<mat-form-field>
+			<input
+				matInput
+				#search
+				type="search"
+				(keyup)="applyFilter($event.target.value)"
+				placeholder="Αναζήτηση στους χρήστες της εφαρμογής"
+			/>
+		</mat-form-field>
+		<div>
+			<button mat-raised-button color="warn" (click)="search.value = ''; applyFilter('')">Καθαρισμός</button>
+		</div>
+	</div>
 	<mat-table [dataSource]="users" matSort class="mat-elevation-z8">
 		<!-- Checkbox Column -->
 		<ng-container matColumnDef="select">

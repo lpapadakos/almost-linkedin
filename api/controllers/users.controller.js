@@ -36,7 +36,9 @@ exports.login = async (req, res, next) => {
 		if (!user) return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
 
 		const passwordMatch = await bcrypt.compare(req.body.password, user.password);
-		if (!passwordMatch) return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
+		if (!passwordMatch) {
+			return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
+		}
 
 		res.status(200).json({
 			_id: user._id,
@@ -56,13 +58,15 @@ exports.login = async (req, res, next) => {
 
 exports.get = async (req, res, next) => {
 	try {
-		let filter = { role: "user" };
-
 		// BUG https://github.com/Automattic/mongoose/issues/1399
 		const userObjectId = mongoose.Types.ObjectId(req.userId);
 		const paramObjectId = mongoose.Types.ObjectId(req.params.userId);
 
-		if (req.params.userId) filter._id = paramObjectId;
+		if (req.params.userId) {
+			filter = { _id: paramObjectId };
+		} else {
+			filter = { role: "user" };
+		}
 
 		const users = await User.aggregate([
 			{ $match: filter },
@@ -142,6 +146,8 @@ exports.get = async (req, res, next) => {
 					(user.contact && user.contact.accepted);
 
 				for (const entryType of ["experience", "education", "skills"]) {
+					if (!user[entryType]) continue;
+
 					if (daijobu || user[entryType].public) {
 						if (user[entryType].fromYear) {
 							await user[entryType].entries.sort(
@@ -156,8 +162,11 @@ exports.get = async (req, res, next) => {
 		);
 
 		if (req.params.userId) {
-			if (users) return res.status(200).json(users[0]);
-			else return res.status(404).json({ error: "Δεν βρέθηκε ο χρήστης" });
+			if (users) {
+				return res.status(200).json(users[0]);
+			} else {
+				return res.status(404).json({ error: "Δεν βρέθηκε ο χρήστης" });
+			}
 		}
 
 		res.status(200).json(users);
@@ -425,7 +434,7 @@ exports.export = async (req, res, next) => {
 							$match: {
 								$expr: {
 									$or: [
-										{ $eq: ["$poster", "$$id"] },
+										{ $eq: ["$$id", "$poster"] },
 										{ $in: ["$$id", "$interestNotes"] },
 										{ $in: ["$$id", "$comments.poster"] },
 									],
@@ -448,7 +457,7 @@ exports.export = async (req, res, next) => {
 							$match: {
 								$expr: {
 									$or: [
-										{ $eq: ["$poster", "$$id"] },
+										{ $eq: ["$$id", "$poster"] },
 										{ $in: ["$$id", "$applications"] },
 									],
 								},
@@ -465,9 +474,11 @@ exports.export = async (req, res, next) => {
 		if (type === "json") {
 			res.json(users);
 		} else {
-			// TODO ObjectIds look weird in this
+			// The stringify-parse loop converts the ObjectIDs to strings
+			const xml = new j2xParser().parse(JSON.parse(JSON.stringify({ user: users })));
+
 			res.set("Content-Type", "application/xml");
-			res.send(new j2xParser().parse(users));
+			res.send(xml);
 		}
 	} catch (err) {
 		next(err);

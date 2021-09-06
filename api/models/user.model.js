@@ -13,7 +13,7 @@ const userSchema = mongoose.Schema(
 		// TODO bio in edit page
 		name: { type: String, required: true },
 		email: { type: String, required: true, unique: true },
-		password: { type: String, required: true, select: false },
+		password: { type: String, required: true },
 		phone: String,
 		img: String,
 		bio: String,

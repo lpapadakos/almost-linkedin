@@ -2,11 +2,6 @@ mat-card {
 	text-align: center;
 }
 
-#search-area {
-	display: flex;
-	align-items: center;
-}
-
 mat-card button {
 	margin: 0 1em;
 }
