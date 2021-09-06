@@ -84,3 +84,9 @@ a:hover {
 .mat-row.highlighted {
 	background: rgba(0, 0, 0, 0.12);
 }
+
+/* Searchable lists with scroll */
+mat-form-field + mat-list {
+	max-height: 400px;
+	overflow: auto;
+}

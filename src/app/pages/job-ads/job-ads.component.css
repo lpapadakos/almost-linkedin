@@ -31,8 +31,3 @@ button.view-applications {
 .delete-area {
 	float: right;
 }
-
-.job-ad .applications mat-list {
- 	max-height: 400px;
-	overflow: auto;
-}

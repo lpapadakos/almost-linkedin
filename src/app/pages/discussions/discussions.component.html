@@ -8,7 +8,7 @@
 			<button *ngIf="newDiscussion" mat-raised-button color="warn" (click)="newDiscussion = false">
 				Ακύρωση
 			</button>
-			<mat-list *ngIf="newDiscussion">
+			<div *ngIf="newDiscussion">
 				<mat-form-field>
 					<input
 						matInput
@@ -17,16 +17,19 @@
 						placeholder="Αναζήτηση στις επαφές"
 					/>
 				</mat-form-field>
-				<a
-					mat-list-item
-					*ngFor="let user of contacts | filter: searchText"
-					[routerLink]="'/discussions/' + user._id"
-					(click)="newDiscussion = false"
-				>
-					<img matListAvatar [src]="user.img | secure | async" />
-					<h3 matLine>{{ user.name }}</h3>
-				</a>
-			</mat-list>
+				<mat-list>
+
+					<a
+						mat-list-item
+						*ngFor="let user of contacts | filter: searchText"
+						[routerLink]="'/discussions/' + user._id"
+						(click)="newDiscussion = false"
+					>
+						<img matListAvatar [src]="user.img | secure | async" />
+						<h3 matLine>{{ user.name }}</h3>
+					</a>
+				</mat-list>
+			</div>
 		</div>
 		<mat-list *ngIf="discussions && discussions.length">
 			<h2>Υφιστάμενες συζητήσεις</h2>
