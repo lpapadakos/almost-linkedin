@@ -42,7 +42,12 @@
 	</mat-card>
 
 	<!-- job ad list -->
-	<mat-card class="job-ad" [id]="jobAd._id" *ngFor="let jobAd of jobAds">
+	<mat-card
+		class="job-ad"
+		[id]="jobAd._id"
+		*ngFor="let jobAd of jobAds"
+		[ngClass]="{ 'mat-elevation-z8': fragment === jobAd._id }"
+	>
 		<mat-card-title-group>
 			<img mat-card-sm-image [src]="jobAd.poster.img | secure | async" />
 			<a mat-card-title [routerLink]="'/profile/' + jobAd.poster._id">{{ jobAd.poster.name }}</a>
@@ -96,7 +101,10 @@
 				</span>
 			</div>
 		</mat-card-actions>
-		<section *ngIf="jobAd.applications.length && jobAd.viewApplications" class="alt-background applications">
+		<section
+			*ngIf="jobAd.applications.length && jobAd.viewApplications"
+			class="alt-background applications"
+		>
 			<mat-form-field>
 				<input
 					matInput

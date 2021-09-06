@@ -28,7 +28,10 @@ export class ArticleListComponent implements AfterViewInit {
 	ngAfterViewInit(): void {
 		setTimeout(() => {
 			this.route.fragment.subscribe((fragment) => {
-				if (fragment) this.viewportScroller.scrollToAnchor(fragment);
+				if (fragment) {
+					this.fragment = fragment;
+					this.viewportScroller.scrollToAnchor(fragment);
+				}
 			});
 		}, 500);
 	}

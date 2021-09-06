@@ -1,4 +1,8 @@
-<mat-card [id]="article._id" *ngFor="let article of articles">
+<mat-card
+	[id]="article._id"
+	*ngFor="let article of articles"
+	[ngClass]="{ 'mat-elevation-z8': fragment === article._id }"
+>
 	<mat-card-title-group>
 		<img mat-card-sm-image [src]="article.poster.img | secure | async" />
 		<a mat-card-title [routerLink]="'/profile/' + article.poster._id">{{ article.poster.name }}</a>
