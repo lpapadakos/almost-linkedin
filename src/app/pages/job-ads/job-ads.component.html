@@ -1,2 +1,120 @@
-<p>job-ads works!</p>
-<!-- TODO job ads -->
+<div class="container">
+	<mat-card>
+		<mat-card-content>
+			<form [formGroup]="jobAdForm" (ngSubmit)="onPost()">
+				<mat-error *ngIf="error">{{ error }}</mat-error>
+				<h2>Ανάρτηση αγγελίας</h2>
+				<mat-form-field>
+					<input
+						matInput
+						type="text"
+						placeholder="Τίτλος θέσης"
+						formControlName="what"
+						required
+					/>
+					<mat-error>Παρακαλώ εισάγετε τον τίτλο θέσης</mat-error>
+				</mat-form-field>
+				<mat-form-field>
+					<input
+						matInput
+						type="text"
+						placeholder="Επωνυμία Εταιρίας/Οργανισμού"
+						formControlName="where"
+						required
+					/>
+					<mat-error>Παρακαλώ εισάγετε την επωνυμία της εταιρίας</mat-error>
+				</mat-form-field>
+				<mat-form-field>
+					<mat-error>Παρακαλώ εισάγετε την περιγραφή της θέσης</mat-error>
+					<textarea
+						matInput
+						matTextareaAutosize
+						placeholder="Περιγραφή θέσης"
+						formControlName="description"
+						required
+					></textarea>
+				</mat-form-field>
+				<mat-card-actions>
+					<button mat-raised-button type="submit" color="primary">Δημοσίευση</button>
+				</mat-card-actions>
+			</form>
+		</mat-card-content>
+	</mat-card>
+
+	<!-- job ad list -->
+	<mat-card class="job-ad" [id]="jobAd._id" *ngFor="let jobAd of jobAds">
+		<mat-card-title-group>
+			<img mat-card-sm-image [src]="jobAd.poster.img | secure | async" />
+			<a mat-card-title [routerLink]="'/profile/' + jobAd.poster._id">{{ jobAd.poster.name }}</a>
+			<a mat-card-subtitle routerLink="/job-ads" [fragment]="jobAd._id">
+				{{ jobAd.createdAt | date: "medium" }}
+			</a>
+		</mat-card-title-group>
+		<mat-card-content>
+			<p>Για τη θέση:</p>
+			<mat-list>
+				<mat-list-item>
+					<img matListAvatar src="/assets/experience.png" />
+					<h3 matLine>{{ jobAd.what }}</h3>
+					<span matLine>{{ jobAd.where }}</span>
+				</mat-list-item>
+			</mat-list>
+			<p>{{ jobAd.description }}</p>
+		</mat-card-content>
+		<mat-card-actions>
+			<button
+				mat-button
+				[ngClass]="{ 'mat-primary': hasApplied(user, jobAd) }"
+				(click)="toggleApply(jobAd)"
+			>
+				<mat-icon>attachment</mat-icon>
+				{{ hasApplied(user, jobAd) ? "Έγινε αίτηση" : "Αίτηση" }}
+			</button>
+			<ng-container *ngIf="jobAd.applications.length">
+				<button
+					mat-button
+					class="view-applications"
+					[ngClass]="{ 'alt-background': jobAd.viewApplications }"
+					(click)="jobAd.viewApplications = !jobAd.viewApplications"
+				>
+					<mat-icon>view_list</mat-icon>
+					Προβολή Αιτήσεων
+				</button>
+				<span>{{ jobAd.applications.length }} υποψήφιοι έχουν κάνει αίτηση</span>
+			</ng-container>
+			<div *ngIf="jobAd.poster._id === user._id" class="delete-area">
+				<button *ngIf="!jobAd.delete" mat-button color="warn" (click)="jobAd.delete = true">
+					<mat-icon>delete_forever</mat-icon>
+					Διαγραφή Αγγελίας
+				</button>
+				<span *ngIf="jobAd.delete">
+					Σίγουρα?
+					<button mat-raised-button color="warn" (click)="delete(jobAd)">Ναι</button>
+					<button mat-raised-button color="primary" (click)="jobAd.delete = false">
+						Όχι
+					</button>
+				</span>
+			</div>
+		</mat-card-actions>
+		<section *ngIf="jobAd.applications.length && jobAd.viewApplications" class="alt-background applications">
+			<mat-form-field>
+				<input
+					matInput
+					type="search"
+					[(ngModel)]="jobAd.searchText"
+					placeholder="Αναζήτηση στους υποψήφιους"
+				/>
+			</mat-form-field>
+			<mat-list>
+				<a
+					mat-list-item
+					*ngFor="let user of jobAd.applications | filter: jobAd.searchText"
+					[routerLink]="'/profile/' + user._id"
+				>
+					<img matListAvatar [src]="user.img | secure | async" />
+					<h3 matLine>{{ user.name }}</h3>
+				</a>
+			</mat-list>
+		</section>
+	</mat-card>
+</div>

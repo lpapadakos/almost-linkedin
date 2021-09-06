@@ -80,6 +80,8 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 				this.onError(error);
 			},
 		});
+
+		this.router.events.subscribe((event) => clearInterval(this.intervalId));
 	}
 
 	startDiscussion() {

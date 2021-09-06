@@ -1,0 +1,38 @@
+.job-ad {
+	padding: 0;
+}
+
+.job-ad mat-card-title-group {
+	padding: 16px 16px 0;
+}
+
+.job-ad mat-card-content {
+	padding: 0 16px 16px;
+	margin: 0;
+}
+
+.job-ad mat-list-item img {
+	border-radius: inherit !important;
+}
+
+.job-ad mat-card-actions {
+	margin: 0;
+	padding-bottom: 0;
+}
+
+button.view-applications {
+	border-radius: 0 !important;
+}
+
+.job-ad span {
+	font-size: 0.8em;
+}
+
+.delete-area {
+	float: right;
+}
+
+.job-ad .applications mat-list {
+ 	max-height: 400px;
+	overflow: auto;
+}

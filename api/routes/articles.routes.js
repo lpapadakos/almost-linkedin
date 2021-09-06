@@ -15,6 +15,7 @@ router.route("/:articleId").get(article.get).delete(article.delete);
 router.route("/:articleId/like").post(article.like, interaction).delete(article.unlike);
 
 // Comments
-router.route("/:articleId/comment").post(article.comment, interaction).delete(article.deleteComment);
+router.post("/:articleId/comment", article.comment, interaction)
+router.delete("/:articleId/comment/:commentId", article.deleteComment);
 
 module.exports = router;

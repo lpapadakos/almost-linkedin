@@ -114,5 +114,10 @@
 			}
 		}
 	},
-	"defaultProject": "almost-linkedin"
+  "defaultProject": "almost-linkedin",
+  "cli": {
+    "warnings": {
+      "versionMismatch": false
+    }
+  }
 }

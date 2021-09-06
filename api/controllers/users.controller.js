@@ -64,7 +64,8 @@ exports.get = async (req, res, next) => {
 		const users = await User.aggregate([
 			{ $match: filter },
 			{
-				$lookup: { // add extra 'contact' field for frontend usage
+				$lookup: {
+					// add extra 'contact' field for frontend usage
 					from: Contact.collection.name,
 					let: { id: "$_id" },
 					pipeline: [
@@ -252,7 +253,7 @@ exports.deleteContactRequest = async (req, res, next) => {
 exports.getContacts = async (req, res, next) => {
 	try {
 		// Can peep only at the network of ourselves or our contacts
-		if (!req.params.userId === req.userId) {
+		if (req.params.userId !== req.userId) {
 			const isContact = await Contact.exists({
 				$and: [
 					{ accepted: true },

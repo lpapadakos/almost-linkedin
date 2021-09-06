@@ -24,7 +24,7 @@ export class ProfileComponent implements OnInit {
 			name: 'experience',
 			label: 'Επαγγελματική εμπειρία',
 			form: 'Εισαγωγή επαγγελματικής εμπειρίας',
-			form_what: 'Περιγραφή Θέσης',
+			form_what: 'Τίτλος Θέσης',
 			form_where: 'Επωνυμία Εταιρίας/Οργανισμού',
 		},
 		{

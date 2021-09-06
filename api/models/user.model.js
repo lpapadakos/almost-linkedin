@@ -2,8 +2,8 @@ const mongoose = require("mongoose");
 const uniqueValidator = require("mongoose-unique-validator");
 
 const entrySchema = mongoose.Schema({
-	where: String,
 	what: String,
+	where: String,
 	fromYear: Number,
 	toYear: Number,
 });

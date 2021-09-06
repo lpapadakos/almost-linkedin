@@ -21,8 +21,8 @@ export class ArticleListComponent implements AfterViewInit {
 	constructor(
 		private route: ActivatedRoute,
 		private router: Router,
-		private viewportScroller: ViewportScroller,
-		private articleService: ArticleService
+		private articleService: ArticleService,
+		private viewportScroller: ViewportScroller
 	) {}
 
 	ngAfterViewInit(): void {

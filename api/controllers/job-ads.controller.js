@@ -1,11 +1,12 @@
 const JobAd = require("../models/job-ad.model");
+ const { User } = require("../models/user.model");
 
 exports.post = async (req, res, next) => {
 	try {
 		const jobAd = await JobAd.create({
 			poster: req.userId,
-			where: req.body.where,
 			what: req.body.what,
+			where: req.body.where,
 			description: req.body.description,
 		});
 
@@ -15,7 +16,6 @@ exports.post = async (req, res, next) => {
 	}
 };
 
-// TODO here convert to job ads
 exports.get = async (req, res, next) => {
 	try {
 		let filter = {};
@@ -57,7 +57,7 @@ exports.delete = async (req, res, next) => {
 
 		if (jobAd) {
 			// Can only delete own job ads
-			if (jobAd.poster.equals(req.userId)) {
+			if (!jobAd.poster.equals(req.userId)) {
 				return res
 					.status(403)
 					.json({ error: "Λειτουργία διαθέσιμη μόνο για τον συγγραφέα της αγγελίας" });

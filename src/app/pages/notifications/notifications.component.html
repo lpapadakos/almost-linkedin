@@ -25,12 +25,12 @@
 					<a matLine [routerLink]="'/profile/' + interestedUser._id">
 						{{ interestedUser.name }}
 					</a>
-					<p>
+					<span>
 						<mat-icon>thumb_up</mat-icon>
 						Ο χρήστης βρήκε ενδιαφέρον
 						<a routerLink="/profile" [fragment]="article._id">το άρθρο σας</a>
 						.
-					</p>
+					</span>
 				</mat-list-item>
 			</ng-container>
 			<ng-container *ngFor="let comment of article.comments">
@@ -39,14 +39,14 @@
 					<a matLine [routerLink]="'/profile/' + comment.poster._id">
 						{{ comment.poster.name }}
 					</a>
-					<p>
+					<span>
 						<mat-icon>comment</mat-icon>
 						Ο χρήστης έγγραψε
 						<a routerLink="/profile" [fragment]="comment._id">
 							ένα σχόλιο στο άρθρο σας
 						</a>
 						.
-					</p>
+					</span>
 				</mat-list-item>
 			</ng-container>
 		</mat-list>

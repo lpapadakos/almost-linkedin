@@ -23,7 +23,6 @@
 	<mat-card-actions>
 		<button
 			mat-button
-			class="like"
 			[ngClass]="{ 'mat-primary': isInterested(user, article) }"
 			(click)="toggleInterest(article)"
 		>
