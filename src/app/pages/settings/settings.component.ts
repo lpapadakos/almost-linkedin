@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+
+import { AlertService } from '../../services/alert.service';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -13,14 +14,12 @@ import { UserService } from '../../services/user.service';
 export class SettingsComponent implements OnInit {
 	user: User = this.userService.user;
 	updateForm: FormGroup;
-	error = '';
 	userImage: File | null = null;
 	imageData: any;
 
 	constructor(
 		private formBuilder: FormBuilder,
-		private route: ActivatedRoute,
-		private router: Router,
+		private alertService: AlertService,
 		private userService: UserService
 	) {}
 
@@ -36,12 +35,12 @@ export class SettingsComponent implements OnInit {
 				repeat_new_password: [],
 			},
 			{
-			 	// validator: this.userService.matchControls('new_password', 'new_repeat_password'),
+				validator: this.userService.equivalentValidator('new_password', 'repeat_new_password'),
 			}
 		);
 	}
 
-	onFileChange(event): void {
+	onFileChange(event) {
 		if (event.target.files && event.target.files[0]) {
 			this.userImage = event.target.files[0];
 
@@ -56,11 +55,13 @@ export class SettingsComponent implements OnInit {
 		if (this.updateForm.invalid) return;
 
 		this.userService.update(this.updateForm.value, this.userImage).subscribe({
-			next: (res: {message: string}) => {
-				this.error = res.message + ". Οι αλλαγές θα ισχύσουν από την επόμενη σύνδεση";
+			next: (res: { message: string }) => {
+				this.alertService.success(
+					res.message + '. Οι αλλαγές θα ισχύσουν από την επόμενη σύνδεση'
+				);
 			},
 			error: (error) => {
-				this.error = error;
+				this.alertService.error(error);
 			},
 		});
 	}

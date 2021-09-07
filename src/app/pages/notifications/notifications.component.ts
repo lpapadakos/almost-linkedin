@@ -1,9 +1,11 @@
 import { Component, OnInit } from '@angular/core';
 
+import { AlertService } from '../../services/alert.service';
+
 import { User, ContactRequest } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
-import { Article, Comment } from '../../models/article.model';
+import { Article } from '../../models/article.model';
 import { ArticleService } from '../../services/article.service';
 
 @Component({
@@ -15,11 +17,10 @@ export class NotificationsComponent implements OnInit {
 	user: User = this.userService.user;
 	requests: ContactRequest[];
 	recentArticles: Article[];
-	error = '';
 
-	constructor(private userService: UserService, private articleService: ArticleService) {}
+	constructor(private alertService: AlertService, private userService: UserService, private articleService: ArticleService) {}
 
-	ngOnInit(): void {
+	ngOnInit() {
 		this.userService.getContactRequests().subscribe((requests) => (this.requests = requests));
 
 		this.articleService.getFromUser(this.user._id).subscribe((articles) => {
@@ -35,7 +36,7 @@ export class NotificationsComponent implements OnInit {
 				if (index > -1) this.requests.splice(index, 1);
 			},
 			error: (error) => {
-				this.onError(error);
+				this.alertService.error(error);
 			},
 		});
 	}
@@ -47,12 +48,8 @@ export class NotificationsComponent implements OnInit {
 				if (index > -1) this.requests.splice(index, 1);
 			},
 			error: (error) => {
-				this.onError(error);
+				this.alertService.error(error);
 			},
 		});
-	}
-
-	onError(error: string) {
-		this.error = error;
 	}
 }

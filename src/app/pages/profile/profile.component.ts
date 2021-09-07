@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
+
+import { AlertService } from '../../services/alert.service';
 
 import { Entry, User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -14,10 +16,11 @@ import { ArticleService } from '../../services/article.service';
 	styleUrls: ['./profile.component.css'],
 })
 export class ProfileComponent implements OnInit {
-	error = '';
 	user: User = this.userService.user;
 	viewedUser: User;
+
 	articles: Article[];
+
 	form = {};
 	entryTypes = [
 		{
@@ -43,8 +46,9 @@ export class ProfileComponent implements OnInit {
 
 	constructor(
 		private formBuilder: FormBuilder,
-		private route: ActivatedRoute,
 		private router: Router,
+		private route: ActivatedRoute,
+		private alertService: AlertService,
 		private userService: UserService,
 		private articleService: ArticleService
 	) {}
@@ -69,7 +73,7 @@ export class ProfileComponent implements OnInit {
 		};
 	}
 
-	ngOnInit(): void {
+	ngOnInit() {
 		this.route.paramMap.subscribe((paramMap) => {
 			let viewedUserId = paramMap.get('userId');
 
@@ -83,7 +87,7 @@ export class ProfileComponent implements OnInit {
 						.subscribe((articles) => (this.articles = articles));
 				},
 				error: (error) => {
-					this.onError(error);
+					this.alertService.error(error);
 					this.router.navigate(['/404'], { skipLocationChange: true });
 				},
 			});
@@ -133,10 +137,9 @@ export class ProfileComponent implements OnInit {
 				}
 
 				form.reset();
-				this.error = '';
 			},
 			error: (err) => {
-				this.onError(err);
+				this.alertService.error(err);
 			},
 		});
 	}
@@ -147,7 +150,7 @@ export class ProfileComponent implements OnInit {
 			error: (err) => {
 				// revert check on error
 				this.viewedUser[entryType].public = !isPublic;
-				this.onError(err);
+				this.alertService.error(err);
 			},
 		});
 	}
@@ -161,12 +164,8 @@ export class ProfileComponent implements OnInit {
 				if (index > -1) array.splice(index, 1);
 			},
 			error: (error) => {
-				this.onError(error);
+				this.alertService.error(error);
 			},
 		});
-	}
-
-	onError(error: string) {
-		this.error = error;
 	}
 }

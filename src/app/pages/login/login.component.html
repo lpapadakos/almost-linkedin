@@ -8,7 +8,6 @@
 		<mat-card-content>
 			<form [formGroup]="loginForm" (ngSubmit)="onSubmit()">
 				<h2>Σύνδεση Χρήστη</h2>
-				<mat-error *ngIf="error">{{ error }}</mat-error>
 				<mat-form-field>
 					<input
 						matInput

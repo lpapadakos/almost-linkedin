@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router, ActivatedRoute } from '@angular/router';
 
+import { AlertService } from '../../services/alert.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -12,12 +13,12 @@ import { UserService } from '../../services/user.service';
 export class LoginComponent implements OnInit {
 	private returnUrl: string;
 	loginForm: FormGroup;
-	error = '';
 
 	constructor(
 		private formBuilder: FormBuilder,
-		private route: ActivatedRoute,
 		private router: Router,
+		private route: ActivatedRoute,
+		private alertService: AlertService,
 		private userService: UserService
 	) {
 		this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
@@ -43,7 +44,7 @@ export class LoginComponent implements OnInit {
 					this.router.navigate([this.returnUrl]);
 				},
 				error: (error) => {
-					this.error = error;
+					this.alertService.error(error);
 				},
 			});
 	}

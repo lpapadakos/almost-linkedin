@@ -1,4 +1,6 @@
-import { Component, OnChanges, SimpleChanges, Input, Output, EventEmitter } from '@angular/core';
+import { Component, OnChanges, SimpleChanges, Input } from '@angular/core';
+
+import { AlertService } from '../../services/alert.service';
 
 import { User, ContactRequest } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -9,22 +11,17 @@ import { UserService } from '../../services/user.service';
 	styleUrls: ['./sidenav.component.css'],
 })
 export class SidenavComponent implements OnChanges {
+	@Input() viewedUser: User;
+
 	user: User = this.userService.user;
 	topContacts: User[];
-	@Input() viewedUser: User;
-	@Output() errorEvent = new EventEmitter<string>();
 
-	constructor(private userService: UserService) {}
+	constructor(private alertService: AlertService, private userService: UserService) {}
 
-	ngOnChanges(changes: SimpleChanges): void {
-		this.userService.getContacts(this.viewedUser._id).subscribe({
-			next: (contacts) => {
-				this.topContacts = contacts.splice(0, 5);
-			},
-			error: (error) => {
-				this.topContacts = null;
-			},
-		});
+	ngOnChanges(changes: SimpleChanges) {
+		this.userService
+			.getContacts(this.viewedUser._id)
+			.subscribe((contacts) => (this.topContacts = contacts.splice(0, 5)));
 	}
 
 	addContactRequest() {
@@ -36,7 +33,7 @@ export class SidenavComponent implements OnChanges {
 				};
 			},
 			error: (error) => {
-				this.errorEvent.emit(error);
+				this.alertService.error(error);
 			},
 		});
 	}
@@ -48,7 +45,7 @@ export class SidenavComponent implements OnChanges {
 				this.viewedUser.contact = null;
 			},
 			error: (error) => {
-				this.errorEvent.emit(error);
+				this.alertService.error(error);
 			},
 		});
 	}

@@ -1,16 +1,14 @@
 <mat-sidenav-container>
 	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<app-sidenav [viewedUser]="user" (errorEmitter)="onError($event)"></app-sidenav>
+		<app-sidenav [viewedUser]="user"></app-sidenav>
 	</mat-sidenav>
 	<mat-sidenav-content>
 		<div class="container">
 			<mat-card>
 				<mat-card-content>
 					<form [formGroup]="articleForm" (ngSubmit)="onPost()">
-						<mat-error *ngIf="error">{{ error }}</mat-error>
 						<h2>Ανάρτηση άρθρου</h2>
 						<mat-form-field>
-							<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
 							<textarea
 								matInput
 								matTextareaAutosize
@@ -18,6 +16,7 @@
 								formControlName="text"
 								required
 							></textarea>
+							<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
 						</mat-form-field>
 						<label for="media">Μπορείτε να επισυνάψετε αρχεία πολυμέσων:</label>
 						<input
@@ -36,11 +35,7 @@
 					</form>
 				</mat-card-content>
 			</mat-card>
-			<app-article-list
-				[user]="user"
-				[articles]="articles"
-				(errorEmitter)="onError($event)"
-			></app-article-list>
+			<app-article-list [user]="user" [articles]="articles"></app-article-list>
 		</div>
 	</mat-sidenav-content>
 </mat-sidenav-container>

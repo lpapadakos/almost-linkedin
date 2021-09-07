@@ -55,16 +55,16 @@ export class NavComponent implements OnInit, OnDestroy {
 		];
 	}
 
-	ngOnInit(): void {
-		this.subscription = this.userService.userEmitter().subscribe((user) => (this.user = user));
+	ngOnInit() {
+		this.subscription = this.userService.onUser().subscribe((user) => (this.user = user));
 	}
 
-	logout(): void {
+	logout() {
 		this.userService.logout();
 		this.router.navigate(['/login']);
 	}
 
-	ngOnDestroy(): void {
+	ngOnDestroy() {
 		this.subscription.unsubscribe();
 	}
 }

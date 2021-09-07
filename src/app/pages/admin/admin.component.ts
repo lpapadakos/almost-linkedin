@@ -1,5 +1,4 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { SelectionModel } from '@angular/cdk/collections';
 import { saveAs } from 'file-saver';
 
@@ -21,9 +20,9 @@ export class AdminComponent implements OnInit {
 
 	@ViewChild(MatSort) sort: MatSort;
 
-	constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {}
+	constructor(private userService: UserService) {}
 
-	ngOnInit(): void {
+	ngOnInit() {
 		this.userService.getAll().subscribe((users) => {
 			this.users = new MatTableDataSource(users);
 
@@ -35,7 +34,7 @@ export class AdminComponent implements OnInit {
 
 	applyFilter(filterValue: string) {
 		this.users.filter = filterValue.trim().toLowerCase();
-}
+	}
 
 	isAllSelected() {
 		return this.selection.selected.length === this.users.data.length;

@@ -1,7 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 
+import { AlertService } from '../../services/alert.service';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -11,18 +12,15 @@ import { UserService } from '../../services/user.service';
 })
 export class RegisterComponent implements OnInit {
 	registerForm: FormGroup;
-	error = '';
 	userImage: File | null = null;
 	imageData: any;
 
 	constructor(
 		private formBuilder: FormBuilder,
-		private route: ActivatedRoute,
 		private router: Router,
+		private alertService: AlertService,
 		private userService: UserService
 	) {}
-
-
 
 	ngOnInit() {
 		this.registerForm = this.formBuilder.group(
@@ -34,12 +32,12 @@ export class RegisterComponent implements OnInit {
 				repeat_password: ['', Validators.required],
 			},
 			{
-				validator: this.userService.matchControls('password', 'repeat_password'),
+				validator: this.userService.equivalentValidator('password', 'repeat_password'),
 			}
 		);
 	}
 
-	onFileChange(event): void {
+	onFileChange(event) {
 		if (event.target.files && event.target.files[0]) {
 			this.userImage = event.target.files[0];
 
@@ -58,7 +56,7 @@ export class RegisterComponent implements OnInit {
 				this.router.navigate(['/login']);
 			},
 			error: (error) => {
-				this.error = error;
+				this.alertService.error(error);
 			},
 		});
 	}

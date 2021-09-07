@@ -2,7 +2,6 @@
 	<mat-card-content>
 		<form [formGroup]="updateForm" (ngSubmit)="onSubmit()">
 			<h1>Ενημέρωση Στοιχείων Χρήστη</h1>
-			<mat-error *ngIf="error">{{ error }}</mat-error>
 			<mat-form-field>
 				<input matInput placeholder="Όνοματεπώνυμο" formControlName="name" required />
 				<mat-error>Παρακαλώ εισάγετε το ονοματεπώνυμό σας</mat-error>
@@ -24,7 +23,7 @@
 			<div id="fileArea">
 				<input #imgInput hidden type="file" accept="image/*" (change)="onFileChange($event)" />
 				<button mat-raised-button color="primary" (click)="imgInput.click()">
-					{{ user.img ? 'Αλλαγή' : 'Επιλογή' }} εικόνας προφίλ
+					{{ user.img ? "Αλλαγή" : "Επιλογή" }} εικόνας προφίλ
 				</button>
 				<img [src]="imageData || (user.img | secure | async)" />
 			</div>

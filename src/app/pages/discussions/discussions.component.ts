@@ -1,5 +1,7 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
-import { Router, ActivatedRoute } from '@angular/router';
+import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
+
+import { AlertService } from '../../services/alert.service';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -16,7 +18,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	private intervalId;
 	private lastUpdate: number;
 
-	error = '';
 	user: User = this.userService.user;
 
 	newDiscussion = false;
@@ -29,8 +30,9 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	message: string;
 
 	constructor(
-		private route: ActivatedRoute,
 		private router: Router,
+		private route: ActivatedRoute,
+		private alertService: AlertService,
 		private userService: UserService,
 		private discussionService: DiscussionService
 	) {}
@@ -39,7 +41,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 		setTimeout(() => window.scrollTo(0, document.scrollingElement.scrollHeight), 500);
 	}
 
-	ngOnInit(): void {
+	ngOnInit() {
 		//TODO load images only twice?
 		// TODO add contact field for warning on message line
 
@@ -69,7 +71,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 									this.onDiscussion();
 								},
 								error: (error) => {
-									this.onError(error);
+									this.alertService.error(error);
 									this.router.navigate(['/404'], {
 										skipLocationChange: true,
 									});
@@ -80,11 +82,15 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 				});
 			},
 			error: (error) => {
-				this.onError(error);
+				this.alertService.error(error);
 			},
 		});
 
-		this.router.events.subscribe((event) => clearInterval(this.intervalId));
+		this.router.events.subscribe((event) => {
+			if (event instanceof NavigationStart) {
+				clearInterval(this.intervalId);
+			}
+		});
 	}
 
 	startDiscussion() {
@@ -93,7 +99,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 				this.contacts = contacts;
 			},
 			error: (error) => {
-				this.onError(error);
+				this.alertService.error(error);
 			},
 		});
 
@@ -117,7 +123,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 				this.scrollToBottom();
 			},
 			error: (error) => {
-				this.onError(error);
+				this.alertService.error(error);
 			},
 		});
 
@@ -143,7 +149,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 					}
 				},
 				error: (error) => {
-					this.onError(error);
+					this.alertService.error(error);
 				},
 			});
 		}, 3000);
@@ -162,13 +168,9 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 				this.scrollToBottom();
 			},
 			error: (error) => {
-				this.onError(error);
+				this.alertService.error(error);
 			},
 		});
-	}
-
-	onError(error: string) {
-		this.error = error;
 	}
 
 	ngOnDestroy() {

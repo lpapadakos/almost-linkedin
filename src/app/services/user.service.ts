@@ -10,40 +10,30 @@ import { Entry, User, ContactRequest } from '../models/user.model';
 @Injectable({ providedIn: 'root' })
 export class UserService {
 	private userSubject: BehaviorSubject<User>;
-	public _user: Observable<User>;
 
 	constructor(private http: HttpClient) {
 		this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
-		this._user = this.userSubject.asObservable();
 	}
 
-	get user(): User {
+	get user() {
 		return this.userSubject.value;
 	}
 
-	userEmitter(): Observable<User> {
-		return this._user;
+	onUser() {
+		return this.userSubject.asObservable();
 	}
 
 	// Custom validator: Compare password fields to see if they match
-	matchControls(controlName: string, matchingControlName: string) {
+	equivalentValidator = (firstControlName: string, secondControlName: string) => {
 		return (formGroup: FormGroup) => {
-			const control = formGroup.controls[controlName];
-			const matchingControl = formGroup.controls[matchingControlName];
+			const firstControl = formGroup.get(firstControlName);
+			const secondControl = formGroup.get(secondControlName);
 
-			if (matchingControl.errors && !matchingControl.errors.mustMatch) {
-				// return if another validator has already found an error on the matchingControl
-				return;
-			}
-
-			// set error on matchingControl if validation fails
-			if (control.value !== matchingControl.value) {
-				matchingControl.setErrors({ mustMatch: true });
-			} else {
-				matchingControl.setErrors(null);
+			if (firstControl.value !== secondControl.value) {
+				return secondControl.setErrors({ notEqual: true });
 			}
 		};
-	}
+	};
 
 	register(user: User, img: File) {
 		const formData = new FormData();

@@ -1,6 +1,8 @@
-import { Component, AfterViewInit, Input, Output, EventEmitter } from '@angular/core';
+import { Component, AfterViewInit, Input } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
+import { AlertService } from '../../services/alert.service';
 
 import { User } from '../../models/user.model';
 
@@ -15,17 +17,16 @@ import { ArticleService } from '../../services/article.service';
 export class ArticleListComponent implements AfterViewInit {
 	@Input() user: User;
 	@Input() articles: Article[];
-	@Output() errorEvent = new EventEmitter<string>();
 	fragment: string;
 
 	constructor(
+		private viewportScroller: ViewportScroller,
 		private route: ActivatedRoute,
-		private router: Router,
-		private articleService: ArticleService,
-		private viewportScroller: ViewportScroller
+		private alertService: AlertService,
+		private articleService: ArticleService
 	) {}
 
-	ngAfterViewInit(): void {
+	ngAfterViewInit() {
 		setTimeout(() => {
 			this.route.fragment.subscribe((fragment) => {
 				if (fragment) {
@@ -43,12 +44,12 @@ export class ArticleListComponent implements AfterViewInit {
 				if (index > -1) this.articles.splice(index, 1);
 			},
 			error: (error) => {
-				this.errorEvent.emit(error);
+				this.alertService.error(error);
 			},
 		});
 	}
 
-	isInterested(user: User, article: Article): boolean {
+	isInterested(user: User, article: Article) {
 		return article.interestNotes.find((u) => u._id === user._id) != undefined;
 	}
 
@@ -60,7 +61,7 @@ export class ArticleListComponent implements AfterViewInit {
 					if (index > -1) article.interestNotes.splice(index, 1);
 				},
 				error: (error) => {
-					this.errorEvent.emit(error);
+					this.alertService.error(error);
 				},
 			});
 		} else {
@@ -69,7 +70,7 @@ export class ArticleListComponent implements AfterViewInit {
 					article.interestNotes.push(this.user);
 				},
 				error: (error) => {
-					this.errorEvent.emit(error);
+					this.alertService.error(error);
 				},
 			});
 		}
@@ -88,7 +89,7 @@ export class ArticleListComponent implements AfterViewInit {
 				article.commentDraft = '';
 			},
 			error: (error) => {
-				this.errorEvent.emit(error);
+				this.alertService.error(error);
 			},
 		});
 	}
@@ -100,7 +101,7 @@ export class ArticleListComponent implements AfterViewInit {
 				if (index > -1) article.comments.splice(index, 1);
 			},
 			error: (error) => {
-				this.errorEvent.emit(error);
+				this.alertService.error(error);
 			},
 		});
 	}

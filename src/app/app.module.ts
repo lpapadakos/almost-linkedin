@@ -36,6 +36,7 @@ import { FilterPipe } from './helpers/filter.pipe';
 
 import { AppComponent } from './app.component';
 import { NavComponent } from './components/nav/nav.component';
+import { AlertComponent } from './components/alert/alert.component';
 import { SidenavComponent } from './components/sidenav/sidenav.component';
 import { ArticleListComponent } from './components/article-list/article-list.component';
 
@@ -56,6 +57,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 	declarations: [
 		AppComponent,
 		NavComponent,
+		AlertComponent,
 		SidenavComponent,
 		ArticleListComponent,
 		HomeComponent,

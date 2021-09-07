@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 
-import { Entry, User } from '../../models/user.model';
+import { AlertService } from '../../services/alert.service';
+
+import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
 @Component({
@@ -9,15 +11,14 @@ import { UserService } from '../../services/user.service';
 	styleUrls: ['./network.component.css'],
 })
 export class NetworkComponent implements OnInit {
-	error = '';
 	user: User = this.userService.user;
 	allUsers: User[];
 	contacts: User[];
 	searchText: string;
 
-	constructor(private userService: UserService) {}
+	constructor(private alertService: AlertService, private userService: UserService) {}
 
-	ngOnInit(): void {
+	ngOnInit() {
 		this.userService.getAll().subscribe((users) => {
 			this.allUsers = users;
 

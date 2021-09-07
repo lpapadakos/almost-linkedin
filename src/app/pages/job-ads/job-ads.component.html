@@ -2,7 +2,6 @@
 	<mat-card>
 		<mat-card-content>
 			<form [formGroup]="jobAdForm" (ngSubmit)="onPost()">
-				<mat-error *ngIf="error">{{ error }}</mat-error>
 				<h2>Ανάρτηση αγγελίας</h2>
 				<mat-form-field>
 					<input
@@ -25,7 +24,6 @@
 					<mat-error>Παρακαλώ εισάγετε την επωνυμία της εταιρίας</mat-error>
 				</mat-form-field>
 				<mat-form-field>
-					<mat-error>Παρακαλώ εισάγετε την περιγραφή της θέσης</mat-error>
 					<textarea
 						matInput
 						matTextareaAutosize
@@ -33,6 +31,7 @@
 						formControlName="description"
 						required
 					></textarea>
+					<mat-error>Παρακαλώ εισάγετε την περιγραφή της θέσης</mat-error>
 				</mat-form-field>
 				<mat-card-actions>
 					<button mat-raised-button type="submit" color="primary">Δημοσίευση</button>

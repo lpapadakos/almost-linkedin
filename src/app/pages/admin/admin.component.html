@@ -28,7 +28,9 @@
 			/>
 		</mat-form-field>
 		<div>
-			<button mat-raised-button color="warn" (click)="search.value = ''; applyFilter('')">Καθαρισμός</button>
+			<button mat-raised-button color="warn" (click)="search.value = ''; applyFilter('')">
+				Καθαρισμός
+			</button>
 		</div>
 	</div>
 	<mat-table [dataSource]="users" matSort class="mat-elevation-z8">

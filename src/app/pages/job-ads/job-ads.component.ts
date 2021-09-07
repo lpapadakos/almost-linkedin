@@ -1,7 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
-import { Router, ActivatedRoute } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
+
+import { AlertService } from '../../services/alert.service';
 
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
@@ -15,22 +17,23 @@ import { JobAdService } from '../../services/job-ad.service';
 	styleUrls: ['./job-ads.component.css'],
 })
 export class JobAdsComponent implements OnInit {
-	jobAdForm: FormGroup;
-	error = '';
 	user: User = this.userService.user;
+
+	jobAdForm: FormGroup;
+
 	jobAds: JobAd[];
 	fragment: string;
 
 	constructor(
-		private route: ActivatedRoute,
-		private router: Router,
+		private viewportScroller: ViewportScroller,
 		private formBuilder: FormBuilder,
+		private route: ActivatedRoute,
+		private alertService: AlertService,
 		private userService: UserService,
-		private jobAdService: JobAdService,
-		private viewportScroller: ViewportScroller
+		private jobAdService: JobAdService
 	) {}
 
-	ngOnInit(): void {
+	ngOnInit() {
 		this.jobAdForm = this.formBuilder.group({
 			what: ['', Validators.required],
 			where: ['', Validators.required],
@@ -40,7 +43,7 @@ export class JobAdsComponent implements OnInit {
 		this.jobAdService.getAll().subscribe((jobAds) => (this.jobAds = jobAds));
 	}
 
-	ngAfterViewInit(): void {
+	ngAfterViewInit() {
 		setTimeout(() => {
 			this.route.fragment.subscribe((fragment) => {
 				if (fragment) {
@@ -51,7 +54,7 @@ export class JobAdsComponent implements OnInit {
 		}, 500);
 	}
 
-	onPost(): void {
+	onPost() {
 		if (this.jobAdForm.invalid) return;
 
 		this.jobAdService.post(this.jobAdForm.value).subscribe({
@@ -60,10 +63,9 @@ export class JobAdsComponent implements OnInit {
 				this.jobAds.unshift(jobAd);
 
 				this.jobAdForm.reset();
-				this.error = '';
 			},
 			error: (error) => {
-				this.onError(error);
+				this.alertService.error(error);
 			},
 		});
 	}
@@ -75,12 +77,12 @@ export class JobAdsComponent implements OnInit {
 				if (index > -1) this.jobAds.splice(index, 1);
 			},
 			error: (error) => {
-				this.onError(error);
+				this.alertService.error(error);
 			},
 		});
 	}
 
-	hasApplied(user: User, jobAd: JobAd): boolean {
+	hasApplied(user: User, jobAd: JobAd) {
 		return jobAd.applications.find((u) => u._id === user._id) != undefined;
 	}
 
@@ -92,7 +94,7 @@ export class JobAdsComponent implements OnInit {
 					if (index > -1) jobAd.applications.splice(index, 1);
 				},
 				error: (error) => {
-					this.onError(error);
+					this.alertService.error(error);
 				},
 			});
 		} else {
@@ -101,13 +103,9 @@ export class JobAdsComponent implements OnInit {
 					jobAd.applications.push(this.user);
 				},
 				error: (error) => {
-					this.onError(error);
+					this.alertService.error(error);
 				},
 			});
 		}
-	}
-
-	onError(error: string) {
-		this.error = error;
 	}
 }
