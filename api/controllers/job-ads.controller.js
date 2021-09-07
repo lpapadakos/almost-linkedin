@@ -1,5 +1,5 @@
 const JobAd = require("../models/job-ad.model");
- const { User } = require("../models/user.model");
+const { User } = require("../models/user.model");
 
 exports.post = async (req, res, next) => {
 	try {

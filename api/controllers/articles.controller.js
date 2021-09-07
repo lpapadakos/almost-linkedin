@@ -105,9 +105,16 @@ exports.delete = async (req, res, next) => {
 					.json({ error: "Λειτουργία διαθέσιμη μόνο για τον συγγραφέα του άρθρου" });
 			}
 
-			await Promise.all(
-				article.media.map(async (file) => fs.promises.unlink(config.UPLOAD_DIR + file.id))
-			);
+			try {
+				await Promise.all(
+					article.media.map(async (file) =>
+						fs.promises.unlink(config.UPLOAD_DIR + file.id)
+					)
+				);
+			} catch (err) {
+				console.error(err);
+			}
+
 			await article.delete();
 		}
 
@@ -166,7 +173,7 @@ exports.comment = async (req, res, next) => {
 
 exports.deleteComment = async (req, res, next) => {
 	try {
-		// TODO Can only delete own comments
+		// Can only delete own comments
 		await Article.updateOne(
 			{ _id: req.params.articleId },
 			{

@@ -189,18 +189,11 @@ exports.update = async (req, res, next) => {
 		}
 
 		// Filter to updatable fields
- 		for (const property of ["name", "email", "phone", "bio"]) {
-			 if (req.body[property]) {
+		for (const property of ["name", "email", "phone", "bio"]) {
+			if (req.body[property]) {
 				update[property] = req.body[property];
-			 }
-		 }
-
-		// TODO does unique validator handle this?
-		// if (update.email) {
-		// 	if (await User.exists({ _id: { $ne: req.userId }, email: update.email })) {
-		// 		return res.status(409).json({ error: "Ο χρήστης με αυτό το email υπάρχει ήδη" });
-		// 	}
-		// }
+			}
+		}
 
 		if (req.body.new_password) {
 			update.password = await bcrypt.hash(req.body.new_password, 10);
@@ -208,18 +201,23 @@ exports.update = async (req, res, next) => {
 
 		if (req.file) {
 			// Replace avatar img
-			await fs.promises.unlink(config.UPLOAD_DIR + user.img);
+			try {
+				await fs.promises.unlink(config.UPLOAD_DIR + user.img);
+			} catch (err) {
+				console.error(err);
+			}
+
 			update.img = req.file.filename;
 		}
 
 		Object.assign(user, update);
 		await user.save();
 
- 		res.status(200).json({ message: "Επιτυχής ενημέρωση στοιχείων χρήστη" });
+		res.status(200).json({ message: "Επιτυχής ενημέρωση στοιχείων χρήστη" });
 	} catch (err) {
 		next(err);
 	}
-}
+};
 
 exports.addContactRequest = async (req, res, next) => {
 	try {

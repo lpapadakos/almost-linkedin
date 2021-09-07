@@ -18,7 +18,11 @@ export class NotificationsComponent implements OnInit {
 	requests: ContactRequest[];
 	recentArticles: Article[];
 
-	constructor(private alertService: AlertService, private userService: UserService, private articleService: ArticleService) {}
+	constructor(
+		private alertService: AlertService,
+		private userService: UserService,
+		private articleService: ArticleService
+	) {}
 
 	ngOnInit() {
 		this.userService.getContactRequests().subscribe((requests) => (this.requests = requests));
