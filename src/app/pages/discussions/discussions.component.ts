@@ -151,8 +151,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
 	sendMessage() {
 		this.discussionService.send(this.viewedDiscussion._id, this.message).subscribe({
-			next: (obj) => {
-				let message = <Message>obj;
+			next: (message: Message) => {
 				message.sender = this.user;
 				this.messages.push(message);
 				this.viewedDiscussion.lastMessage = message.text;

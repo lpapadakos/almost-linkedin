@@ -22,25 +22,7 @@ export class RegisterComponent implements OnInit {
 		private userService: UserService
 	) {}
 
-	// Custom validator: Compare password fields to see if they match
-	private matchControls(controlName: string, matchingControlName: string) {
-		return (formGroup: FormGroup) => {
-			const control = formGroup.controls[controlName];
-			const matchingControl = formGroup.controls[matchingControlName];
 
-			if (matchingControl.errors && !matchingControl.errors.mustMatch) {
-				// return if another validator has already found an error on the matchingControl
-				return;
-			}
-
-			// set error on matchingControl if validation fails
-			if (control.value !== matchingControl.value) {
-				matchingControl.setErrors({ mustMatch: true });
-			} else {
-				matchingControl.setErrors(null);
-			}
-		};
-	}
 
 	ngOnInit() {
 		this.registerForm = this.formBuilder.group(
@@ -52,7 +34,7 @@ export class RegisterComponent implements OnInit {
 				repeat_password: ['', Validators.required],
 			},
 			{
-				validator: this.matchControls('password', 'repeat_password'),
+				validator: this.userService.matchControls('password', 'repeat_password'),
 			}
 		);
 	}

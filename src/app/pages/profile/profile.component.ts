@@ -119,17 +119,17 @@ export class ProfileComponent implements OnInit {
 
 	onSubmit(entryType: string) {
 		let form = this.form[entryType];
-		let array = this.viewedUser[entryType].entries;
+		let array: Entry[] = this.viewedUser[entryType].entries;
 
 		if (form.invalid) return;
 
 		this.userService.addEntry(entryType, form.value).subscribe({
-			next: (obj) => {
-				array.push(obj);
+			next: (entry: Entry) => {
+				array.push(entry);
 
 				// Sort results by fromYear descending
 				if (entryType !== 'skills') {
-					<Entry[]>array.sort((e1, e2) => e2.fromYear - e1.fromYear);
+					array.sort((e1, e2) => e2.fromYear - e1.fromYear);
 				}
 
 				form.reset();

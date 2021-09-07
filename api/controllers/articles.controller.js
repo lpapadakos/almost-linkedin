@@ -1,6 +1,7 @@
 const fs = require("fs");
 const mongoose = require("mongoose");
 
+const config = require("../config");
 const { Article, Comment } = require("../models/article.model");
 const { Contact } = require("../models/user.model");
 
@@ -105,7 +106,7 @@ exports.delete = async (req, res, next) => {
 			}
 
 			await Promise.all(
-				article.media.map(async (file) => fs.promises.unlink("./uploads/" + file.id))
+				article.media.map(async (file) => fs.promises.unlink(config.UPLOAD_DIR + file.id))
 			);
 			await article.delete();
 		}

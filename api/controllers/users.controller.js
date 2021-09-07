@@ -1,3 +1,4 @@
+const fs = require("fs");
 const mongoose = require("mongoose");
 const jwt = require("jsonwebtoken");
 const bcrypt = require("bcryptjs");
@@ -47,6 +48,7 @@ exports.login = async (req, res, next) => {
 			phone: user.phone,
 			role: user.role,
 			img: user.img,
+			bio: user.bio,
 			lastDiscussion: user.lastDiscussion,
 			createdAt: user.createdAt,
 			token: await jwt.sign({ id: user._id }, config.TOKEN_SECRET, { expiresIn: "1d" }),
@@ -128,6 +130,7 @@ exports.get = async (req, res, next) => {
 					email: 1,
 					phone: 1,
 					img: 1,
+					bio: 1,
 					experience: 1,
 					education: 1,
 					skills: 1,
@@ -174,6 +177,49 @@ exports.get = async (req, res, next) => {
 		next(err);
 	}
 };
+
+exports.update = async (req, res, next) => {
+	try {
+		let user = await User.findById(req.userId);
+		let update = {};
+
+		const passwordMatch = await bcrypt.compare(req.body.password, user.password);
+		if (!passwordMatch) {
+			return res.status(403).json({ error: "Λάθος κωδικός πρόσβασης" });
+		}
+
+		// Filter to updatable fields
+ 		for (const property of ["name", "email", "phone", "bio"]) {
+			 if (req.body[property]) {
+				update[property] = req.body[property];
+			 }
+		 }
+
+		// TODO does unique validator handle this?
+		// if (update.email) {
+		// 	if (await User.exists({ _id: { $ne: req.userId }, email: update.email })) {
+		// 		return res.status(409).json({ error: "Ο χρήστης με αυτό το email υπάρχει ήδη" });
+		// 	}
+		// }
+
+		if (req.body.new_password) {
+			update.password = await bcrypt.hash(req.body.new_password, 10);
+		}
+
+		if (req.file) {
+			// Replace avatar img
+			await fs.promises.unlink(config.UPLOAD_DIR + user.img);
+			update.img = req.file.filename;
+		}
+
+		Object.assign(user, update);
+		await user.save();
+
+ 		res.status(200).json({ message: "Επιτυχής ενημέρωση στοιχείων χρήστη" });
+	} catch (err) {
+		next(err);
+	}
+}
 
 exports.addContactRequest = async (req, res, next) => {
 	try {

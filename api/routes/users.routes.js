@@ -4,6 +4,10 @@ const { body } = require("express-validator");
 const compression = require("compression");
 
 const upload = require("../middlewares/multerStorage");
+const parseUserData = (req, res, next) => {
+	req.body = JSON.parse(req.body.user); // for "body" middleware to work
+	next();
+};
 const validationHandler = require("../middlewares/validationHandler");
 const adminOnly = require("../middlewares/adminOnly");
 const sameUserOnly = (req, res, next) => {
@@ -19,17 +23,16 @@ const user = require("../controllers/users.controller");
 router.post(
 	"/register",
 	upload.single("image"),
-	(req, res, next) => {
-		req.body = JSON.parse(req.body.user); // for validation middleware to work
-		next();
-	},
+	parseUserData,
 	[
 		body("name", "Παρακαλώ εισάγετε το ονοματεπώνυμό σας").exists(),
 		body("email", "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail(),
 		body("phone", "Παρακαλώ εισάγετε έναν έγκυρο αριθμό τηλεφώνου")
 			.isMobilePhone()
 			.optional({ nullable: true, checkFalsy: true }),
-		body("password", "Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες").isLength({ min: 8 }),
+		body("password", "Ο κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες")
+			.trim()
+			.isLength({ min: 8 }),
 	],
 	validationHandler,
 	user.register
@@ -44,13 +47,31 @@ router.post(
 
 // Profiles
 router.get("/:userId?", user.get);
-// TODO router.put("/:userId", sameUserOnly, usersController.update);
+router.patch(
+	"/:userId",
+	sameUserOnly,
+	upload.single("image"),
+	parseUserData,
+	[
+		body("name", "Παρακαλώ εισάγετε το ονοματεπώνυμό σας").exists(),
+		body("email", "Παρακαλώ εισάγετε μια έγκυρη διεύθυνση email").isEmail(),
+		body("phone", "Παρακαλώ εισάγετε έναν έγκυρο αριθμό τηλεφώνου")
+			.isMobilePhone()
+			.optional({ nullable: true, checkFalsy: true }),
+		body("new_password", "Ο νέος κωδικός πρόσβασης πρέπει να έχει τουλάχιστον 8 χαρακτήρες")
+			.trim()
+			.isLength({ min: 8 })
+			.optional({ nullable: true, checkFalsy: true }),
+	],
+	validationHandler,
+	user.update
+);
 
 // Contacts
 router.route("/:userId/contact-requests").post(user.addContactRequest).get(sameUserOnly, user.getContactRequests);
 router.route("/:userId/contact-requests/:requestId")
 	.all(sameUserOnly)
-	.put(user.acceptContactRequest)
+	.patch(user.acceptContactRequest)
 	.delete(user.deleteContactRequest);
 
 router.get("/:userId/contacts", user.getContacts);
@@ -63,7 +84,7 @@ router.use("/:userId/:entryType", sameUserOnly, (req, res, next) => {
 
 	next();
 });
-router.route("/:userId/:entryType").post(user.addEntry).put(user.changeEntryStatus);
+router.route("/:userId/:entryType").post(user.addEntry).patch(user.changeEntryStatus);
 router.delete("/:userId/:entryType/:entryId", user.deleteEntry);
 
 // Admin stuff

@@ -3,6 +3,7 @@
 		<img mat-card-avatar [src]="viewedUser.img | secure | async" />
 		<h1>{{ viewedUser.name }}</h1>
 	</a>
+	<p *ngIf="viewedUser.bio">{{ viewedUser.bio }}</p>
 	<mat-card-subtitle *ngIf="viewedUser.createdAt">
 		Μέλος από {{ viewedUser.createdAt | date: "short" }}
 	</mat-card-subtitle>

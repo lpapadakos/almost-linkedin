@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
+import { FormGroup } from '@angular/forms';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
@@ -22,6 +23,26 @@ export class UserService {
 
 	userEmitter(): Observable<User> {
 		return this._user;
+	}
+
+	// Custom validator: Compare password fields to see if they match
+	matchControls(controlName: string, matchingControlName: string) {
+		return (formGroup: FormGroup) => {
+			const control = formGroup.controls[controlName];
+			const matchingControl = formGroup.controls[matchingControlName];
+
+			if (matchingControl.errors && !matchingControl.errors.mustMatch) {
+				// return if another validator has already found an error on the matchingControl
+				return;
+			}
+
+			// set error on matchingControl if validation fails
+			if (control.value !== matchingControl.value) {
+				matchingControl.setErrors({ mustMatch: true });
+			} else {
+				matchingControl.setErrors(null);
+			}
+		};
 	}
 
 	register(user: User, img: File) {
@@ -64,6 +85,15 @@ export class UserService {
 		return this.http.get<User>(`${environment.apiUrl}/users/${userId}`);
 	}
 
+	update(changes: User, img: File) {
+		const formData = new FormData();
+		formData.append('user', JSON.stringify(changes));
+
+		if (img) formData.append('image', img);
+
+		return this.http.patch(`${environment.apiUrl}/users/${this.userSubject.value._id}`, formData);
+	}
+
 	addContactRequest(receiverId: string) {
 		return this.http.post(`${environment.apiUrl}/users/${receiverId}/contact-requests`, {});
 	}
@@ -75,7 +105,7 @@ export class UserService {
 	}
 
 	acceptContactRequest(requestId: string) {
-		return this.http.put(
+		return this.http.patch(
 			`${environment.apiUrl}/users/${this.userSubject.value._id}/contact-requests/${requestId}`,
 			{}
 		);
@@ -96,7 +126,7 @@ export class UserService {
 	}
 
 	changeEntryStatus(entryType: string, isPublic: boolean) {
-		return this.http.put(`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}`, {
+		return this.http.patch(`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}`, {
 			public: isPublic,
 		});
 	}
@@ -105,5 +135,13 @@ export class UserService {
 		return this.http.delete(
 			`${environment.apiUrl}/users/${this.userSubject.value._id}/${entryType}/${entryId}`
 		);
+	}
+
+	export(ids: string[], fileType: string) {
+		if (this.userSubject.value.role == 'admin') {
+			return this.http.post(`${environment.apiUrl}/users/export?type=${fileType}`, ids, {
+				responseType: 'blob',
+			});
+		}
 	}
 }

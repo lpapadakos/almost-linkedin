@@ -42,8 +42,7 @@ export class HomeComponent implements OnInit {
 		if (this.articleForm.invalid) return;
 
 		this.articleService.post(this.articleForm.get('text').value.trim(), this.files).subscribe({
-			next: (obj) => {
-				let article = <Article>obj;
+			next: (article: Article) => {
 				article.poster = this.user;
 				this.articles.unshift(article);
 

@@ -7,7 +7,7 @@ import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
 import { User } from '../../models/user.model';
-import { AdminService } from '../../services/admin.service';
+import { UserService } from '../../services/user.service';
 
 @Component({
 	selector: 'app-admin',
@@ -21,10 +21,10 @@ export class AdminComponent implements OnInit {
 
 	@ViewChild(MatSort) sort: MatSort;
 
-	constructor(private route: ActivatedRoute, private router: Router, private adminService: AdminService) {}
+	constructor(private route: ActivatedRoute, private router: Router, private userService: UserService) {}
 
 	ngOnInit(): void {
-		this.adminService.getAll().subscribe((users) => {
+		this.userService.getAll().subscribe((users) => {
 			this.users = new MatTableDataSource(users);
 
 			this.users.sort = this.sort;
@@ -50,7 +50,7 @@ export class AdminComponent implements OnInit {
 	exportUserData(fileType: string) {
 		if (fileType !== 'xml' && fileType !== 'json') return;
 
-		this.adminService
+		this.userService
 			.export(
 				this.selection.selected.map((user) => user._id),
 				fileType

@@ -11,7 +11,9 @@ export class User {
 	token?: string;
 	name: string;
 	email: string;
+	phone: string;
 	img: string;
+	bio: string;
 	role: string;
 	createdAt: Date;
 	experience: {

@@ -81,8 +81,7 @@ export class ArticleListComponent implements AfterViewInit {
 		if (!text) return;
 
 		this.articleService.comment(article._id, text).subscribe({
-			next: (obj) => {
-				let comment = <Comment>obj;
+			next: (comment: Comment) => {
 				comment.poster = this.user;
 				article.comments.push(comment);
 

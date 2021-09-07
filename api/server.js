@@ -39,7 +39,7 @@ server.use(express.urlencoded({ extended: true }));
 server.use(unless(require("./middlewares/verifyToken"), "/users/register", "/users/login"));
 
 // Set API endpoint routes
-server.use("/files", express.static("uploads"));
+server.use("/files", express.static(config.UPLOAD_DIR));
 server.use("/users", require("./routes/users.routes"));
 server.use("/articles", require("./routes/articles.routes"));
 server.use("/job-ads", require("./routes/job-ads.routes"));

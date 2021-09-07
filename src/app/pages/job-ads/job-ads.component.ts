@@ -55,8 +55,7 @@ export class JobAdsComponent implements OnInit {
 		if (this.jobAdForm.invalid) return;
 
 		this.jobAdService.post(this.jobAdForm.value).subscribe({
-			next: (obj) => {
-				let jobAd = <JobAd>obj;
+			next: (jobAd: JobAd) => {
 				jobAd.poster = this.user;
 				this.jobAds.unshift(jobAd);
 

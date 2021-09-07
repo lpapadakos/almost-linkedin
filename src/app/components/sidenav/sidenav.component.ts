@@ -29,10 +29,9 @@ export class SidenavComponent implements OnChanges {
 
 	addContactRequest() {
 		this.userService.addContactRequest(this.viewedUser._id).subscribe({
-			next: (obj) => {
-				let contactRequest = <ContactRequest>obj;
+			next: (request: ContactRequest) => {
 				this.viewedUser.contact = {
-					_id: contactRequest._id,
+					_id: request._id,
 					accepted: false,
 				};
 			},
