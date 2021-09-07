@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 
 import { AlertService } from '../../services/alert.service';
@@ -40,7 +40,14 @@ export class JobAdsComponent implements OnInit {
 			description: ['', Validators.required],
 		});
 
-		this.jobAdService.getAll().subscribe((jobAds) => (this.jobAds = jobAds));
+		this.jobAdService.getAll().subscribe({
+			next: (jobAds) => {
+				this.jobAds = jobAds;
+			},
+			error: (error) => {
+				this.alertService.error(error);
+			},
+		});
 	}
 
 	ngAfterViewInit() {
@@ -54,7 +61,7 @@ export class JobAdsComponent implements OnInit {
 		}, 500);
 	}
 
-	onPost() {
+	onPost(formDirective: FormGroupDirective) {
 		if (this.jobAdForm.invalid) return;
 
 		this.jobAdService.post(this.jobAdForm.value).subscribe({
@@ -62,7 +69,7 @@ export class JobAdsComponent implements OnInit {
 				jobAd.poster = this.user;
 				this.jobAds.unshift(jobAd);
 
-				this.jobAdForm.reset();
+				formDirective.resetForm();
 			},
 			error: (error) => {
 				this.alertService.error(error);

@@ -181,7 +181,6 @@ exports.get = async (req, res, next) => {
 exports.update = async (req, res, next) => {
 	try {
 		let user = await User.findById(req.userId);
-		let update = {};
 
 		const passwordMatch = await bcrypt.compare(req.body.password, user.password);
 		if (!passwordMatch) {
@@ -189,11 +188,12 @@ exports.update = async (req, res, next) => {
 		}
 
 		// Filter to updatable fields
-		for (const property of ["name", "email", "phone", "bio"]) {
-			if (req.body[property]) {
-				update[property] = req.body[property];
-			}
-		}
+		let update = {
+			name: req.body.name,
+			email: req.body.email,
+			phone: req.body.phone,
+			bio: req.body.bio,
+		};
 
 		if (req.body.new_password) {
 			update.password = await bcrypt.hash(req.body.new_password, 10);
@@ -213,7 +213,7 @@ exports.update = async (req, res, next) => {
 		Object.assign(user, update);
 		await user.save();
 
-		res.status(200).json({ message: "Επιτυχής ενημέρωση στοιχείων χρήστη" });
+		res.status(200).json(update);
 	} catch (err) {
 		next(err);
 	}

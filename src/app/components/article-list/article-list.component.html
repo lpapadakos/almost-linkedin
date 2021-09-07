@@ -58,13 +58,13 @@
 				(keyup.enter)="comment(article)"
 			/>
 		</mat-form-field>
-		<div class="comment" [id]="comment._id" *ngFor="let comment of article.comments">
+		<div class="comment" [id]="comment._id" *ngFor="let comment of article.comments" [ngClass]="{ 'mat-elevation-z8': fragment === comment._id }">
 			<img mat-card-avatar [src]="comment.poster.img | secure | async" />
 			<div class="comment-header">
 				<a mat-card-title [routerLink]="'/profile/' + comment.poster._id">
 					{{ comment.poster.name }}
 				</a>
-				<mat-card-subtitle>{{ comment.createdAt | date: "medium" }}</mat-card-subtitle>
+				<a mat-card-subtitle [routerLink]="'/profile/' + article.poster._id" [fragment]="comment._id">{{ comment.createdAt | date: "medium" }}</a>
 			</div>
 			<p>{{ comment.text }}</p>
 			<span class="flexExpand"></span>

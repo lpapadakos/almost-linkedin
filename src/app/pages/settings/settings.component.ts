@@ -30,9 +30,9 @@ export class SettingsComponent implements OnInit {
 				email: [this.user.email, [Validators.required, Validators.email]],
 				phone: [this.user.phone, Validators.pattern('[- +()0-9]+')],
 				bio: [this.user.bio],
-				password: [, Validators.required],
-				new_password: [, Validators.minLength(8)],
-				repeat_new_password: [],
+				password: ['', Validators.required],
+				new_password: ['', Validators.minLength(8)],
+				repeat_new_password: [''],
 			},
 			{
 				validator: this.userService.equivalentValidator('new_password', 'repeat_new_password'),
@@ -55,10 +55,8 @@ export class SettingsComponent implements OnInit {
 		if (this.updateForm.invalid) return;
 
 		this.userService.update(this.updateForm.value, this.userImage).subscribe({
-			next: (res: { message: string }) => {
-				this.alertService.success(
-					res.message + '. Οι αλλαγές θα ισχύσουν από την επόμενη σύνδεση'
-				);
+			next: () => {
+				this.alertService.success("Επιτυχής ενημέρωση στοιχείων χρήστη");
 			},
 			error: (error) => {
 				this.alertService.error(error);

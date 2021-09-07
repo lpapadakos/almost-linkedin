@@ -5,6 +5,8 @@ import { saveAs } from 'file-saver';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
 
+import { AlertService } from '../../services/alert.service';
+
 import { User } from '../../models/user.model';
 import { UserService } from '../../services/user.service';
 
@@ -20,15 +22,20 @@ export class AdminComponent implements OnInit {
 
 	@ViewChild(MatSort) sort: MatSort;
 
-	constructor(private userService: UserService) {}
+	constructor(private alertService: AlertService, private userService: UserService) {}
 
 	ngOnInit() {
-		this.userService.getAll().subscribe((users) => {
-			this.users = new MatTableDataSource(users);
+		this.userService.getAll().subscribe({
+			next: (users) => {
+				this.users = new MatTableDataSource(users);
 
-			this.users.sort = this.sort;
-			this.users.filterPredicate = (user: { name: string }, filter: string) =>
-				user.name.toLocaleLowerCase().includes(filter);
+				this.users.sort = this.sort;
+				this.users.filterPredicate = (user: { name: string }, filter: string) =>
+					user.name.toLocaleLowerCase().includes(filter);
+			},
+			error: (error) => {
+				this.alertService.error(error);
+			},
 		});
 	}
 
@@ -49,14 +56,16 @@ export class AdminComponent implements OnInit {
 	exportUserData(fileType: string) {
 		if (fileType !== 'xml' && fileType !== 'json') return;
 
-		this.userService
-			.export(
-				this.selection.selected.map((user) => user._id),
-				fileType
-			)
-			.subscribe((res) => {
+		let selectedIds = this.selection.selected.map((user) => user._id);
+
+		this.userService.export(selectedIds, fileType).subscribe({
+			next: (res) => {
 				const blob = new Blob([res], { type: 'application/' + fileType });
 				saveAs(blob, 'extract-' + new Date().toISOString() + '.' + fileType);
-			});
+			},
+			error: (error) => {
+				this.alertService.error(error);
+			},
+		});
 	}
 }

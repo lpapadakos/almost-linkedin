@@ -11,8 +11,8 @@ import { AlertService } from '../../services/alert.service';
 	styleUrls: ['./alert.component.css'],
 })
 export class AlertComponent implements OnInit, OnDestroy {
+	private subscriptions: Subscription[] = [];
 	alerts: Alert[] = [];
-	subscriptions: Subscription[] = [];
 
 	constructor(private router: Router, private alertService: AlertService) {}
 

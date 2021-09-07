@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormGroup } from '@angular/forms';
-import { BehaviorSubject, Observable } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '../../environments/environment';
@@ -23,7 +23,7 @@ export class UserService {
 		return this.userSubject.asObservable();
 	}
 
-	// Custom validator: Compare password fields to see if they match
+	// TODO Fix should sync one or other. Custom validator: Compare password fields to see if they match
 	equivalentValidator = (firstControlName: string, secondControlName: string) => {
 		return (formGroup: FormGroup) => {
 			const firstControl = formGroup.get(firstControlName);
@@ -45,19 +45,14 @@ export class UserService {
 	}
 
 	login(email: string, password: string) {
-		return this.http
-			.post<any>(`${environment.apiUrl}/users/login`, {
-				email,
-				password,
+		return this.http.post<any>(`${environment.apiUrl}/users/login`, { email, password }).pipe(
+			map((user) => {
+				// store user details and jwt token in local storage
+				localStorage.setItem('user', JSON.stringify(user));
+				this.userSubject.next(user);
+				return user;
 			})
-			.pipe(
-				map((user) => {
-					// store user details and jwt token in local storage to keep user logged in between page refreshes
-					localStorage.setItem('user', JSON.stringify(user));
-					this.userSubject.next(user);
-					return user;
-				})
-			);
+		);
 	}
 
 	logout() {
@@ -81,7 +76,14 @@ export class UserService {
 
 		if (img) formData.append('image', img);
 
-		return this.http.patch(`${environment.apiUrl}/users/${this.userSubject.value._id}`, formData);
+		return this.http.patch(`${environment.apiUrl}/users/${this.userSubject.value._id}`, formData).pipe(
+			map((update) => {
+				Object.assign(this.userSubject.value, update);
+
+				// update user details and jwt token in local storage
+				localStorage.setItem('user', JSON.stringify(this.userSubject.value));
+			})
+		);
 	}
 
 	addContactRequest(receiverId: string) {

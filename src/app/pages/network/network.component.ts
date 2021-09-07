@@ -19,39 +19,44 @@ export class NetworkComponent implements OnInit {
 	constructor(private alertService: AlertService, private userService: UserService) {}
 
 	ngOnInit() {
-		this.userService.getAll().subscribe((users) => {
-			this.allUsers = users;
+		this.userService.getAll().subscribe({
+			next: (users) => {
+				this.allUsers = users;
 
-			this.allUsers.forEach((user) => {
-				let toYear: number;
-				const currentYear = new Date().getFullYear();
+				this.allUsers.forEach((user) => {
+					let toYear: number;
+					const currentYear = new Date().getFullYear();
 
-				// Get latest entry (work or alternatively, education)
-				let currentStatus = user.experience.entries.pop();
+					// Get latest entry (work or alternatively, education)
+					let currentStatus = user.experience.entries.pop();
 
-				// Let's see if this is the status right now
-				if (currentStatus) {
-					toYear = currentStatus.toYear || 9999;
-					if (currentStatus.fromYear <= currentYear && currentYear <= toYear) {
-						user.currentStatus = currentStatus;
-						return;
+					// Let's see if this is the status right now
+					if (currentStatus) {
+						toYear = currentStatus.toYear || 9999;
+						if (currentStatus.fromYear <= currentYear && currentYear <= toYear) {
+							user.currentStatus = currentStatus;
+							return;
+						}
 					}
-				}
 
-				currentStatus = user.education.entries.pop();
+					currentStatus = user.education.entries.pop();
 
-				if (currentStatus) {
-					toYear = currentStatus.toYear || 9999;
-					if (currentStatus.fromYear <= currentYear && currentYear <= toYear) {
-						user.currentStatus = currentStatus;
-						return;
+					if (currentStatus) {
+						toYear = currentStatus.toYear || 9999;
+						if (currentStatus.fromYear <= currentYear && currentYear <= toYear) {
+							user.currentStatus = currentStatus;
+							return;
+						}
 					}
-				}
 
-				// If we reach here, we cannot determine the current status
-			});
+					// If we reach here, we cannot determine the current status
+				});
 
-			this.contacts = this.allUsers.filter((u) => u.contact && u.contact.accepted);
+				this.contacts = this.allUsers.filter((u) => u.contact && u.contact.accepted);
+			},
+			error: (error) => {
+				this.alertService.error(error);
+			},
 		});
 	}
 }

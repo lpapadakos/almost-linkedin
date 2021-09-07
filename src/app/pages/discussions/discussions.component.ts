@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
+import { Subscription } from 'rxjs';
 
 import { AlertService } from '../../services/alert.service';
 
@@ -17,6 +18,7 @@ import { DiscussionService } from '../../services/discussion.service';
 export class DiscussionsComponent implements OnInit, OnDestroy {
 	private intervalId;
 	private lastUpdate: number;
+	private subscription: Subscription;
 
 	user: User = this.userService.user;
 
@@ -86,7 +88,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 			},
 		});
 
-		this.router.events.subscribe((event) => {
+		this.subscription = this.router.events.subscribe((event) => {
 			if (event instanceof NavigationStart) {
 				clearInterval(this.intervalId);
 			}
@@ -175,5 +177,6 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
 	ngOnDestroy() {
 		clearInterval(this.intervalId);
+		this.subscription.unsubscribe();
 	}
 }

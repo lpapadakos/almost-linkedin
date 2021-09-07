@@ -6,7 +6,7 @@
 		<div class="container">
 			<mat-card>
 				<mat-card-content>
-					<form [formGroup]="articleForm" (ngSubmit)="onPost()">
+					<form [formGroup]="articleForm" #formDirective="ngForm" (ngSubmit)="onPost(formDirective)">
 						<h2>Ανάρτηση άρθρου</h2>
 						<mat-form-field>
 							<textarea
@@ -24,7 +24,6 @@
 							type="file"
 							multiple
 							accept="image/*,audio/*,video/*"
-							formControlName="media"
 							(change)="onFileChange($event)"
 						/>
 						<mat-card-actions>

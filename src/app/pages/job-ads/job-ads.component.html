@@ -1,7 +1,7 @@
 <div class="container">
 	<mat-card>
 		<mat-card-content>
-			<form [formGroup]="jobAdForm" (ngSubmit)="onPost()">
+			<form [formGroup]="jobAdForm" #formDirective="ngForm" (ngSubmit)="onPost(formDirective)">
 				<h2>Ανάρτηση αγγελίας</h2>
 				<mat-form-field>
 					<input

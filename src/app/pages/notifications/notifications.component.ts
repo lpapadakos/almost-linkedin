@@ -25,11 +25,23 @@ export class NotificationsComponent implements OnInit {
 	) {}
 
 	ngOnInit() {
-		this.userService.getContactRequests().subscribe((requests) => (this.requests = requests));
+		this.userService.getContactRequests().subscribe({
+			next: (requests) => {
+				this.requests = requests;
+			},
+			error: (error) => {
+				this.alertService.error(error);
+			},
+		});
 
-		this.articleService.getFromUser(this.user._id).subscribe((articles) => {
-			// Use the 10 most recently updated articles (sorted by activity, essentially)
-			this.recentArticles = articles.splice(0, 10);
+		this.articleService.getFromUser(this.user._id).subscribe({
+			next: (articles) => {
+				// Use the 10 most recently updated articles (sorted by activity, essentially)
+				this.recentArticles = articles.splice(0, 10);
+			},
+			error: (error) => {
+				this.alertService.error(error);
+			},
 		});
 	}
 

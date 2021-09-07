@@ -39,9 +39,7 @@ exports.get = async (req, res, next) => {
 			if (jobAds) {
 				return res.status(200).json(jobAds[0]);
 			} else {
-				return res.status(404).json({
-					error: "Δεν βρέθηκε η αγγελία",
-				});
+				return res.status(404).json({ error: "Δεν βρέθηκε η αγγελία" });
 			}
 		}
 

@@ -47,7 +47,7 @@ span {
 	font-size: 1em;
 }
 
-.comment-header mat-card-subtitle {
+.comment-header a[mat-card-subtitle] {
 	font-size: 0.8em;
 	margin: 0;
 }

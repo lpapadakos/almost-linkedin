@@ -82,9 +82,14 @@ export class ProfileComponent implements OnInit {
 			this.userService.getById(viewedUserId).subscribe({
 				next: (user) => {
 					this.viewedUser = user;
-					this.articleService
-						.getFromUser(this.viewedUser._id)
-						.subscribe((articles) => (this.articles = articles));
+					this.articleService.getFromUser(this.viewedUser._id).subscribe({
+						next: (articles) => {
+							this.articles = articles;
+						},
+						error: (error) => {
+							this.alertService.error(error);
+						},
+					});
 				},
 				error: (error) => {
 					this.alertService.error(error);
@@ -138,19 +143,21 @@ export class ProfileComponent implements OnInit {
 
 				form.reset();
 			},
-			error: (err) => {
-				this.alertService.error(err);
+			error: (error) => {
+				this.alertService.error(error);
 			},
 		});
 	}
 
 	onStatusChange(entryType: string, isPublic: boolean) {
 		this.userService.changeEntryStatus(entryType, isPublic).subscribe({
-			next: () => {},
-			error: (err) => {
+			next: (res: { message: string }) => {
+				this.alertService.success(res.message);
+			},
+			error: (error) => {
 				// revert check on error
 				this.viewedUser[entryType].public = !isPublic;
-				this.alertService.error(err);
+				this.alertService.error(error);
 			},
 		});
 	}

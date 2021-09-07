@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 
 import { AlertService } from '../../services/alert.service';
 
@@ -32,17 +32,23 @@ export class HomeComponent implements OnInit {
 	ngOnInit() {
 		this.articleForm = this.formBuilder.group({
 			text: ['', Validators.required],
-			media: [''],
 		});
 
-		this.articleService.getAll().subscribe((articles) => (this.articles = articles));
+		this.articleService.getAll().subscribe({
+			next: (articles) => {
+				this.articles = articles;
+			},
+			error: (error) => {
+				this.alertService.error(error);
+			},
+		});
 	}
 
 	onFileChange(event) {
 		this.files = [].slice.call(event.target.files);
 	}
 
-	onPost() {
+	onPost(formDirective: FormGroupDirective) {
 		if (this.articleForm.invalid) return;
 
 		this.articleService.post(this.articleForm.get('text').value.trim(), this.files).subscribe({
@@ -50,7 +56,7 @@ export class HomeComponent implements OnInit {
 				article.poster = this.user;
 				this.articles.unshift(article);
 
-				this.articleForm.reset();
+				formDirective.resetForm();
 			},
 			error: (error) => {
 				this.alertService.error(error);

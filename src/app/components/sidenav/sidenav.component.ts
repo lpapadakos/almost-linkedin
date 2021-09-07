@@ -19,9 +19,14 @@ export class SidenavComponent implements OnChanges {
 	constructor(private alertService: AlertService, private userService: UserService) {}
 
 	ngOnChanges(changes: SimpleChanges) {
-		this.userService
-			.getContacts(this.viewedUser._id)
-			.subscribe((contacts) => (this.topContacts = contacts.splice(0, 5)));
+		this.userService.getContacts(this.viewedUser._id).subscribe({
+			next: (contacts) => {
+				this.topContacts = contacts.splice(0, 5);
+			},
+			error: (error) => {
+				this.topContacts = null;
+			},
+		});
 	}
 
 	addContactRequest() {
@@ -39,7 +44,6 @@ export class SidenavComponent implements OnChanges {
 	}
 
 	_deleteContact() {
-		console.log('delete run');
 		this.userService.deleteContact(this.viewedUser.contact._id).subscribe({
 			next: () => {
 				this.viewedUser.contact = null;

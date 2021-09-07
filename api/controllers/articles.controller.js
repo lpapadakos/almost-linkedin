@@ -185,9 +185,7 @@ exports.deleteComment = async (req, res, next) => {
 				},
 			}
 		);
-		res.status(204).json({
-			message: "Αφαιρέθηκε το σχόλιο από το άρθρο",
-		});
+		res.status(204).json({ message: "Αφαιρέθηκε το σχόλιο από το άρθρο" });
 	} catch (err) {
 		next(err);
 	}
