@@ -21,10 +21,8 @@
 				<mat-error>Παρακαλώ εισάγετε έναν έγκυρο αριθμό τηλεφώνου</mat-error>
 			</mat-form-field>
 			<div id="fileArea">
-				<input #imgInput hidden type="file" accept="image/*" (change)="onFileChange($event)" />
-				<button mat-raised-button color="primary" (click)="imgInput.click()">
-					Επιλογή μιας εικόνας προφίλ
-				</button>
+				<label for="img">Επιλογή μιας εικόνας προφίλ: </label>
+				<input id="img" type="file" accept="image/*" (change)="onFileChange($event)" />
 				<img [src]="imageData" />
 			</div>
 			<mat-form-field>
@@ -48,7 +46,7 @@
 				<mat-error>Παρακαλώ επαναλάβετε τον κωδικό πρόσβασής σας</mat-error>
 			</mat-form-field>
 			<mat-card-actions>
-				<button mat-raised-button type="submit" color="primary">ΕΓΓΡΑΦΗ</button>
+				<button mat-raised-button type="submit" color="primary" autofocus>ΕΓΓΡΑΦΗ</button>
 			</mat-card-actions>
 		</form>
 	</mat-card-content>

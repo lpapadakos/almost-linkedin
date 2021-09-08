@@ -2,10 +2,6 @@
 	width: 50%;
 }
 
-#fileArea {
-	padding-bottom: 1.25em;
-}
-
 #fileArea img {
 	display: block;
 	max-height: 200px;
