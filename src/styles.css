@@ -101,6 +101,10 @@ mat-form-field + mat-list {
 	overflow: auto;
 }
 
+label + input {
+	margin-left: 8px;
+}
+
 /* TODO Fix Anchor/Fragment Scrolling with fixed navbar */
 :target::before {
 	content: "";

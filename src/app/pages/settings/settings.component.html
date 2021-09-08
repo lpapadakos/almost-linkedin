@@ -21,7 +21,7 @@
 				<mat-error>Παρακαλώ εισάγετε έναν έγκυρο αριθμό τηλεφώνου</mat-error>
 			</mat-form-field>
 			<div id="fileArea">
-				<label for="img">{{ user.img ? "Αλλαγή" : "Επιλογή" }} εικόνας προφίλ: </label>
+				<label for="img">{{ user.img ? "Αλλαγή" : "Επιλογή" }} εικόνας προφίλ:</label>
 				<input id="img" type="file" accept="image/*" (change)="onFileChange($event)" />
 				<img [src]="imageData || (user.img | secure | async)" />
 			</div>
