@@ -1,4 +1,4 @@
-#discussion mat-list a:hover,
+mat-list#existing-discussions a:hover,
 .selected {
 	text-decoration: none;
 	background-color: #eee;
@@ -68,4 +68,8 @@ mat-card-content img {
 	bottom: 0;
 	right: 0;
 	left: 20%;
+}
+
+#new-message mat-card {
+	margin: 0;
 }

@@ -50,7 +50,7 @@ export class ArticleListComponent implements AfterViewInit {
 	}
 
 	isInterested(user: User, article: Article) {
-		return article.interestNotes.find((u) => u._id === user._id) != undefined;
+		return article.interestNotes.some((u) => u._id === user._id);
 	}
 
 	toggleInterest(article: Article) {

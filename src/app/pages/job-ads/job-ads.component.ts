@@ -90,7 +90,7 @@ export class JobAdsComponent implements OnInit {
 	}
 
 	hasApplied(user: User, jobAd: JobAd) {
-		return jobAd.applications.find((u) => u._id === user._id) != undefined;
+		return jobAd.applications.some((u) => u._id === user._id);
 	}
 
 	toggleApply(jobAd: JobAd) {

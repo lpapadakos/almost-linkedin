@@ -9,7 +9,6 @@ const { Entry, User, Contact } = require("../models/user.model");
 const { Article } = require("../models/article.model");
 const JobAd = require("../models/job-ad.model");
 
-// TODO use brackets on most ifs
 exports.register = async (req, res, next) => {
 	try {
 		// role is not defined during registration. It's 'user'. Admin is preinstalled
@@ -33,8 +32,9 @@ exports.register = async (req, res, next) => {
 exports.login = async (req, res, next) => {
 	try {
 		const user = await User.findOne({ email: req.body.email });
-
-		if (!user) return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
+		if (!user) {
+			return res.status(401).json({ error: "Λάθος διεύθυνση email ή κωδικός πρόσβασης" });
+		}
 
 		const passwordMatch = await bcrypt.compare(req.body.password, user.password);
 		if (!passwordMatch) {
@@ -165,7 +165,7 @@ exports.get = async (req, res, next) => {
 		);
 
 		if (req.params.userId) {
-			if (users) {
+			if (users && users.length) {
 				return res.status(200).json(users[0]);
 			} else {
 				return res.status(404).json({ error: "Δεν βρέθηκε ο χρήστης" });

@@ -15,8 +15,20 @@ export class UserService {
 		this.userSubject = new BehaviorSubject<User>(JSON.parse(localStorage.getItem('user')));
 	}
 
+	private updateLocalStorage() {
+		// As can be seen in the constructor, user details are kept up to date in localStorage
+		localStorage.setItem('user', JSON.stringify(this.userSubject.value));
+	}
+
 	get user() {
 		return this.userSubject.value;
+	}
+
+	set lastDiscussion(newLastDiscussionId: string) {
+		if (this.userSubject.value.lastDiscussion !== newLastDiscussionId) {
+			this.userSubject.value.lastDiscussion = newLastDiscussionId;
+			this.updateLocalStorage();
+		}
 	}
 
 	onUser() {
@@ -47,18 +59,17 @@ export class UserService {
 	login(email: string, password: string) {
 		return this.http.post<any>(`${environment.apiUrl}/users/login`, { email, password }).pipe(
 			map((user) => {
-				// store user details and jwt token in local storage
-				localStorage.setItem('user', JSON.stringify(user));
 				this.userSubject.next(user);
+				this.updateLocalStorage();
+
 				return user;
 			})
 		);
 	}
 
 	logout() {
-		// remove user from local storage to log user out
-		localStorage.removeItem('user');
 		this.userSubject.next(null);
+		localStorage.removeItem('user');
 	}
 
 	// Profiles
@@ -79,9 +90,7 @@ export class UserService {
 		return this.http.patch(`${environment.apiUrl}/users/${this.userSubject.value._id}`, formData).pipe(
 			map((update) => {
 				Object.assign(this.userSubject.value, update);
-
-				// update user details and jwt token in local storage
-				localStorage.setItem('user', JSON.stringify(this.userSubject.value));
+				this.updateLocalStorage();
 			})
 		);
 	}

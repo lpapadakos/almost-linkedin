@@ -6,7 +6,11 @@
 		<div class="container">
 			<mat-card>
 				<mat-card-content>
-					<form [formGroup]="articleForm" #formDirective="ngForm" (ngSubmit)="onPost(formDirective)">
+					<form
+						[formGroup]="articleForm"
+						#formDirective="ngForm"
+						(ngSubmit)="onPost(formDirective)"
+					>
 						<h2>Ανάρτηση άρθρου</h2>
 						<mat-form-field>
 							<textarea

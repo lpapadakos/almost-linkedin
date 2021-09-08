@@ -25,19 +25,46 @@ export class AlertComponent implements OnInit, OnDestroy {
 			this.alertService.onAlert().subscribe((alert) => {
 				if (alert) {
 					this.alerts.push(alert);
-					setTimeout(() => this.remove(alert), 5000);
+					setTimeout(() => this.remove(alert), 8000);
 				}
 			})
 		);
 
-		// TODO Clear alert on navigation change
+		// Clear alert on navigation change
 		this.subscriptions.push(
 			this.router.events.subscribe((event) => {
 				if (event instanceof NavigationStart) {
 					this.alertService.clear();
+					this.alerts = [];
 				}
 			})
 		);
+	}
+
+	cssClass(alert: Alert) {
+		switch (alert.type) {
+			case AlertType.Success:
+				return 'success';
+			case AlertType.Warning:
+				return 'warning';
+			case AlertType.Error:
+				return 'error';
+			default:
+				return 'info';
+		}
+	}
+
+	matIcon(alert: Alert) {
+		switch (alert.type) {
+			case AlertType.Success:
+				return 'check_circle';
+			case AlertType.Warning:
+				return 'warning';
+			case AlertType.Error:
+				return 'error';
+			default:
+				return 'info';
+		}
 	}
 
 	remove(alert: Alert) {

@@ -80,7 +80,7 @@ exports.get = async (req, res, next) => {
 			.populate("comments.poster", "_id name img");
 
 		if (req.params.articleId) {
-			if (articles) {
+			if (articles && articles.length) {
 				return res.status(200).json(articles[0]);
 			} else {
 				return res.status(404).json({ error: "Δεν βρέθηκε το άρθρο" });

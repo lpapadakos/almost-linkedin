@@ -30,13 +30,13 @@
 				</mat-list>
 			</div>
 		</div>
-		<mat-list *ngIf="discussions && discussions.length">
+		<mat-list id="existing-discussions" *ngIf="discussions && discussions.length">
 			<h2>Υφιστάμενες συζητήσεις</h2>
 			<a
 				mat-list-item
 				*ngFor="let user of discussions"
 				[routerLink]="'/discussions/' + user._id"
-				[class.selected]="viewedDiscussion && user._id === viewedDiscussion._id"
+				[class.selected]="discussionPartner && user._id === discussionPartner._id"
 			>
 				<img matListAvatar [src]="user.img | secure | async" />
 				<h3 matLine>{{ user.name }}</h3>
@@ -48,7 +48,7 @@
 		</mat-list>
 	</mat-sidenav>
 	<mat-sidenav-content>
-		<section *ngIf="viewedDiscussion">
+		<section *ngIf="discussionPartner">
 			<div id="discussion">
 				<div
 					*ngFor="let message of messages"
@@ -70,16 +70,20 @@
 				</div>
 			</div>
 			<div id="new-message" class="alt-background">
-				<mat-form-field>
+				<mat-form-field *ngIf="discussionPartner.contact && discussionPartner.contact.accepted; else outsideNetwork">
 					<textarea
 						matInput
 						matTextareaAutosize
-						placeholder="Μήνυμα"
+						placeholder="Μήνυμα (Αποστολή με Enter)"
 						[(ngModel)]="message"
 						(keydown.enter)="sendMessage()"
 					></textarea>
-					<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
 				</mat-form-field>
+				<ng-template #outsideNetwork>
+					<mat-card>
+						Δεν μπορείτε να στείλετε μηνύματα σε αυτό το άτομο (εκτός Δικτύου)
+					</mat-card>
+				</ng-template>
 			</div>
 		</section>
 	</mat-sidenav-content>

@@ -88,7 +88,6 @@ router.route("/:userId/:entryType").post(user.addEntry).patch(user.changeEntrySt
 router.delete("/:userId/:entryType/:entryId", user.deleteEntry);
 
 // Admin stuff
-// TODO router.delete("/:userId", adminOnly, usersController.deactivate);
 // GET requests don't normally have a body, so use post, for list of ids in body
 router.post("/export", adminOnly, compression(), user.export);
 

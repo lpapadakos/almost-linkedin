@@ -8,7 +8,6 @@ export class Entry {
 
 export class User {
 	_id: string;
-	token?: string;
 	name: string;
 	email: string;
 	phone: string;
@@ -37,6 +36,7 @@ export class User {
 	};
 	currentStatus: Entry;
 	lastMessage: string;
+	token?: string;
 }
 
 export class ContactRequest {

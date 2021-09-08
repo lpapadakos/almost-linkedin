@@ -26,8 +26,8 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	searchText = '';
 	contacts: User[];
 
+	discussionPartner: User;
 	discussions: User[];
-	viewedDiscussion: User;
 	messages: Message[] = [];
 	message: string;
 
@@ -45,41 +45,32 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
 	ngOnInit() {
 		//TODO load images only twice?
-		// TODO add contact field for warning on message line
 
 		this.discussionService.summary().subscribe({
 			next: (discussions) => {
 				this.discussions = discussions;
 
 				this.route.paramMap.subscribe((paramMap) => {
-					let viewedDiscussionId = paramMap.get('userId');
+					let discussionPartnerId = paramMap.get('userId') || this.user.lastDiscussion;
 
-					if (!viewedDiscussionId) viewedDiscussionId = this.user.lastDiscussion;
+					if (!discussionPartnerId) return;
 
-					if (viewedDiscussionId && viewedDiscussionId !== '') {
-						this.viewedDiscussion = this.discussions.find(
-							(user) => user._id === viewedDiscussionId
-						);
+					this.discussionPartner = this.discussions.find((u) => u._id == discussionPartnerId);
 
-						// If userId not found in established discussions, create entry for it
-						if (this.viewedDiscussion) {
-							this.onDiscussion();
-						} else {
-							this.userService.getById(viewedDiscussionId).subscribe({
-								next: (user) => {
-									this.viewedDiscussion = user;
-									this.discussions.unshift(user);
+					if (this.discussionPartner) { // Established discussion thread
+						this.onDiscussion();
+					} else {                      // First time conversing with this user
+						this.userService.getById(discussionPartnerId).subscribe({
+							next: (user) => {
+								this.discussionPartner = user;
+								this.discussions.unshift(user);
 
-									this.onDiscussion();
-								},
-								error: (error) => {
-									this.alertService.error(error);
-									this.router.navigate(['/404'], {
-										skipLocationChange: true,
-									});
-								},
-							});
-						}
+								this.onDiscussion();
+							},
+							error: (error) => {
+								this.router.navigate(['/404'], { skipLocationChange: true });
+							},
+						});
 					}
 				});
 			},
@@ -96,20 +87,24 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	}
 
 	startDiscussion() {
+		if (this.contacts) {
+			this.newDiscussion = true;
+			return;
+		}
+
 		this.userService.getContacts(this.user._id).subscribe({
 			next: (contacts) => {
 				this.contacts = contacts;
+				this.newDiscussion = true;
 			},
 			error: (error) => {
 				this.alertService.error(error);
 			},
 		});
-
-		this.newDiscussion = true;
 	}
 
 	onDiscussion() {
-		this.discussionService.get(this.viewedDiscussion._id).subscribe({
+		this.discussionService.get(this.discussionPartner._id).subscribe({
 			next: (messages) => {
 				this.lastUpdate = Date.now();
 
@@ -118,7 +113,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 						(message.sender =
 							message.sender === this.user._id
 								? this.user
-								: this.viewedDiscussion)
+								: this.discussionPartner)
 				);
 				this.messages = messages;
 
@@ -131,7 +126,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
 		// Update conversation with received messages
 		this.intervalId = setInterval(() => {
-			this.discussionService.getSince(this.viewedDiscussion._id, this.lastUpdate).subscribe({
+			this.discussionService.getSince(this.discussionPartner._id, this.lastUpdate).subscribe({
 				next: (messages) => {
 					this.lastUpdate = Date.now();
 
@@ -141,10 +136,10 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 								(message.sender =
 									message.sender === this.user._id
 										? this.user
-										: this.viewedDiscussion)
+										: this.discussionPartner)
 						);
 						this.messages.push.apply(this.messages, messages);
-						this.viewedDiscussion.lastMessage =
+						this.discussionPartner.lastMessage =
 							this.messages[this.messages.length - 1].text;
 
 						this.scrollToBottom();
@@ -158,13 +153,13 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	}
 
 	sendMessage() {
-		this.discussionService.send(this.viewedDiscussion._id, this.message).subscribe({
+		this.discussionService.send(this.discussionPartner._id, this.message).subscribe({
 			next: (message: Message) => {
 				message.sender = this.user;
 				this.messages.push(message);
-				this.viewedDiscussion.lastMessage = message.text;
+				this.discussionPartner.lastMessage = message.text;
 
-				this.user.lastDiscussion = this.viewedDiscussion._id;
+				this.userService.lastDiscussion = this.discussionPartner._id;
 
 				this.message = '';
 				this.scrollToBottom();

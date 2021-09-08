@@ -92,7 +92,6 @@ export class ProfileComponent implements OnInit {
 					});
 				},
 				error: (error) => {
-					this.alertService.error(error);
 					this.router.navigate(['/404'], { skipLocationChange: true });
 				},
 			});

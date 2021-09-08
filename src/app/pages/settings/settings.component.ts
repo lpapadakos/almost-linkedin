@@ -56,7 +56,7 @@ export class SettingsComponent implements OnInit {
 
 		this.userService.update(this.updateForm.value, this.userImage).subscribe({
 			next: () => {
-				this.alertService.success("Επιτυχής ενημέρωση στοιχείων χρήστη");
+				this.alertService.success('Επιτυχής ενημέρωση στοιχείων χρήστη');
 			},
 			error: (error) => {
 				this.alertService.error(error);

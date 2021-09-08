@@ -1,13 +1,4 @@
-<mat-card
-	*ngFor="let alert of alerts"
-	class="alert mat-elevation-z4"
-	[ngClass]="{
-		success: alert.type === AlertType.Success,
-		info: alert.type === AlertType.Info,
-		warning: alert.type === AlertType.Warning,
-		error: alert.type === AlertType.Error
-	}"
->
-	<span>{{ alert.message }}</span>
+<mat-card *ngFor="let alert of alerts" [class]="'alert mat-elevation-z8 ' + cssClass(alert)">
+	<span><mat-icon>{{ matIcon(alert) }}</mat-icon>{{ alert.message }}</span>
 	<button mat-icon-button (click)="remove(alert)" aria-label="Close alert"><mat-icon>close</mat-icon></button>
 </mat-card>

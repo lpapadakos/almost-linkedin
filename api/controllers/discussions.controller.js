@@ -32,10 +32,63 @@ exports.summary = async (req, res, next) => {
 			},
 			{ $unwind: "$user" },
 			{
+				$lookup: {
+					// add extra 'contact' field for frontend usage
+					from: Contact.collection.name,
+					let: { id: "$_id" },
+					pipeline: [
+						{
+							$match: {
+								$expr: {
+									$or: [
+										{
+											$and: [
+												{
+													$eq: [
+														"$sender",
+														userObjectId,
+													],
+												},
+												{
+													$eq: [
+														"$receiver",
+														"$$id",
+													],
+												},
+											],
+										},
+										{
+											$and: [
+												{
+													$eq: [
+														"$sender",
+														"$$id",
+													],
+												},
+												{
+													$eq: [
+														"$receiver",
+														userObjectId,
+													],
+												},
+											],
+										},
+									],
+								},
+							},
+						},
+						{ $project: { accepted: 1 } },
+					],
+					as: "contact",
+				},
+			},
+			{ $unwind: { path: "$contact", preserveNullAndEmptyArrays: true } },
+			{
 				$project: {
 					name: "$user.name",
 					img: "$user.img",
 					lastMessage: 1,
+					contact: 1,
 				},
 			},
 		]);
@@ -64,7 +117,9 @@ exports.sendMessage = async (req, res, next) => {
 			],
 		});
 
-		if (!isContact) return res.status(403).json({ error: "Δεν έχετε την άδεια συζήτησης με το χρήστη" });
+		if (!isContact) {
+			return res.status(403).json({ error: "Δεν έχετε την άδεια συζήτησης με το χρήστη" });
+		}
 
 		const message = await Message.create({
 			sender: req.userId,

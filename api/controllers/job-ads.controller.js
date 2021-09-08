@@ -36,7 +36,7 @@ exports.get = async (req, res, next) => {
 		// TODO sort job ads by relevance to user skills
 
 		if (req.params.jobAdId) {
-			if (jobAds) {
+			if (jobAds && jobAds.length) {
 				return res.status(200).json(jobAds[0]);
 			} else {
 				return res.status(404).json({ error: "Δεν βρέθηκε η αγγελία" });
