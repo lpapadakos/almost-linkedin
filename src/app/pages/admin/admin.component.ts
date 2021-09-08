@@ -1,5 +1,6 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { SelectionModel } from '@angular/cdk/collections';
+import { Title } from '@angular/platform-browser';
 import { saveAs } from 'file-saver';
 
 import { MatSort } from '@angular/material/sort';
@@ -22,7 +23,9 @@ export class AdminComponent implements OnInit {
 
 	@ViewChild(MatSort) sort: MatSort;
 
-	constructor(private alertService: AlertService, private userService: UserService) {}
+	constructor(private titleService: Title, private alertService: AlertService, private userService: UserService) {
+		this.titleService.setTitle('Διαχείριση Χρηστών - AlmostLinkedIn');
+	}
 
 	ngOnInit() {
 		this.userService.getAll().subscribe({

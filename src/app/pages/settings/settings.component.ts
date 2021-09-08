@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 import { AlertService } from '../../services/alert.service';
 
@@ -19,9 +20,12 @@ export class SettingsComponent implements OnInit {
 
 	constructor(
 		private formBuilder: FormBuilder,
+		private titleService: Title,
 		private alertService: AlertService,
 		private userService: UserService
-	) {}
+	) {
+		this.titleService.setTitle('Ρυθμίσεις - AlmostLinkedIn');
+	}
 
 	ngOnInit() {
 		this.updateForm = this.formBuilder.group(

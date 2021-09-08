@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ViewportScroller } from '@angular/common';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
 
 import { AlertService } from '../../services/alert.service';
@@ -27,11 +28,14 @@ export class JobAdsComponent implements OnInit {
 	constructor(
 		private viewportScroller: ViewportScroller,
 		private formBuilder: FormBuilder,
+		private titleService: Title,
 		private route: ActivatedRoute,
 		private alertService: AlertService,
 		private userService: UserService,
 		private jobAdService: JobAdService
-	) {}
+	) {
+		this.titleService.setTitle('Αγγελίες - AlmostLinkedIn');
+	}
 
 	ngOnInit() {
 		this.jobAdForm = this.formBuilder.group({

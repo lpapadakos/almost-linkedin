@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AlertService } from '../../services/alert.service';
@@ -46,12 +47,15 @@ export class ProfileComponent implements OnInit {
 
 	constructor(
 		private formBuilder: FormBuilder,
+		private titleService: Title,
 		private router: Router,
 		private route: ActivatedRoute,
 		private alertService: AlertService,
 		private userService: UserService,
 		private articleService: ArticleService
-	) {}
+	) {
+		this.titleService.setTitle('Προφίλ - AlmostLinkedIn');
+	}
 
 	// Custom validator: Compare From and To Fields for correct time interval
 	private validateInterval(fromControlName: string, toControlName: string) {
@@ -82,6 +86,8 @@ export class ProfileComponent implements OnInit {
 			this.userService.getById(viewedUserId).subscribe({
 				next: (user) => {
 					this.viewedUser = user;
+					this.titleService.setTitle(user.name + ' - AlmostLinkedIn');
+
 					this.articleService.getFromUser(this.viewedUser._id).subscribe({
 						next: (articles) => {
 							this.articles = articles;

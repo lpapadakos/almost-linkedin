@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 @Component({
 	selector: 'app-not-found',
@@ -6,7 +7,9 @@ import { Component, OnInit } from '@angular/core';
 	styleUrls: ['./not-found.component.css'],
 })
 export class NotFoundComponent implements OnInit {
-	constructor() {}
+	constructor(private titleService: Title) {
+		this.titleService.setTitle('404 - AlmostLinkedIn');
+	}
 
 	ngOnInit() {}
 }

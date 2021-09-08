@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { AlertService } from '../../services/alert.service';
 
@@ -19,10 +20,13 @@ export class NotificationsComponent implements OnInit {
 	recentArticles: Article[];
 
 	constructor(
+		private titleService: Title,
 		private alertService: AlertService,
 		private userService: UserService,
 		private articleService: ArticleService
-	) {}
+	) {
+		this.titleService.setTitle('Ειδοποιήσεις - AlmostLinkedIn');
+	}
 
 	ngOnInit() {
 		this.userService.getContactRequests().subscribe({

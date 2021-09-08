@@ -1,4 +1,5 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
 
@@ -32,12 +33,15 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	message: string;
 
 	constructor(
+		private titleService: Title,
 		private router: Router,
 		private route: ActivatedRoute,
 		private alertService: AlertService,
 		private userService: UserService,
 		private discussionService: DiscussionService
-	) {}
+	) {
+		this.titleService.setTitle('Συζητήσεις - AlmostLinkedIn');
+	}
 
 	private scrollToBottom() {
 		setTimeout(() => window.scrollTo(0, document.scrollingElement.scrollHeight), 500);
@@ -55,11 +59,15 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
 					if (!discussionPartnerId) return;
 
-					this.discussionPartner = this.discussions.find((u) => u._id == discussionPartnerId);
+					this.discussionPartner = this.discussions.find(
+						(u) => u._id == discussionPartnerId
+					);
 
-					if (this.discussionPartner) { // Established discussion thread
+					if (this.discussionPartner) {
+						// Established discussion thread
 						this.onDiscussion();
-					} else {                      // First time conversing with this user
+					} else {
+						// First time conversing with this user
 						this.userService.getById(discussionPartnerId).subscribe({
 							next: (user) => {
 								this.discussionPartner = user;
@@ -68,7 +76,9 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 								this.onDiscussion();
 							},
 							error: (error) => {
-								this.router.navigate(['/404'], { skipLocationChange: true });
+								this.router.navigate(['/404'], {
+									skipLocationChange: true,
+								});
 							},
 						});
 					}
@@ -104,6 +114,8 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	}
 
 	onDiscussion() {
+		this.titleService.setTitle(this.discussionPartner.name + ' - Συζητήσεις - AlmostLinkedIn');
+
 		this.discussionService.get(this.discussionPartner._id).subscribe({
 			next: (messages) => {
 				this.lastUpdate = Date.now();

@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Title } from '@angular/platform-browser';
 
 import { AlertService } from '../../services/alert.service';
 
@@ -16,7 +17,9 @@ export class NetworkComponent implements OnInit {
 	contacts: User[];
 	searchText: string;
 
-	constructor(private alertService: AlertService, private userService: UserService) {}
+	constructor(private titleService: Title, private alertService: AlertService, private userService: UserService) {
+		this.titleService.setTitle('Δίκτυο - AlmostLinkedIn');
+	}
 
 	ngOnInit() {
 		this.userService.getAll().subscribe({

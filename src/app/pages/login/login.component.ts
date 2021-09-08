@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { AlertService } from '../../services/alert.service';
@@ -11,17 +12,18 @@ import { UserService } from '../../services/user.service';
 	styleUrls: ['./login.component.css'],
 })
 export class LoginComponent implements OnInit {
-	private returnUrl: string;
+	private returnUrl: string = this.route.snapshot.queryParams.returnUrl || '/';
 	loginForm: FormGroup;
 
 	constructor(
 		private formBuilder: FormBuilder,
+		private titleService: Title,
 		private router: Router,
 		private route: ActivatedRoute,
 		private alertService: AlertService,
 		private userService: UserService
 	) {
-		this.returnUrl = this.route.snapshot.queryParams.returnUrl || '/';
+		this.titleService.setTitle('Σύνδεση - AlmostLinkedIn');
 	}
 
 	ngOnInit() {

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 
 import { AlertService } from '../../services/alert.service';
 
@@ -24,10 +25,13 @@ export class HomeComponent implements OnInit {
 
 	constructor(
 		private formBuilder: FormBuilder,
+		private titleService: Title,
 		private alertService: AlertService,
 		private userService: UserService,
 		private articleService: ArticleService
-	) {}
+	) {
+		this.titleService.setTitle('Αρχική Σελίδα - AlmostLinkedIn');
+	}
 
 	ngOnInit() {
 		this.articleForm = this.formBuilder.group({

@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Title } from '@angular/platform-browser';
 import { Router } from '@angular/router';
 
 import { AlertService } from '../../services/alert.service';
@@ -17,10 +18,13 @@ export class RegisterComponent implements OnInit {
 
 	constructor(
 		private formBuilder: FormBuilder,
+		private titleService: Title,
 		private router: Router,
 		private alertService: AlertService,
 		private userService: UserService
-	) {}
+	) {
+		this.titleService.setTitle('Εγγραφή - AlmostLinkedIn');
+	}
 
 	ngOnInit() {
 		this.registerForm = this.formBuilder.group(
