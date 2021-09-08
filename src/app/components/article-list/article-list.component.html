@@ -50,13 +50,13 @@
 	</mat-card-actions>
 	<section class="alt-background">
 		<mat-form-field>
-			<input
+			<textarea
 				matInput
-				[(ngModel)]="article.commentDraft"
-				type="text"
+				matTextareaAutosize
 				placeholder="Αφήστε ένα σχόλιο..."
-				(keyup.enter)="comment(article)"
-			/>
+				[(ngModel)]="article.commentDraft"
+				(keydown.enter)="comment(article)"
+			></textarea>
 		</mat-form-field>
 		<div
 			class="comment"

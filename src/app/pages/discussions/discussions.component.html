@@ -70,7 +70,12 @@
 				</div>
 			</div>
 			<div id="new-message" class="alt-background">
-				<mat-form-field *ngIf="discussionPartner.contact && discussionPartner.contact.accepted; else outsideNetwork">
+				<mat-form-field
+					*ngIf="
+						discussionPartner.contact && discussionPartner.contact.accepted;
+						else outsideNetwork
+					"
+				>
 					<textarea
 						matInput
 						matTextareaAutosize
