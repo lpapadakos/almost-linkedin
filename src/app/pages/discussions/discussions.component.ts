@@ -30,7 +30,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	discussionPartner: User;
 	discussions: User[];
 	messages: Message[] = [];
-	message: string;
+	messageDraft: string;
 
 	constructor(
 		private titleService: Title,
@@ -168,7 +168,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	}
 
 	sendMessage() {
-		this.discussionService.send(this.discussionPartner._id, this.message).subscribe({
+		this.discussionService.send(this.discussionPartner._id, this.messageDraft).subscribe({
 			next: (message: Message) => {
 				message.sender = this.user;
 				this.messages.push(message);
@@ -176,7 +176,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
 				this.userService.lastDiscussion = this.discussionPartner._id;
 
-				this.message = '';
+				this.messageDraft = '';
 				this.scrollToBottom();
 			},
 			error: (error) => {

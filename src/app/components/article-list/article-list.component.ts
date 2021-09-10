@@ -5,6 +5,7 @@ import { ActivatedRoute } from '@angular/router';
 import { AlertService } from '../../services/alert.service';
 
 import { User } from '../../models/user.model';
+import { UserService } from '../../services/user.service';
 
 import { Article, Comment } from '../../models/article.model';
 import { ArticleService } from '../../services/article.service';
@@ -15,7 +16,8 @@ import { ArticleService } from '../../services/article.service';
 	styleUrls: ['./article-list.component.css'],
 })
 export class ArticleListComponent implements AfterViewInit {
-	@Input() user: User;
+	user: User = this.userService.user;
+
 	@Input() articles: Article[];
 	fragment: string;
 
@@ -23,6 +25,7 @@ export class ArticleListComponent implements AfterViewInit {
 		private viewportScroller: ViewportScroller,
 		private route: ActivatedRoute,
 		private alertService: AlertService,
+		private userService: UserService,
 		private articleService: ArticleService
 	) {}
 

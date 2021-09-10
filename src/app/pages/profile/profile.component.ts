@@ -18,8 +18,8 @@ import { ArticleService } from '../../services/article.service';
 })
 export class ProfileComponent implements OnInit {
 	user: User = this.userService.user;
-	viewedUser: User;
 
+	viewedUser: User;
 	articles: Article[];
 
 	form = {};

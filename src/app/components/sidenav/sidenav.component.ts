@@ -11,9 +11,9 @@ import { UserService } from '../../services/user.service';
 	styleUrls: ['./sidenav.component.css'],
 })
 export class SidenavComponent implements OnChanges {
-	@Input() viewedUser: User;
-
 	user: User = this.userService.user;
+
+	@Input() viewedUser: User;
 	topContacts: User[];
 
 	constructor(private alertService: AlertService, private userService: UserService) {}
