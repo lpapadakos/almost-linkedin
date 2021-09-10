@@ -234,7 +234,9 @@ exports.addContactRequest = async (req, res, next) => {
 			],
 		});
 
-		if (existingRequest) return res.status(409).json({ error: "Έχει ήδη γίνει αίτημα σύνδεσης" });
+		if (existingRequest) {
+			return res.status(409).json({ error: "Έχει ήδη γίνει αίτημα σύνδεσης" });
+		}
 
 		const request = new Contact({
 			sender: req.userId,

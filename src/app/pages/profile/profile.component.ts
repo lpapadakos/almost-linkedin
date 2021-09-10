@@ -58,30 +58,22 @@ export class ProfileComponent implements OnInit {
 	}
 
 	// Custom validator: Compare From and To Fields for correct time interval
-	private validateInterval(fromControlName: string, toControlName: string) {
+	private intervalValidator(fromControlName: string, toControlName: string) {
 		return (formGroup: FormGroup) => {
 			const fromControl = formGroup.controls[fromControlName];
 			const toControl = formGroup.controls[toControlName];
 
-			if (toControl.errors && !toControl.errors.mustBeInterval) {
-				// return if another validator has already found an error on the mustBeInterval
-				return;
-			}
-
-			// set error on mustBeInterval if validation fails
-			if (toControl.value && fromControl.value > toControl.value) {
-				toControl.setErrors({ mustBeInterval: true });
-			} else {
-				toControl.setErrors(null);
-			}
+			toControl.setErrors(
+				!toControl.value || fromControl.value <= toControl.value
+					? null
+					: { mustBeInterval: true }
+			);
 		};
 	}
 
 	ngOnInit() {
 		this.route.paramMap.subscribe((paramMap) => {
-			let viewedUserId = paramMap.get('userId');
-
-			if (!viewedUserId) viewedUserId = this.user._id;
+			let viewedUserId = paramMap.get('userId') || this.user._id;
 
 			this.userService.getById(viewedUserId).subscribe({
 				next: (user) => {
@@ -111,7 +103,7 @@ export class ProfileComponent implements OnInit {
 				toYear: [''],
 			},
 			{
-				validator: this.validateInterval('fromYear', 'toYear'),
+				validator: this.intervalValidator('fromYear', 'toYear'),
 			}
 		);
 
@@ -122,7 +114,7 @@ export class ProfileComponent implements OnInit {
 				toYear: [''],
 			},
 			{
-				validator: this.validateInterval('fromYear', 'toYear'),
+				validator: this.intervalValidator('fromYear', 'toYear'),
 			}
 		);
 

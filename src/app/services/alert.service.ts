@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Observable, Subject } from 'rxjs';
+import { Subject } from 'rxjs';
 
 import { AlertType, Alert } from '../models/alert.model';
 
@@ -8,8 +8,6 @@ import { AlertType, Alert } from '../models/alert.model';
 })
 export class AlertService {
 	private alertSubject = new Subject<Alert>();
-
-	constructor() {}
 
 	onAlert() {
 		return this.alertSubject.asObservable();
@@ -29,9 +27,5 @@ export class AlertService {
 
 	error(message: string) {
 		this.alertSubject.next(new Alert({ type: AlertType.Error, message }));
-	}
-
-	clear() {
-		this.alertSubject.next(null);
 	}
 }

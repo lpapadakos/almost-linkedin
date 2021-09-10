@@ -35,17 +35,15 @@ export class UserService {
 		return this.userSubject.asObservable();
 	}
 
-	// TODO Fix should sync one or other. Custom validator: Compare password fields to see if they match
-	equivalentValidator = (firstControlName: string, secondControlName: string) => {
+	// Custom validator: Compare password and repeat-password fields
+	equivalentValidator(controlName: string, matchingControlName: string) {
 		return (formGroup: FormGroup) => {
-			const firstControl = formGroup.get(firstControlName);
-			const secondControl = formGroup.get(secondControlName);
+			const control = formGroup.get(controlName);
+			const matchingControl = formGroup.get(matchingControlName);
 
-			if (firstControl.value !== secondControl.value) {
-				return secondControl.setErrors({ notEqual: true });
-			}
+			matchingControl.setErrors(control.value === matchingControl.value ? null : { mustMatch: true });
 		};
-	};
+	}
 
 	register(user: User, img: File) {
 		const formData = new FormData();
@@ -91,6 +89,8 @@ export class UserService {
 			map((update) => {
 				Object.assign(this.userSubject.value, update);
 				this.updateLocalStorage();
+
+				return update;
 			})
 		);
 	}

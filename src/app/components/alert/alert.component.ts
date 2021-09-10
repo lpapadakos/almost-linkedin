@@ -16,25 +16,18 @@ export class AlertComponent implements OnInit, OnDestroy {
 
 	constructor(private router: Router, private alertService: AlertService) {}
 
-	get AlertType() {
-		return AlertType;
-	}
-
 	ngOnInit() {
 		this.subscriptions.push(
 			this.alertService.onAlert().subscribe((alert) => {
-				if (alert) {
-					this.alerts.push(alert);
-					setTimeout(() => this.remove(alert), 8000);
-				}
+				this.alerts.push(alert);
+				setTimeout(() => this.remove(alert), 8000);
 			})
 		);
 
-		// Clear alert on navigation change
+		// Clear alerts on navigation change
 		this.subscriptions.push(
 			this.router.events.subscribe((event) => {
 				if (event instanceof NavigationStart) {
-					this.alertService.clear();
 					this.alerts = [];
 				}
 			})
