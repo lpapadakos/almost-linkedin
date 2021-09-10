@@ -136,6 +136,9 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 			},
 		});
 
+		// Watch for new messages, but only if we can talk with that person
+		if (!this.discussionPartner.contact || !this.discussionPartner.contact.accepted) return;
+
 		// Update conversation with received messages
 		this.intervalId = setInterval(() => {
 			this.discussionService.getSince(this.discussionPartner._id, this.lastUpdate).subscribe({

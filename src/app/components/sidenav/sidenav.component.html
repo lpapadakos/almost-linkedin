@@ -22,21 +22,21 @@
 		</mat-list-item>
 	</mat-list>
 	<div *ngIf="user.role !== 'admin'">
-		<a *ngIf="viewedUser._id === user._id" mat-raised-button color="accent" routerLink="/network">
+		<a *ngIf="viewedUser._id === user._id; else otherUser" mat-raised-button color="accent" routerLink="/network">
 			Το Δίκτυο μου
 		</a>
-		<div *ngIf="viewedUser._id !== user._id">
+		<ng-template #otherUser>
 			<button
-				*ngIf="!viewedUser.contact; else deleteContact"
+				*ngIf="!viewedUser.contact; else requestMade"
 				mat-raised-button
 				color="primary"
 				(click)="addContactRequest()"
 			>
 				Αίτημα Σύνδεσης
 			</button>
-			<ng-template #deleteContact>
+			<ng-template #requestMade>
 				<a
-					*ngIf="!viewedUser.delete"
+					*ngIf="viewedUser.contact.accepted"
 					mat-raised-button
 					color="accent"
 					[routerLink]="'/discussions/' + viewedUser._id"
@@ -44,23 +44,23 @@
 					Συζήτηση
 				</a>
 				<button
-					*ngIf="!viewedUser.delete"
+					*ngIf="!viewedUser.delete; else confirmDelete"
 					mat-raised-button
 					color="warn"
 					(click)="viewedUser.delete = true"
 				>
 					Διαγραφή
-					{{ viewedUser.contact.accepted === false ? "Αιτήματος" : "Επαφής" }}
+					{{ viewedUser.contact.accepted ? "Επαφής" : "Αιτήματος" }}
 				</button>
-				<span *ngIf="viewedUser.delete">
+				<ng-template #confirmDelete>
 					Σίγουρα?
-					<button mat-raised-button color="warn" (click)="_deleteContact()">Ναι</button>
+					<button mat-raised-button color="warn" (click)="deleteContact()">Ναι</button>
 					<button mat-raised-button color="primary" (click)="viewedUser.delete = false">
 						Όχι
 					</button>
-				</span>
+				</ng-template>
 			</ng-template>
-		</div>
+		</ng-template>
 	</div>
 	<div id="top-contacts" *ngIf="topContacts && topContacts.length > 0">
 		<h2 mat-card-title>Συχνές Επαφές</h2>

@@ -57,10 +57,12 @@
 				>
 					<mat-card class="message">
 						<mat-card-content>
-							<img
-								mat-card-avatar
-								[src]="message.sender.img | secure | async"
-							/>
+							<a [routerLink]="'/profile/' + message.sender._id">
+								<img
+									mat-card-avatar
+									[src]="message.sender.img | secure | async"
+								/>
+							</a>
 							<p>{{ message.text }}</p>
 						</mat-card-content>
 						<mat-card-subtitle>

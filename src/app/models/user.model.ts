@@ -30,12 +30,13 @@ export class User {
 	lastDiscussion: string;
 
 	// Frontend only vars: Helpful
+	currentStatus: Entry;
+	lastMessage: string;
 	contact: {
 		_id: string;
 		accepted: boolean;
 	};
-	currentStatus: Entry;
-	lastMessage: string;
+	delete: boolean;
 	token?: string;
 }
 

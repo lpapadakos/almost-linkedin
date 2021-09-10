@@ -43,10 +43,11 @@ export class SidenavComponent implements OnChanges {
 		});
 	}
 
-	_deleteContact() {
+	deleteContact() {
 		this.userService.deleteContact(this.viewedUser.contact._id).subscribe({
 			next: () => {
-				this.viewedUser.contact = null;
+				delete this.viewedUser.contact;
+				this.viewedUser.delete = false;
 			},
 			error: (error) => {
 				this.alertService.error(error);
