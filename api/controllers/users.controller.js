@@ -70,7 +70,7 @@ exports.get = async (req, res, next) => {
 			filter = { role: "user" };
 		}
 
-		const users = await User.aggregate([
+		let users = await User.aggregate([
 			{ $match: filter },
 			{
 				$lookup: {
@@ -153,8 +153,8 @@ exports.get = async (req, res, next) => {
 
 					if (daijobu || user[entryType].public) {
 						if (user[entryType].fromYear) {
-							await user[entryType].entries.sort(
-								(e1, e2) => e2.fromYear - e1.fromYear
+							user[entryType].entries.sort(
+								(a, b) => b.fromYear - a.fromYear
 							);
 						}
 					} else {

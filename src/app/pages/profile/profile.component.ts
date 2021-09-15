@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute } from '@angular/router';
 
@@ -123,7 +123,7 @@ export class ProfileComponent implements OnInit {
 		});
 	}
 
-	onSubmit(entryType: string) {
+	onSubmit(formDirective: FormGroupDirective, entryType: string) {
 		let form = this.form[entryType];
 		let array: Entry[] = this.viewedUser[entryType].entries;
 
@@ -135,10 +135,10 @@ export class ProfileComponent implements OnInit {
 
 				// Sort results by fromYear descending
 				if (entryType !== 'skills') {
-					array.sort((e1, e2) => e2.fromYear - e1.fromYear);
+					array.sort((a, b) => b.fromYear - a.fromYear);
 				}
 
-				form.reset();
+				formDirective.resetForm();
 			},
 			error: (error) => {
 				this.alertService.error(error);

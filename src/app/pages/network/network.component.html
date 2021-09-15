@@ -12,7 +12,7 @@
 			<button mat-raised-button color="warn" (click)="searchText = ''">Καθαρισμός</button>
 		</div>
 	</div>
-	<mat-grid-list *ngIf="!searchText || searchText == ''" cols="4" rowHeight="1:1">
+	<mat-grid-list *ngIf="!searchText || searchText === ''" cols="4" rowHeight="1:1">
 		<h2>Το Δίκτυο μου</h2>
 		<mat-grid-tile *ngFor="let user of contacts">
 			<a [routerLink]="'/profile/' + user._id">
@@ -30,7 +30,7 @@
 			</a>
 		</mat-grid-tile>
 	</mat-grid-list>
-	<mat-list *ngIf="searchText && searchText != ''">
+	<mat-list *ngIf="searchText && searchText !== ''">
 		<h2>Αποτελέσματα Αναζήτησης</h2>
 		<a
 			mat-list-item

@@ -20,7 +20,7 @@
 		<h2>Πρόσφατες Ενημερώσεις</h2>
 		<mat-list *ngFor="let article of recentArticles">
 			<ng-container *ngFor="let interestedUser of article.interestNotes">
-				<mat-list-item *ngIf="interestedUser._id != user._id">
+				<mat-list-item *ngIf="interestedUser._id !== user._id">
 					<img matListAvatar [src]="interestedUser.img | secure | async" />
 					<a matLine [routerLink]="'/profile/' + interestedUser._id">
 						{{ interestedUser.name }}
@@ -34,7 +34,7 @@
 				</mat-list-item>
 			</ng-container>
 			<ng-container *ngFor="let comment of article.comments">
-				<mat-list-item *ngIf="comment.poster._id != user._id">
+				<mat-list-item *ngIf="comment.poster._id !== user._id">
 					<img matListAvatar [src]="comment.poster.img | secure | async" />
 					<a matLine [routerLink]="'/profile/' + comment.poster._id">
 						{{ comment.poster.name }}

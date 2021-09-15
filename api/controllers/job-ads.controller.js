@@ -27,13 +27,28 @@ exports.get = async (req, res, next) => {
 		}
 
 		let jobAds = await JobAd.find(filter)
+			.sort({ createdAt: "desc" })
 			.populate("poster", "_id name img")
 			.populate("applications", "_id name img")
 			.lean();
 
-		const user = await User.findById(req.userId);
+		// Get user skills
+		const user = await User.findById(req.userId, "skills");
+		const skills = await Promise.all(user.skills.entries.map(async (entry) => entry.what.toLowerCase()));
 
-		// TODO sort job ads by relevance to user skills
+		// Sort job ads by relevance to user skills
+		await Promise.all(
+			jobAds.map(async (jobAd) => {
+				const what = jobAd.what.toLowerCase();
+				const description = jobAd.description.toLowerCase();
+
+				jobAd.score =
+					2 * skills.filter((s) => what.includes(s)).length +
+					skills.filter((s) => description.includes(s)).length;
+			})
+		);
+
+		jobAds.sort((a, b) => b.score - a.score);
 
 		if (req.params.jobAdId) {
 			if (jobAds && jobAds.length) {

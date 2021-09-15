@@ -139,7 +139,7 @@ export class UserService {
 	}
 
 	export(ids: string[], fileType: string) {
-		if (this.userSubject.value.role == 'admin') {
+		if (this.userSubject.value.role === 'admin') {
 			return this.http.post(`${environment.apiUrl}/users/export?type=${fileType}`, ids, {
 				responseType: 'blob',
 			});

@@ -60,7 +60,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 					if (!discussionPartnerId) return;
 
 					this.discussionPartner = this.discussions.find(
-						(u) => u._id == discussionPartnerId
+						(u) => u._id === discussionPartnerId
 					);
 
 					if (this.discussionPartner) {

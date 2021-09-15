@@ -65,7 +65,8 @@
 				<form
 					*ngIf="viewedUser._id === user._id"
 					[formGroup]="form[entryType.name]"
-					(ngSubmit)="onSubmit(entryType.name)"
+					#formDirective="ngForm"
+					(ngSubmit)="onSubmit(formDirective, entryType.name)"
 				>
 					<h3>{{ entryType.form }}</h3>
 					<mat-form-field *ngIf="entryType.form_what">

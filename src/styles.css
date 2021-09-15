@@ -8,6 +8,7 @@ body {
 body {
 	margin: 0;
 	font-family: "Open Sans", Roboto, "Helvetica Neue", sans-serif;
+	background-color: #fafafa;
 }
 
 mat-sidenav {

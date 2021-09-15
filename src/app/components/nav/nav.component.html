@@ -1,6 +1,6 @@
 <mat-toolbar color="primary">
 	<span id="logo">AlmostLinkedIn</span>
-	<div *ngIf="user && user.role == 'user'">
+	<div *ngIf="user && user.role === 'user'">
 		<a
 			*ngFor="let page of pages"
 			mat-flat-button
@@ -22,7 +22,7 @@
 			<mat-icon>account_circle</mat-icon>
 			{{ user.name.split(" ")[0] }}
 		</span>
-		<a *ngIf="user && user.role == 'admin'" mat-raised-button color="accent" routerLink="/admin">
+		<a *ngIf="user && user.role === 'admin'" mat-raised-button color="accent" routerLink="/admin">
 			Διαχείριση Χρηστών
 		</a>
 		<button *ngIf="user" mat-raised-button color="warn" (click)="logout()">Αποσύνδεση</button>

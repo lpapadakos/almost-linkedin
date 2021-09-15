@@ -27,11 +27,11 @@ export class AuthGuard implements CanActivate {
 		// Check if authorized for this particular route.
 		// Some pages are, for example, restricted to the admin
 		if (route.data.adminOnly) {
-			if (route.data.adminOnly == true && user.role != 'admin') {
+			if (route.data.adminOnly && user.role !== 'admin') {
 				this.router.navigate(['/']);
 				return false;
 			}
-		} else if (user.role == 'admin') {
+		} else if (user.role === 'admin') {
 			this.router.navigate(['/admin']);
 			return false;
 		}
