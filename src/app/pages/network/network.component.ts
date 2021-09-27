@@ -31,7 +31,7 @@ export class NetworkComponent implements OnInit {
 					const currentYear = new Date().getFullYear();
 
 					// Get latest entry (work or alternatively, education)
-					let currentStatus = user.experience.entries.pop();
+					let currentStatus = user.experience.entries && user.experience.entries.pop();
 
 					// Let's see if this is the status right now
 					if (currentStatus) {
@@ -42,7 +42,7 @@ export class NetworkComponent implements OnInit {
 						}
 					}
 
-					currentStatus = user.education.entries.pop();
+					currentStatus = user.education.entries && user.education.entries.pop();
 
 					if (currentStatus) {
 						toYear = currentStatus.toYear || 9999;
