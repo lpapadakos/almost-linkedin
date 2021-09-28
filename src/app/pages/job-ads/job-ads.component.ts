@@ -1,5 +1,4 @@
 import { Component, OnInit } from '@angular/core';
-import { ViewportScroller } from '@angular/common';
 import { FormBuilder, FormGroup, FormGroupDirective, Validators } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute } from '@angular/router';
@@ -26,7 +25,6 @@ export class JobAdsComponent implements OnInit {
 	fragment: string;
 
 	constructor(
-		private viewportScroller: ViewportScroller,
 		private formBuilder: FormBuilder,
 		private titleService: Title,
 		private route: ActivatedRoute,
@@ -38,6 +36,8 @@ export class JobAdsComponent implements OnInit {
 	}
 
 	ngOnInit() {
+		this.route.fragment.subscribe((fragment) => (this.fragment = fragment));
+
 		this.jobAdForm = this.formBuilder.group({
 			what: ['', Validators.required],
 			where: ['', Validators.required],
@@ -52,17 +52,6 @@ export class JobAdsComponent implements OnInit {
 				this.alertService.error(error);
 			},
 		});
-	}
-
-	ngAfterViewInit() {
-		setTimeout(() => {
-			this.route.fragment.subscribe((fragment) => {
-				if (fragment) {
-					this.fragment = fragment;
-					this.viewportScroller.scrollToAnchor(fragment);
-				}
-			});
-		}, 500);
 	}
 
 	onPost(formDirective: FormGroupDirective) {

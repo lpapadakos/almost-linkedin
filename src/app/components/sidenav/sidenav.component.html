@@ -22,7 +22,12 @@
 		</mat-list-item>
 	</mat-list>
 	<div *ngIf="user.role !== 'admin'">
-		<a *ngIf="viewedUser._id === user._id; else otherUser" mat-raised-button color="accent" routerLink="/network">
+		<a
+			*ngIf="viewedUser._id === user._id; else otherUser"
+			mat-raised-button
+			color="accent"
+			routerLink="/network"
+		>
 			Το Δίκτυο μου
 		</a>
 		<ng-template #otherUser>

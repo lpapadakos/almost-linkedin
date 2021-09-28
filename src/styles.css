@@ -106,11 +106,7 @@ label + input {
 	margin-left: 8px;
 }
 
-/* TODO Fix Anchor/Fragment Scrolling with fixed navbar */
-:target::before {
-	content: "";
-	display: block;
-	position: relative;
-	height: 64px; /* fixed header height */
-	margin-top: -64px; /* negative fixed header height */
+/* Fix Anchor/Fragment Scrolling with fixed navbar */
+:target {
+	scroll-margin-top: 70px;
 }

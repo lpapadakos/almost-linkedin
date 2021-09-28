@@ -1,5 +1,4 @@
-import { Component, AfterViewInit, Input } from '@angular/core';
-import { ViewportScroller } from '@angular/common';
+import { Component, OnInit, Input } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 
 import { AlertService } from '../../services/alert.service';
@@ -15,29 +14,21 @@ import { ArticleService } from '../../services/article.service';
 	templateUrl: './article-list.component.html',
 	styleUrls: ['./article-list.component.css'],
 })
-export class ArticleListComponent implements AfterViewInit {
+export class ArticleListComponent implements OnInit {
 	user: User = this.userService.user;
 
 	@Input() articles: Article[];
 	fragment: string;
 
 	constructor(
-		private viewportScroller: ViewportScroller,
 		private route: ActivatedRoute,
 		private alertService: AlertService,
 		private userService: UserService,
 		private articleService: ArticleService
 	) {}
 
-	ngAfterViewInit() {
-		setTimeout(() => {
-			this.route.fragment.subscribe((fragment) => {
-				if (fragment) {
-					this.fragment = fragment;
-					this.viewportScroller.scrollToAnchor(fragment);
-				}
-			});
-		}, 500);
+	ngOnInit() {
+		this.route.fragment.subscribe((fragment) => (this.fragment = fragment));
 	}
 
 	delete(article: Article) {

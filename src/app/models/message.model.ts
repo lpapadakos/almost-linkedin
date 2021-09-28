@@ -1,7 +1,7 @@
 import { User } from './user.model';
 
 export class Message {
-	sender: any;
+	sender: string | User;
 	text: string;
 	createdAt: Date;
 }

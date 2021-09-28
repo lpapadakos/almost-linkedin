@@ -2,6 +2,7 @@ import { Component, OnInit, OnDestroy } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { Router, ActivatedRoute, NavigationStart } from '@angular/router';
 import { Subscription } from 'rxjs';
+import { first } from 'rxjs/operators';
 
 import { AlertService } from '../../services/alert.service';
 
@@ -10,6 +11,7 @@ import { UserService } from '../../services/user.service';
 
 import { Message } from '../../models/message.model';
 import { DiscussionService } from '../../services/discussion.service';
+import { SecurePipe } from 'src/app/helpers/secure.pipe';
 
 @Component({
 	selector: 'app-discussions',
@@ -36,6 +38,7 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 		private titleService: Title,
 		private router: Router,
 		private route: ActivatedRoute,
+		private securePipe: SecurePipe,
 		private alertService: AlertService,
 		private userService: UserService,
 		private discussionService: DiscussionService
@@ -48,7 +51,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 	}
 
 	ngOnInit() {
-		//TODO load images only twice?
+		// load images only twice, use for messages
+		this.securePipe
+			.transform(this.user.img)
+			.pipe(first())
+			.subscribe((safeUrl) => (this.user.imgBlob = safeUrl));
 
 		this.discussionService.summary().subscribe({
 			next: (discussions) => {
@@ -115,6 +122,11 @@ export class DiscussionsComponent implements OnInit, OnDestroy {
 
 	onDiscussion() {
 		this.titleService.setTitle(this.discussionPartner.name + ' - Συζητήσεις - AlmostLinkedIn');
+
+		this.securePipe
+			.transform(this.discussionPartner.img)
+			.pipe(first())
+			.subscribe((safeUrl) => (this.discussionPartner.imgBlob = safeUrl));
 
 		this.discussionService.get(this.discussionPartner._id).subscribe({
 			next: (messages) => {

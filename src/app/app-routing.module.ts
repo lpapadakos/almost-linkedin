@@ -68,7 +68,12 @@ const routes: Routes = [
 ];
 
 @NgModule({
-	imports: [RouterModule.forRoot(routes, { anchorScrolling: 'enabled' })],
+	imports: [
+		// BUG: Would use anchorScrolling, but it's broken as hell:
+		// https://github.com/angular/angular/issues/30139
+		// https://github.com/angular/angular/issues/33240
+		RouterModule.forRoot(routes),
+	],
 	exports: [RouterModule],
 })
 export class AppRoutingModule {}

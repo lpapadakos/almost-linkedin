@@ -100,6 +100,7 @@ import { NotFoundComponent } from './pages/not-found/not-found.component';
 		MatToolbarModule,
 	],
 	providers: [
+		SecurePipe,
 		{ provide: LOCALE_ID, useValue: 'el-GR' },
 		{
 			provide: HTTP_INTERCEPTORS,

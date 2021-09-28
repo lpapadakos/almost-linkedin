@@ -1,32 +1,19 @@
 // Include Packages
-const mongoose = require("mongoose");
+const fs = require("fs");
 const express = require("express");
 const cors = require("cors");
 const logger = require("morgan");
-const fs = require("fs");
+const mongoose = require("mongoose");
 const https = require("https");
-
-const unless = require("./middlewares/unless");
 
 // Server Configuration
 const config = require("./config");
+const unless = require("./middlewares/unless");
 const httpsOptions = {
 	key: fs.readFileSync("./certs/selfsigned.key"),
 	cert: fs.readFileSync("./certs/selfsigned.crt"),
 };
 
-// Connect to MongoDB
-mongoose.connect(config.MONGO_URI, {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-	useCreateIndex: true,
-	useFindAndModify: false,
-});
-mongoose.connection.on("error", (err) => {
-	console.error("Could not connect to MongoDB: " + err);
-});
-
-// Initialize the server itself
 var server = express();
 
 // Middleware
@@ -54,7 +41,16 @@ server.use((err, req, res, next) => {
 	res.status(500).json({ error: "Something happened: " + err });
 });
 
-// Start the server (HTTPS)
-https.createServer(httpsOptions, server).listen(config.LISTEN_PORT, () => {
-	console.log("Listening on port " + config.LISTEN_PORT);
-});
+// Start the server
+mongoose.connect(config.MONGO_URI, {
+	useCreateIndex: true,
+	useFindAndModify: false,
+	useNewUrlParser: true,
+	useUnifiedTopology: true,
+})
+	.then(() => {
+		https.createServer(httpsOptions, server).listen(config.LISTEN_PORT, () => {
+			console.log("Listening on port " + config.LISTEN_PORT);
+		});
+	})
+	.catch((err) => console.error("Could not connect to MongoDB: " + err));

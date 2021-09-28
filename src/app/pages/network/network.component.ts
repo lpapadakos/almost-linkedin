@@ -14,7 +14,7 @@ import { UserService } from '../../services/user.service';
 export class NetworkComponent implements OnInit {
 	user: User = this.userService.user;
 	allUsers: User[];
-	contacts: User[];
+	contacts: User[] = [];
 	searchText: string;
 
 	constructor(private titleService: Title, private alertService: AlertService, private userService: UserService) {
@@ -27,6 +27,10 @@ export class NetworkComponent implements OnInit {
 				this.allUsers = users;
 
 				this.allUsers.forEach((user) => {
+					if (user.contact && user.contact.accepted) {
+						this.contacts.push(user);
+					}
+
 					let toYear: number;
 					const currentYear = new Date().getFullYear();
 
@@ -54,8 +58,6 @@ export class NetworkComponent implements OnInit {
 
 					// If we reach here, we cannot determine the current status
 				});
-
-				this.contacts = this.allUsers.filter((u) => u.contact && u.contact.accepted);
 			},
 			error: (error) => {
 				this.alertService.error(error);

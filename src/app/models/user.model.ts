@@ -1,3 +1,5 @@
+import { SafeUrl } from '@angular/platform-browser';
+
 export class Entry {
 	_id: string;
 	where: string;
@@ -32,6 +34,7 @@ export class User {
 	// Frontend only vars: Helpful
 	currentStatus: Entry;
 	lastMessage: string;
+	imgBlob: SafeUrl;
 	contact: {
 		_id: string;
 		accepted: boolean;

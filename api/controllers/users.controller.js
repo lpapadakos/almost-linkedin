@@ -153,9 +153,7 @@ exports.get = async (req, res, next) => {
 
 					if (daijobu || user[entryType].public) {
 						if (user[entryType].fromYear) {
-							user[entryType].entries.sort(
-								(a, b) => b.fromYear - a.fromYear
-							);
+							user[entryType].entries.sort((a, b) => b.fromYear - a.fromYear);
 						}
 					} else {
 						delete user[entryType].entries;
