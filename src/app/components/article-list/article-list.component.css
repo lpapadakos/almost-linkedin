@@ -39,15 +39,15 @@ span {
 	padding: 5px;
 }
 
-.comment-header {
+.comment header {
 	margin-right: 0.5em;
 }
 
-.comment-header a {
+.comment header a {
 	font-size: 1em;
 }
 
-.comment-header a[mat-card-subtitle] {
+.comment header a[mat-card-subtitle] {
 	font-size: 0.8em;
 	margin: 0;
 }

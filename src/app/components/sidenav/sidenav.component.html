@@ -1,4 +1,4 @@
-<div *ngIf="viewedUser">
+<ng-container *ngIf="viewedUser">
 	<a mat-card-title-group class="profile-area" [routerLink]="'/profile/' + viewedUser._id">
 		<img mat-card-avatar [src]="viewedUser.img | secure | async" />
 		<h1>{{ viewedUser.name }}</h1>
@@ -21,10 +21,10 @@
 			</span>
 		</mat-list-item>
 	</mat-list>
-	<div *ngIf="user.role !== 'admin'">
+	<ng-container *ngIf="user.role !== 'admin'">
 		<a
-			*ngIf="viewedUser._id === user._id; else otherUser"
 			mat-raised-button
+			*ngIf="viewedUser._id === user._id; else otherUser"
 			color="accent"
 			routerLink="/network"
 		>
@@ -32,8 +32,8 @@
 		</a>
 		<ng-template #otherUser>
 			<button
-				*ngIf="!viewedUser.contact; else requestMade"
 				mat-raised-button
+				*ngIf="!viewedUser.contact; else requestMade"
 				color="primary"
 				(click)="addContactRequest()"
 			>
@@ -41,16 +41,16 @@
 			</button>
 			<ng-template #requestMade>
 				<a
-					*ngIf="viewedUser.contact.accepted"
 					mat-raised-button
+					*ngIf="viewedUser.contact.accepted"
 					color="accent"
 					[routerLink]="'/discussions/' + viewedUser._id"
 				>
 					Συζήτηση
 				</a>
 				<button
-					*ngIf="!viewedUser.delete; else confirmDelete"
 					mat-raised-button
+					*ngIf="!viewedUser.delete; else confirmDelete"
 					color="warn"
 					(click)="viewedUser.delete = true"
 				>
@@ -66,8 +66,8 @@
 				</ng-template>
 			</ng-template>
 		</ng-template>
-	</div>
-	<div id="top-contacts" *ngIf="topContacts && topContacts.length > 0">
+	</ng-container>
+	<section id="top-contacts" *ngIf="topContacts && topContacts.length > 0">
 		<h2 mat-card-title>Συχνές Επαφές</h2>
 		<mat-list>
 			<mat-list-item *ngFor="let contact of topContacts">
@@ -75,5 +75,5 @@
 				<a matLine [routerLink]="'/profile/' + contact._id">{{ contact.name }}</a>
 			</mat-list-item>
 		</mat-list>
-	</div>
-</div>
+	</section>
+</ng-container>

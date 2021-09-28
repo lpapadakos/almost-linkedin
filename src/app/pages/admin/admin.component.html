@@ -1,5 +1,5 @@
-<div class="container">
-	<div id="extract-buttons">
+<section class="container">
+	<section id="extract-buttons">
 		<button
 			mat-raised-button
 			color="primary"
@@ -16,8 +16,8 @@
 		>
 			Εξαγωγή επιλεγμένων σε XML
 		</button>
-	</div>
-	<div class="search-area">
+	</section>
+	<section class="search-area">
 		<mat-form-field>
 			<input
 				matInput
@@ -32,7 +32,7 @@
 				Καθαρισμός
 			</button>
 		</div>
-	</div>
+	</section>
 	<mat-table [dataSource]="users" matSort class="mat-elevation-z8">
 		<!-- Checkbox Column -->
 		<ng-container matColumnDef="select">
@@ -93,4 +93,4 @@
 			(mouseout)="row.hovered = false"
 		></mat-row>
 	</mat-table>
-</div>
+</section>

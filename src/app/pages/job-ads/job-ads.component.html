@@ -1,4 +1,4 @@
-<div class="container">
+<section class="container">
 	<mat-card>
 		<mat-card-content>
 			<form [formGroup]="jobAdForm" #formDirective="ngForm" (ngSubmit)="onPost(formDirective)">
@@ -86,19 +86,24 @@
 				</button>
 				<span>{{ jobAd.applications.length }} υποψήφιοι έχουν κάνει αίτηση</span>
 			</ng-container>
-			<div *ngIf="jobAd.poster._id === user._id" class="delete-area">
-				<button *ngIf="!jobAd.delete" mat-button color="warn" (click)="jobAd.delete = true">
+			<section *ngIf="jobAd.poster._id === user._id" class="delete-area">
+				<button
+					mat-button
+					*ngIf="!jobAd.delete; else confirmDelete"
+					color="warn"
+					(click)="jobAd.delete = true"
+				>
 					<mat-icon>delete_forever</mat-icon>
 					Διαγραφή Αγγελίας
 				</button>
-				<span *ngIf="jobAd.delete">
+				<ng-template #confirmDelete>
 					Σίγουρα?
 					<button mat-raised-button color="warn" (click)="delete(jobAd)">Ναι</button>
 					<button mat-raised-button color="primary" (click)="jobAd.delete = false">
 						Όχι
 					</button>
-				</span>
-			</div>
+				</ng-template>
+			</section>
 		</mat-card-actions>
 		<section
 			*ngIf="jobAd.applications.length && jobAd.viewApplications"
@@ -124,4 +129,4 @@
 			</mat-list>
 		</section>
 	</mat-card>
-</div>
+</section>

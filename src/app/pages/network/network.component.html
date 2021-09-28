@@ -1,5 +1,5 @@
-<div class="container">
-	<div class="search-area">
+<section class="container">
+	<section class="search-area">
 		<mat-form-field>
 			<input
 				matInput
@@ -11,20 +11,22 @@
 		<div>
 			<button mat-raised-button color="warn" (click)="searchText = ''">Καθαρισμός</button>
 		</div>
-	</div>
+	</section>
 	<mat-grid-list *ngIf="!searchText || searchText === ''" cols="4" rowHeight="1:1">
 		<h2>Το Δίκτυο μου</h2>
-		<mat-grid-tile *ngFor="let user of contacts">
-			<a [routerLink]="'/profile/' + user._id">
+		<mat-grid-tile *ngFor="let contact of contacts">
+			<a [routerLink]="'/profile/' + contact._id">
 				<mat-card>
-					<img mat-card-avatar [src]="user.img | secure | async" />
-					<mat-card-title>{{ user.name }}</mat-card-title>
-					<mat-card-subtitle *ngIf="user.currentStatus">
-						<mat-icon>{{ user.currentStatus.what ? "work" : "school" }}</mat-icon>
-						{{ user.currentStatus.what || "Σπουδάζει" }}
+					<img mat-card-avatar [src]="contact.img | secure | async" />
+					<mat-card-title>{{ contact.name }}</mat-card-title>
+					<mat-card-subtitle *ngIf="contact.currentStatus">
+						<mat-icon>
+							{{ contact.currentStatus.what ? "work" : "school" }}
+						</mat-icon>
+						{{ contact.currentStatus.what || "Σπουδάζει" }}
 						<br />
 						@
-						<strong>{{ user.currentStatus.where }}</strong>
+						<strong>{{ contact.currentStatus.where }}</strong>
 					</mat-card-subtitle>
 				</mat-card>
 			</a>
@@ -34,16 +36,16 @@
 		<h2>Αποτελέσματα Αναζήτησης</h2>
 		<a
 			mat-list-item
-			*ngFor="let user of allUsers | filter: searchText"
-			[routerLink]="'/profile/' + user._id"
+			*ngFor="let contact of allUsers | filter: searchText"
+			[routerLink]="'/profile/' + contact._id"
 		>
-			<img matListAvatar [src]="user.img | secure | async" />
-			<h3 matLine>{{ user.name }}</h3>
-			<p *ngIf="user.currentStatus">
-				<mat-icon>{{ user.currentStatus.what ? "work" : "school" }}</mat-icon>
-				{{ user.currentStatus.what || "Σπουδάζει" }} @
-				<strong>{{ user.currentStatus.where }}</strong>
+			<img matListAvatar [src]="contact.img | secure | async" />
+			<h3 matLine>{{ contact.name }}</h3>
+			<p *ngIf="contact.currentStatus">
+				<mat-icon>{{ contact.currentStatus.what ? "work" : "school" }}</mat-icon>
+				{{ contact.currentStatus.what || "Σπουδάζει" }} @
+				<strong>{{ contact.currentStatus.where }}</strong>
 			</p>
 		</a>
 	</mat-list>
-</div>
+</section>

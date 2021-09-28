@@ -12,17 +12,14 @@ const JobAd = require("../models/job-ad.model");
 exports.register = async (req, res, next) => {
 	try {
 		// role is not defined during registration. It's 'user'. Admin is preinstalled
-		const user = new User({
+		await User.create({
 			name: req.body.name,
 			email: req.body.email,
 			password: await bcrypt.hash(req.body.password, 10),
 			phone: req.body.phone,
+			img: req.file && req.file.filename,
 		});
 
-		if (req.file) user.img = req.file.filename;
-		else user.img = "default_avatar";
-
-		await user.save();
 		res.status(201).json({ message: "Επιτυχής εγγραφή χρήστη" });
 	} catch (err) {
 		next(err);
@@ -236,12 +233,11 @@ exports.addContactRequest = async (req, res, next) => {
 			return res.status(409).json({ error: "Έχει ήδη γίνει αίτημα σύνδεσης" });
 		}
 
-		const request = new Contact({
+		const request = await Contact.create({
 			sender: req.userId,
 			receiver: req.params.userId,
 		});
 
-		await request.save();
 		res.status(201).json(request);
 	} catch (err) {
 		next(err);

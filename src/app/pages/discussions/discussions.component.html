@@ -1,14 +1,17 @@
 <mat-sidenav-container>
 	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<div class="alt-background">
-			<button *ngIf="!newDiscussion" mat-raised-button color="primary" (click)="startDiscussion()">
+		<section class="alt-background">
+			<button
+				mat-raised-button
+				*ngIf="!newDiscussion; else contactList"
+				color="primary"
+				(click)="startDiscussion()"
+			>
 				<mat-icon>message</mat-icon>
 				Νέα Συζήτηση
 			</button>
-			<button *ngIf="newDiscussion" mat-raised-button color="warn" (click)="newDiscussion = false">
-				Ακύρωση
-			</button>
-			<div *ngIf="newDiscussion">
+			<ng-template #contactList>
+				<button mat-raised-button color="warn" (click)="newDiscussion = false">Ακύρωση</button>
 				<mat-form-field>
 					<input
 						matInput
@@ -20,16 +23,16 @@
 				<mat-list>
 					<a
 						mat-list-item
-						*ngFor="let user of contacts | filter: searchText"
-						[routerLink]="'/discussions/' + user._id"
+						*ngFor="let contact of contacts | filter: searchText"
+						[routerLink]="'/discussions/' + contact._id"
 						(click)="newDiscussion = false"
 					>
-						<img matListAvatar [src]="user.img | secure | async" />
-						<h3 matLine>{{ user.name }}</h3>
+						<img matListAvatar [src]="contact.img | secure | async" />
+						<h3 matLine>{{ contact.name }}</h3>
 					</a>
 				</mat-list>
-			</div>
-		</div>
+			</ng-template>
+		</section>
 		<mat-list id="existing-discussions" *ngIf="discussions && discussions.length">
 			<h2>Υφιστάμενες συζητήσεις</h2>
 			<a
@@ -40,7 +43,7 @@
 			>
 				<img matListAvatar [src]="user.img | secure | async" />
 				<h3 matLine>{{ user.name }}</h3>
-				<p *ngIf="user.lastMessage" matLine>
+				<p matLine *ngIf="user.lastMessage">
 					<mat-icon>message</mat-icon>
 					{{ user.lastMessage }}
 				</p>
@@ -48,8 +51,8 @@
 		</mat-list>
 	</mat-sidenav>
 	<mat-sidenav-content>
-		<section *ngIf="discussionPartner">
-			<div id="discussion">
+		<ng-container *ngIf="discussionPartner">
+			<section id="discussion">
 				<div
 					*ngFor="let message of messages"
 					class="row"
@@ -67,8 +70,8 @@
 						</mat-card-subtitle>
 					</mat-card>
 				</div>
-			</div>
-			<div id="new-message" class="alt-background">
+			</section>
+			<section id="new-message" class="alt-background">
 				<mat-form-field
 					*ngIf="
 						discussionPartner.contact && discussionPartner.contact.accepted;
@@ -88,7 +91,7 @@
 						Δεν μπορείτε να στείλετε μηνύματα σε αυτό το άτομο (εκτός Δικτύου)
 					</mat-card>
 				</ng-template>
-			</div>
-		</section>
+			</section>
+		</ng-container>
 	</mat-sidenav-content>
 </mat-sidenav-container>

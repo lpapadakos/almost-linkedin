@@ -1,11 +1,11 @@
-<mat-sidenav-container>
+<mat-sidenav-container *ngIf="viewedUser">
 	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<app-sidenav *ngIf="viewedUser" [viewedUser]="viewedUser"></app-sidenav>
+		<app-sidenav [viewedUser]="viewedUser"></app-sidenav>
 	</mat-sidenav>
 	<mat-sidenav-content>
-		<div *ngIf="viewedUser" class="container">
+		<section class="container">
 			<mat-card *ngFor="let entryType of entryTypes">
-				<div *ngIf="viewedUser[entryType.name]">
+				<ng-container *ngIf="viewedUser[entryType.name]">
 					<h2>
 						{{ entryType.label }}
 						<mat-checkbox
@@ -23,20 +23,23 @@
 								[src]="'/assets/' + entryType.name + '.png'"
 							/>
 							<h3 matLine>{{ entry.what || entry.where }}</h3>
-							<span *ngIf="entry.what" matLine>{{ entry.where }}</span>
+							<span matLine *ngIf="entry.what">{{ entry.where }}</span>
 							<p *ngIf="entryType.name !== 'skills'">
 								{{ entry.fromYear }} - {{ entry.toYear || "Σήμερα" }}
 							</p>
-							<div *ngIf="viewedUser._id === user._id" class="delete-area">
+							<section
+								*ngIf="viewedUser._id === user._id"
+								class="delete-area"
+							>
 								<button
-									*ngIf="!entry.delete"
 									mat-icon-button
+									*ngIf="!entry.delete; else confirmDelete"
 									color="warn"
 									(click)="entry.delete = true"
 								>
 									<mat-icon>delete_forever</mat-icon>
 								</button>
-								<span *ngIf="entry.delete">
+								<ng-template #confirmDelete>
 									Σίγουρα?
 									<button
 										mat-raised-button
@@ -57,11 +60,11 @@
 									>
 										Όχι
 									</button>
-								</span>
-							</div>
+								</ng-template>
+							</section>
 						</mat-list-item>
 					</mat-list>
-				</div>
+				</ng-container>
 				<form
 					*ngIf="viewedUser._id === user._id"
 					[formGroup]="form[entryType.name]"
@@ -92,8 +95,8 @@
 					<div *ngIf="entryType.name !== 'skills'" class="entry-years">
 						<mat-form-field>
 							<input
-								#expFromYear
 								matInput
+								#expFromYear
 								type="number"
 								placeholder="Από"
 								min="1960"
@@ -121,6 +124,6 @@
 				</form>
 			</mat-card>
 			<app-article-list [articles]="articles"></app-article-list>
-		</div>
+		</section>
 	</mat-sidenav-content>
 </mat-sidenav-container>

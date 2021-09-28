@@ -12,8 +12,8 @@
 	</mat-card-title-group>
 	<mat-card-content>
 		<p class="article-text">{{ article.text }}</p>
-		<div class="article-media">
-			<div *ngFor="let file of article.media">
+		<section class="article-media">
+			<ng-container *ngFor="let file of article.media">
 				<img *ngIf="file.type.startsWith('image')" [src]="file.id | secure | async" />
 				<audio controls *ngIf="file.type.startsWith('audio')" [src]="file.id | secure | async">
 					Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{ file.type }}
@@ -21,8 +21,8 @@
 				<video controls *ngIf="file.type.startsWith('video')" [src]="file.id | secure | async">
 					Ο browser σας δεν υποστηρίζει αρχεία της μορφής {{ file.type }}
 				</video>
-			</div>
-		</div>
+			</ng-container>
+		</section>
 	</mat-card-content>
 	<mat-card-actions>
 		<button
@@ -36,17 +36,22 @@
 		<span *ngIf="article.interestNotes.length">
 			{{ article.interestNotes.length }} χρήστες βρήκαν το άρθρο ενδιαφέρον
 		</span>
-		<div *ngIf="article.poster._id === user._id" class="delete-area">
-			<button *ngIf="!article.delete" mat-button color="warn" (click)="article.delete = true">
+		<section *ngIf="article.poster._id === user._id" class="delete-area">
+			<button
+				mat-button
+				*ngIf="!article.delete; else confirmDelete"
+				color="warn"
+				(click)="article.delete = true"
+			>
 				<mat-icon>delete_forever</mat-icon>
 				Διαγραφή Άρθρου
 			</button>
-			<span *ngIf="article.delete">
+			<ng-template #confirmDelete>
 				Σίγουρα?
 				<button mat-raised-button color="warn" (click)="delete(article)">Ναι</button>
 				<button mat-raised-button color="primary" (click)="article.delete = false">Όχι</button>
-			</span>
-		</div>
+			</ng-template>
+		</section>
 	</mat-card-actions>
 	<section class="alt-background">
 		<mat-form-field>
@@ -65,7 +70,7 @@
 			[ngClass]="{ 'mat-elevation-z8': fragment === comment._id }"
 		>
 			<img mat-card-avatar [src]="comment.poster.img | secure | async" />
-			<div class="comment-header">
+			<header>
 				<a mat-card-title [routerLink]="'/profile/' + comment.poster._id">
 					{{ comment.poster.name }}
 				</a>
@@ -76,19 +81,19 @@
 				>
 					{{ comment.createdAt | date: "medium" }}
 				</a>
-			</div>
+			</header>
 			<p>{{ comment.text }}</p>
 			<span class="flexExpand"></span>
-			<div *ngIf="comment.poster._id === user._id" class="delete-area">
+			<section *ngIf="comment.poster._id === user._id" class="delete-area">
 				<button
-					*ngIf="!comment.delete"
 					mat-icon-button
+					*ngIf="!comment.delete; else confirmDelete"
 					color="warn"
 					(click)="comment.delete = true"
 				>
 					<mat-icon>delete_forever</mat-icon>
 				</button>
-				<span *ngIf="comment.delete">
+				<ng-template #confirmDelete>
 					Σίγουρα?
 					<button
 						mat-raised-button
@@ -100,8 +105,8 @@
 					<button mat-raised-button color="primary" (click)="comment.delete = false">
 						Όχι
 					</button>
-				</span>
-			</div>
+				</ng-template>
+			</section>
 		</div>
 	</section>
 </mat-card>
