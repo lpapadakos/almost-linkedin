@@ -44,7 +44,7 @@ export class NavComponent implements OnInit, OnDestroy {
 			},
 			{
 				icon: 'account_circle',
-				label: 'Προφίλ',
+				label: 'Προσωπικά Στοιχεία',
 				link: '/profile',
 			},
 			{
