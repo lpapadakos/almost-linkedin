@@ -1,19 +1,19 @@
 import { Pipe, PipeTransform } from '@angular/core';
 
 @Pipe({
-	name: 'filter',
+  name: 'filter',
 })
 export class FilterPipe implements PipeTransform {
-	transform(items: any[], searchText: string): any[] {
-		if (!items) return [];
+  transform(items: Array<any>, searchText: string): Array<any> {
+    if (!items) return [];
 
-		if (!searchText) return items;
+    if (!searchText) return items;
 
-		searchText = searchText.toLocaleLowerCase();
+    searchText = searchText.toLocaleLowerCase();
 
-		return items.filter((item) => {
-			let haystack = item.name || item;
-			return haystack.toLocaleLowerCase().includes(searchText);
-		});
-	}
+    return items.filter((item) => {
+      const haystack = item.name || item;
+      return haystack.toLocaleLowerCase().includes(searchText);
+    });
+  }
 }

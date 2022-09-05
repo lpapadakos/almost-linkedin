@@ -1,31 +1,29 @@
 <mat-toolbar color="primary">
-	<a id="logo" routerLink="/">AlmostLinkedIn</a>
-	<div *ngIf="user && user.role === 'user'">
-		<a
-			mat-flat-button
-			*ngFor="let page of pages"
-			color="primary"
-			routerLink="{{ page.link }}"
-			routerLinkActive="mat-accent"
-		>
-			<mat-icon *ngIf="page.icon">{{ page.icon }}</mat-icon>
-			<span>{{ page.label }}</span>
-		</a>
-	</div>
-	<!--  Right Align after this  -->
-	<span class="flexExpand"></span>
-	<div class="left">
-		<ng-container *ngIf="user; else loggedOut">
-			<mat-icon>account_circle</mat-icon>
-			{{ user.name.split(" ")[0] }}
-			<a mat-raised-button *ngIf="user.role === 'admin'" color="accent" routerLink="/admin">
-				Διαχείριση Χρηστών
-			</a>
-			<button mat-raised-button color="warn" (click)="logout()">Αποσύνδεση</button>
-		</ng-container>
-		<ng-template #loggedOut>
-			<a mat-flat-button color="primary" routerLink="/login">Σύνδεση</a>
-			<a mat-raised-button color="accent" routerLink="/register">ΕΓΓΡΑΦΗ</a>
-		</ng-template>
-	</div>
+  <a id="logo" routerLink="/">AlmostLinkedIn</a>
+  <div *ngIf="user && user.role === 'user'">
+    <a
+      *ngFor="let page of pages"
+      mat-flat-button
+      color="primary"
+      routerLink="{{ page.link }}"
+      routerLinkActive="mat-accent"
+    >
+      <mat-icon *ngIf="page.icon">{{ page.icon }}</mat-icon>
+      <span>{{ page.label }}</span>
+    </a>
+  </div>
+  <!--  Right Align after this  -->
+  <span class="flexExpand"></span>
+  <div class="left">
+    <ng-container *ngIf="user; else loggedOut">
+      <mat-icon>account_circle</mat-icon>
+      {{ user.name.split(" ")[0] }}
+      <a *ngIf="user.role === 'admin'" mat-raised-button color="accent" routerLink="/admin"> Διαχείριση Χρηστών </a>
+      <button (click)="logout()" mat-raised-button color="warn">Αποσύνδεση</button>
+    </ng-container>
+    <ng-template #loggedOut>
+      <a mat-flat-button color="primary" routerLink="/login">Σύνδεση</a>
+      <a mat-raised-button color="accent" routerLink="/register">ΕΓΓΡΑΦΗ</a>
+    </ng-template>
+  </div>
 </mat-toolbar>

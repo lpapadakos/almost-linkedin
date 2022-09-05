@@ -1,17 +1,17 @@
-const multer = require("multer");
-const fs = require("fs");
+const multer = require('multer');
+const fs = require('fs');
 
-const config = require("../config");
+const config = require('../config');
 
 var storage = multer.diskStorage({
-	destination: (req, file, cb) => {
-		const path = config.UPLOAD_DIR;
-		fs.mkdirSync(path, { recursive: true });
+  destination: (req, file, cb) => {
+    const path = config.UPLOAD_DIR;
+    fs.mkdirSync(path, { recursive: true });
 
-		return cb(null, path);
-	},
+    return cb(null, path);
+  },
 });
 
-var upload = multer({ storage: storage });
+var upload = multer({ storage });
 
 module.exports = upload;

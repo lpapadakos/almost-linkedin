@@ -1,97 +1,76 @@
 <mat-sidenav-container>
-	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<section class="alt-background">
-			<button
-				mat-raised-button
-				*ngIf="!newDiscussion; else contactList"
-				color="primary"
-				(click)="startDiscussion()"
-			>
-				<mat-icon>message</mat-icon>
-				Νέα Συζήτηση
-			</button>
-			<ng-template #contactList>
-				<button mat-raised-button color="warn" (click)="newDiscussion = false">Ακύρωση</button>
-				<mat-form-field>
-					<input
-						matInput
-						type="search"
-						[(ngModel)]="searchText"
-						placeholder="Αναζήτηση στις επαφές"
-					/>
-				</mat-form-field>
-				<mat-list>
-					<a
-						mat-list-item
-						*ngFor="let contact of contacts | filter: searchText"
-						[routerLink]="'/discussions/' + contact._id"
-						(click)="newDiscussion = false"
-					>
-						<img matListAvatar [src]="contact.img | secure | async" />
-						<h3 matLine>{{ contact.name }}</h3>
-					</a>
-				</mat-list>
-			</ng-template>
-		</section>
-		<mat-list id="existing-discussions" *ngIf="discussions && discussions.length">
-			<h2>Υφιστάμενες συζητήσεις</h2>
-			<a
-				mat-list-item
-				*ngFor="let user of discussions"
-				[routerLink]="'/discussions/' + user._id"
-				[class.selected]="discussionPartner && user._id === discussionPartner._id"
-			>
-				<img matListAvatar [src]="user.img | secure | async" />
-				<h3 matLine>{{ user.name }}</h3>
-				<p matLine *ngIf="user.lastMessage">
-					<mat-icon>message</mat-icon>
-					{{ user.lastMessage }}
-				</p>
-			</a>
-		</mat-list>
-	</mat-sidenav>
-	<mat-sidenav-content>
-		<ng-container *ngIf="discussionPartner">
-			<section id="discussion">
-				<div
-					*ngFor="let message of messages"
-					class="row"
-					[ngClass]="{ sent: message.sender._id === user._id }"
-				>
-					<mat-card class="message">
-						<mat-card-content>
-							<a [routerLink]="'/profile/' + message.sender._id">
-								<img mat-card-avatar [src]="message.sender.imgBlob" />
-							</a>
-							<p>{{ message.text }}</p>
-						</mat-card-content>
-						<mat-card-subtitle>
-							{{ message.createdAt | date: "medium" }}
-						</mat-card-subtitle>
-					</mat-card>
-				</div>
-			</section>
-			<section id="new-message" class="alt-background">
-				<mat-form-field
-					*ngIf="
-						discussionPartner.contact && discussionPartner.contact.accepted;
-						else outsideNetwork
-					"
-				>
-					<textarea
-						matInput
-						matTextareaAutosize
-						placeholder="Μήνυμα (Αποστολή με Enter)"
-						[(ngModel)]="messageDraft"
-						(keydown.enter)="sendMessage()"
-					></textarea>
-				</mat-form-field>
-				<ng-template #outsideNetwork>
-					<mat-card>
-						Δεν μπορείτε να στείλετε μηνύματα σε αυτό το άτομο (εκτός Δικτύου)
-					</mat-card>
-				</ng-template>
-			</section>
-		</ng-container>
-	</mat-sidenav-content>
+  <mat-sidenav class="mat-elevation-z8" [disableClose]="true" opened mode="side">
+    <section class="alt-background">
+      <button *ngIf="!newDiscussion; else contactList" (click)="startDiscussion()" mat-raised-button color="primary">
+        <mat-icon>message</mat-icon>
+        Νέα Συζήτηση
+      </button>
+      <ng-template #contactList>
+        <button (click)="newDiscussion = false" mat-raised-button color="warn">Ακύρωση</button>
+        <mat-form-field>
+          <input [(ngModel)]="searchText" matInput type="search" placeholder="Αναζήτηση στις επαφές" />
+        </mat-form-field>
+        <mat-list>
+          <a
+            *ngFor="let contact of contacts | filter: searchText"
+            [routerLink]="'/discussions/' + contact._id"
+            (click)="newDiscussion = false"
+            mat-list-item
+          >
+            <img [src]="contact.img | secure | async" matListAvatar />
+            <h3 matLine>{{ contact.name }}</h3>
+          </a>
+        </mat-list>
+      </ng-template>
+    </section>
+    <mat-list id="existing-discussions" *ngIf="discussions && discussions.length">
+      <h2>Υφιστάμενες συζητήσεις</h2>
+      <a
+        *ngFor="let user of discussions"
+        [routerLink]="'/discussions/' + user._id"
+        [class.selected]="discussionPartner && user._id === discussionPartner._id"
+        mat-list-item
+      >
+        <img [src]="user.img | secure | async" matListAvatar />
+        <h3 matLine>{{ user.name }}</h3>
+        <p *ngIf="user.lastMessage" matLine>
+          <mat-icon>message</mat-icon>
+          {{ user.lastMessage }}
+        </p>
+      </a>
+    </mat-list>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <ng-container *ngIf="discussionPartner">
+      <section id="discussion">
+        <div class="row" *ngFor="let message of messages" [ngClass]="{ sent: message.sender._id === user._id }">
+          <mat-card class="message">
+            <mat-card-content>
+              <a [routerLink]="'/profile/' + message.sender._id">
+                <img [src]="message.sender.imgBlob" mat-card-avatar />
+              </a>
+              <p>{{ message.text }}</p>
+            </mat-card-content>
+            <mat-card-subtitle>
+              {{ message.createdAt | date: "medium" }}
+            </mat-card-subtitle>
+          </mat-card>
+        </div>
+      </section>
+      <section class="alt-background" id="new-message">
+        <mat-form-field *ngIf="discussionPartner.contact && discussionPartner.contact.accepted; else outsideNetwork">
+          <textarea
+            [(ngModel)]="messageDraft"
+            (keydown.enter)="sendMessage()"
+            matInput
+            matTextareaAutosize
+            placeholder="Μήνυμα (Αποστολή με Enter)"
+          ></textarea>
+        </mat-form-field>
+        <ng-template #outsideNetwork>
+          <mat-card> Δεν μπορείτε να στείλετε μηνύματα σε αυτό το άτομο (εκτός Δικτύου) </mat-card>
+        </ng-template>
+      </section>
+    </ng-container>
+  </mat-sidenav-content>
 </mat-sidenav-container>

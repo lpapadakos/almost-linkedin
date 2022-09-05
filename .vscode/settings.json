@@ -1,0 +1,11 @@
+{
+  "[html][typescript][javascript][javascriptreact][json][jsonc][css][scss][less]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.formatOnSave": true
+  },
+  "[html][typescript]": {
+    "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+    }
+  }
+}

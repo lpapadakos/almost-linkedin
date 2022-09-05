@@ -1,32 +1,32 @@
 :host {
-	position: fixed;
-	z-index: 100;
-	width: 50%;
-	left: 25%;
+  position: fixed;
+  z-index: 100;
+  width: 50%;
+  left: 25%;
 }
 
 .alert {
-	color: white;
+  color: white;
 }
 
 .alert button {
-	position: absolute;
-	top: 5px;
-	right: 0;
+  position: absolute;
+  top: 5px;
+  right: 0;
 }
 
 .success {
-	background-color: green;
+  background-color: green;
 }
 
 .info {
-	background-color: royalblue;
+  background-color: royalblue;
 }
 
 .warning {
-	background-color: darkorange;
+  background-color: darkorange;
 }
 
 .error {
-	background-color: red;
+  background-color: red;
 }

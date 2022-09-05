@@ -1,58 +1,58 @@
 mat-card {
-	padding: 0;
+  padding: 0;
 }
 
 mat-card-title-group {
-	padding: 16px 16px 0;
+  padding: 16px 16px 0;
 }
 
 mat-card-content {
-	padding: 16px;
-	margin: 0;
+  padding: 16px;
+  margin: 0;
 }
 
 mat-card-actions {
-	margin: 0;
+  margin: 0;
 }
 
 .article-media * {
-	max-width: 100%;
-	margin: 0.5em 0;
+  max-width: 100%;
+  margin: 0.5em 0;
 }
 
 span {
-	font-size: 0.8em;
+  font-size: 0.8em;
 }
 
 .delete-area {
-	float: right;
+  float: right;
 }
 
 .comment {
-	display: flex;
-	align-items: center;
-	margin-top: 16px;
+  display: flex;
+  align-items: center;
+  margin-top: 16px;
 }
 
 .comment > * {
-	vertical-align: middle;
-	padding: 5px;
+  vertical-align: middle;
+  padding: 5px;
 }
 
 .comment header {
-	margin-right: 0.5em;
+  margin-right: 0.5em;
 }
 
 .comment header a {
-	font-size: 1em;
+  font-size: 1em;
 }
 
 .comment header a[mat-card-subtitle] {
-	font-size: 0.8em;
-	margin: 0;
+  font-size: 0.8em;
+  margin: 0;
 }
 
 .comment p {
-	border-left: 1px solid #ccc;
-	padding-left: 0.5em;
+  border-left: 1px solid #ccc;
+  padding-left: 0.5em;
 }

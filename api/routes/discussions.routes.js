@@ -1,12 +1,15 @@
-const express = require("express");
+const express = require('express');
 const router = express.Router();
 
-const interaction = require("../middlewares/interaction");
+const interaction = require('../middlewares/interaction');
 
-const discussion = require("../controllers/discussions.controller");
+const discussion = require('../controllers/discussions.controller');
 
-router.get("/", discussion.summary);
+router.get('/', discussion.summary);
 
-router.route("/:userId").post(discussion.sendMessage, interaction).get(discussion.get);
+router
+  .route('/:userId')
+  .post(discussion.sendMessage, interaction)
+  .get(discussion.get);
 
 module.exports = router;

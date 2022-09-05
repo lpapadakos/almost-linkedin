@@ -1,75 +1,75 @@
 mat-list#existing-discussions a:hover,
 .selected {
-	text-decoration: none;
-	background-color: #eee;
+  text-decoration: none;
+  background-color: #eee;
 }
 
 .selected h3 {
-	font-weight: bold;
+  font-weight: bold;
 }
 
 #discussion {
-	padding: 1em;
-	margin-bottom: 100px;
+  padding: 1em;
+  margin-bottom: 100px;
 }
 
 #discussion mat-card {
-	display: inline-block;
-	margin: 1em;
-	max-width: 50%;
+  display: inline-block;
+  margin: 1em;
+  max-width: 50%;
 }
 
 #discussion mat-card p {
-	white-space: pre-wrap; /* CSS3 */
-	white-space: -moz-pre-wrap; /* Firefox */
-	white-space: -o-pre-wrap; /* Opera 7 */
-	word-wrap: break-word; /* IE */
+  white-space: pre-wrap; /* CSS3 */
+  white-space: -moz-pre-wrap; /* Firefox */
+  white-space: -o-pre-wrap; /* Opera 7 */
+  word-wrap: break-word; /* IE */
 }
 
 .row {
-	width: 100%;
-	text-align: left;
+  width: 100%;
+  text-align: left;
 }
 
 mat-card-content {
-	display: flex;
-	align-items: center;
-	flex-direction: row;
+  display: flex;
+  align-items: center;
+  flex-direction: row;
 }
 
 mat-card-content img {
-	margin-right: 10px;
+  margin-right: 10px;
 }
 
 .row.sent {
-	text-align: right;
+  text-align: right;
 }
 
 .sent mat-card {
-	background-color: #3f51b5;
-	color: white;
+  background-color: #3f51b5;
+  color: white;
 }
 
 .sent mat-card-content {
-	flex-direction: row-reverse;
+  flex-direction: row-reverse;
 }
 
 .sent mat-card-content img {
-	margin-right: 0;
-	margin-left: 10px;
+  margin-right: 0;
+  margin-left: 10px;
 }
 
 .sent mat-card-subtitle {
-	color: #eee;
+  color: #eee;
 }
 
 #new-message {
-	position: fixed;
-	bottom: 0;
-	right: 0;
-	left: 20%;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 20%;
 }
 
 #new-message mat-card {
-	margin: 0;
+  margin: 0;
 }

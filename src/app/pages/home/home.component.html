@@ -1,44 +1,32 @@
 <mat-sidenav-container>
-	<mat-sidenav opened [disableClose]="true" mode="side" class="mat-elevation-z8">
-		<app-sidenav [viewedUser]="user"></app-sidenav>
-	</mat-sidenav>
-	<mat-sidenav-content>
-		<section class="container">
-			<mat-card>
-				<mat-card-content>
-					<form
-						[formGroup]="articleForm"
-						#formDirective="ngForm"
-						(ngSubmit)="onPost(formDirective)"
-					>
-						<h2>Ανάρτηση άρθρου</h2>
-						<mat-form-field>
-							<textarea
-								matInput
-								matTextareaAutosize
-								placeholder="Τι σκέφτεστε;"
-								formControlName="text"
-								required
-							></textarea>
-							<mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
-						</mat-form-field>
-						<label for="media">Μπορείτε να επισυνάψετε αρχεία πολυμέσων:</label>
-						<input
-							id="media"
-							type="file"
-							multiple
-							accept="image/*,audio/*,video/*"
-							(change)="onFileChange($event)"
-						/>
-						<mat-card-actions>
-							<button mat-raised-button type="submit" color="primary">
-								Δημοσίευση
-							</button>
-						</mat-card-actions>
-					</form>
-				</mat-card-content>
-			</mat-card>
-			<app-article-list [articles]="articles"></app-article-list>
-		</section>
-	</mat-sidenav-content>
+  <mat-sidenav class="mat-elevation-z8" [disableClose]="true" opened mode="side">
+    <app-sidenav [viewedUser]="user"></app-sidenav>
+  </mat-sidenav>
+  <mat-sidenav-content>
+    <section class="container">
+      <mat-card>
+        <mat-card-content>
+          <form #formDirective="ngForm" [formGroup]="articleForm" (ngSubmit)="onPost(formDirective)">
+            <h2>Ανάρτηση άρθρου</h2>
+            <mat-form-field>
+              <textarea
+                matInput
+                matTextareaAutosize
+                placeholder="Τι σκέφτεστε;"
+                formControlName="text"
+                required
+              ></textarea>
+              <mat-error>Παρακαλώ εισάγετε το κείμενο του άρθρου</mat-error>
+            </mat-form-field>
+            <label for="media">Μπορείτε να επισυνάψετε αρχεία πολυμέσων:</label>
+            <input id="media" (change)="onFileChange($event)" type="file" multiple accept="image/*,audio/*,video/*" />
+            <mat-card-actions>
+              <button mat-raised-button type="submit" color="primary">Δημοσίευση</button>
+            </mat-card-actions>
+          </form>
+        </mat-card-content>
+      </mat-card>
+      <app-article-list [articles]="articles"></app-article-list>
+    </section>
+  </mat-sidenav-content>
 </mat-sidenav-container>

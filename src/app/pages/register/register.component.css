@@ -1,9 +1,9 @@
 .container {
-	width: 50%;
+  width: 50%;
 }
 
 #fileArea img {
-	display: block;
-	max-height: 200px;
-	margin: 1em 0;
+  display: block;
+  max-height: 200px;
+  margin: 1em 0;
 }

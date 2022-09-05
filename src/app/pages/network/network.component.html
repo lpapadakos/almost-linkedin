@@ -1,51 +1,42 @@
 <section class="container">
-	<section class="search-area">
-		<mat-form-field>
-			<input
-				matInput
-				type="search"
-				[(ngModel)]="searchText"
-				placeholder="Αναζήτηση στους χρήστες της εφαρμογής"
-			/>
-		</mat-form-field>
-		<div>
-			<button mat-raised-button color="warn" (click)="searchText = ''">Καθαρισμός</button>
-		</div>
-	</section>
-	<mat-grid-list *ngIf="!searchText || searchText === ''" cols="4" rowHeight="1:1">
-		<h2>Το Δίκτυο μου</h2>
-		<mat-grid-tile *ngFor="let contact of contacts">
-			<a [routerLink]="'/profile/' + contact._id">
-				<mat-card>
-					<img mat-card-avatar [src]="contact.img | secure | async" />
-					<mat-card-title>{{ contact.name }}</mat-card-title>
-					<mat-card-subtitle *ngIf="contact.currentStatus">
-						<mat-icon>
-							{{ contact.currentStatus.what ? "work" : "school" }}
-						</mat-icon>
-						{{ contact.currentStatus.what || "Σπουδάζει" }}
-						<br />
-						@
-						<strong>{{ contact.currentStatus.where }}</strong>
-					</mat-card-subtitle>
-				</mat-card>
-			</a>
-		</mat-grid-tile>
-	</mat-grid-list>
-	<mat-list *ngIf="searchText && searchText !== ''">
-		<h2>Αποτελέσματα Αναζήτησης</h2>
-		<a
-			mat-list-item
-			*ngFor="let contact of allUsers | filter: searchText"
-			[routerLink]="'/profile/' + contact._id"
-		>
-			<img matListAvatar [src]="contact.img | secure | async" />
-			<h3 matLine>{{ contact.name }}</h3>
-			<p *ngIf="contact.currentStatus">
-				<mat-icon>{{ contact.currentStatus.what ? "work" : "school" }}</mat-icon>
-				{{ contact.currentStatus.what || "Σπουδάζει" }} @
-				<strong>{{ contact.currentStatus.where }}</strong>
-			</p>
-		</a>
-	</mat-list>
+  <section class="search-area">
+    <mat-form-field>
+      <input [(ngModel)]="searchText" matInput type="search" placeholder="Αναζήτηση στους χρήστες της εφαρμογής" />
+    </mat-form-field>
+    <div>
+      <button (click)="searchText = ''" mat-raised-button color="warn">Καθαρισμός</button>
+    </div>
+  </section>
+  <mat-grid-list *ngIf="!searchText || searchText === ''" cols="4" rowHeight="1:1">
+    <h2>Το Δίκτυο μου</h2>
+    <mat-grid-tile *ngFor="let contact of contacts">
+      <a [routerLink]="'/profile/' + contact._id">
+        <mat-card>
+          <img [src]="contact.img | secure | async" mat-card-avatar />
+          <mat-card-title>{{ contact.name }}</mat-card-title>
+          <mat-card-subtitle *ngIf="contact.currentStatus">
+            <mat-icon>
+              {{ contact.currentStatus.what ? "work" : "school" }}
+            </mat-icon>
+            {{ contact.currentStatus.what || "Σπουδάζει" }}
+            <br />
+            @
+            <strong>{{ contact.currentStatus.where }}</strong>
+          </mat-card-subtitle>
+        </mat-card>
+      </a>
+    </mat-grid-tile>
+  </mat-grid-list>
+  <mat-list *ngIf="searchText && searchText !== ''">
+    <h2>Αποτελέσματα Αναζήτησης</h2>
+    <a *ngFor="let contact of allUsers | filter: searchText" [routerLink]="'/profile/' + contact._id" mat-list-item>
+      <img [src]="contact.img | secure | async" matListAvatar />
+      <h3 matLine>{{ contact.name }}</h3>
+      <p *ngIf="contact.currentStatus">
+        <mat-icon>{{ contact.currentStatus.what ? "work" : "school" }}</mat-icon>
+        {{ contact.currentStatus.what || "Σπουδάζει" }} @
+        <strong>{{ contact.currentStatus.where }}</strong>
+      </p>
+    </a>
+  </mat-list>
 </section>
