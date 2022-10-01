@@ -1,3 +1,8 @@
+These are all a "maybe":
+
 Split into modules
 Handle anonymous profile/ redirect correctly
 Handle eslint gripes
+Add unit tests
+Fix undefined form stuff in profile
+Address eslint warnings
