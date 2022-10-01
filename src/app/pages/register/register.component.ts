@@ -21,7 +21,7 @@ export class RegisterComponent implements OnInit {
   imageData: any;
 
   constructor(
-    private UntypedFormBuilder: UntypedFormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private titleService: Title,
     private router: Router,
     private alertService: AlertService,
@@ -31,7 +31,7 @@ export class RegisterComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.registerForm = this.UntypedFormBuilder.group(
+    this.registerForm = this.formBuilder.group(
       {
         name: ['', Validators.required],
         email: ['', [Validators.required, Validators.email]],

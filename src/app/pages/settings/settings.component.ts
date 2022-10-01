@@ -22,7 +22,7 @@ export class SettingsComponent implements OnInit {
   imageData: any;
 
   constructor(
-    private UntypedFormBuilder: UntypedFormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private titleService: Title,
     private alertService: AlertService,
     private userService: UserService
@@ -31,7 +31,7 @@ export class SettingsComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.updateForm = this.UntypedFormBuilder.group(
+    this.updateForm = this.formBuilder.group(
       {
         name: [this.user.name, Validators.required],
         email: [this.user.email, [Validators.required, Validators.email]],

@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  FormGroupDirective,
   UntypedFormBuilder,
   UntypedFormGroup,
-  FormGroupDirective,
   Validators,
 } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -28,7 +28,7 @@ export class JobAdsComponent implements OnInit {
   fragment: string;
 
   constructor(
-    private UntypedFormBuilder: UntypedFormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private titleService: Title,
     private route: ActivatedRoute,
     private alertService: AlertService,
@@ -41,7 +41,7 @@ export class JobAdsComponent implements OnInit {
   ngOnInit() {
     this.route.fragment.subscribe((fragment) => (this.fragment = fragment));
 
-    this.jobAdForm = this.UntypedFormBuilder.group({
+    this.jobAdForm = this.formBuilder.group({
       what: ['', Validators.required],
       where: ['', Validators.required],
       description: ['', Validators.required],

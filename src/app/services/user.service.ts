@@ -40,9 +40,9 @@ export class UserService {
 
   // Custom validator: Compare password and repeat-password fields
   equivalentValidator(controlName: string, matchingControlName: string) {
-    return (UntypedFormGroup: UntypedFormGroup) => {
-      const control = UntypedFormGroup.get(controlName);
-      const matchingControl = UntypedFormGroup.get(matchingControlName);
+    return (formGroup: UntypedFormGroup) => {
+      const control = formGroup.get(controlName);
+      const matchingControl = formGroup.get(matchingControlName);
 
       matchingControl.setErrors(
         control.value === matchingControl.value ? null : { mustMatch: true }

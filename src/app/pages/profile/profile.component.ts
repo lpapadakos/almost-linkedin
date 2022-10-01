@@ -54,7 +54,7 @@ export class ProfileComponent implements OnInit {
   ];
 
   constructor(
-    private UntypedFormBuilder: UntypedFormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private titleService: Title,
     private router: Router,
     private route: ActivatedRoute,
@@ -67,9 +67,9 @@ export class ProfileComponent implements OnInit {
 
   // Custom validator: Compare From and To Fields for correct time interval
   private intervalValidator(fromControlName: string, toControlName: string) {
-    return (UntypedFormGroup: UntypedFormGroup) => {
-      const fromControl = UntypedFormGroup.controls[fromControlName];
-      const toControl = UntypedFormGroup.controls[toControlName];
+    return (formGroup: UntypedFormGroup) => {
+      const fromControl = formGroup.controls[fromControlName];
+      const toControl = formGroup.controls[toControlName];
 
       toControl.setErrors(
         !toControl.value || fromControl.value <= toControl.value
@@ -103,7 +103,7 @@ export class ProfileComponent implements OnInit {
       });
     });
 
-    this.form.experience = this.UntypedFormBuilder.group(
+    this.form.experience = this.formBuilder.group(
       {
         what: ['', Validators.required],
         where: ['', Validators.required],
@@ -115,7 +115,7 @@ export class ProfileComponent implements OnInit {
       }
     );
 
-    this.form.education = this.UntypedFormBuilder.group(
+    this.form.education = this.formBuilder.group(
       {
         where: ['', Validators.required],
         fromYear: ['', Validators.required],
@@ -126,7 +126,7 @@ export class ProfileComponent implements OnInit {
       }
     );
 
-    this.form.skills = this.UntypedFormBuilder.group({
+    this.form.skills = this.formBuilder.group({
       what: ['', Validators.required],
     });
   }

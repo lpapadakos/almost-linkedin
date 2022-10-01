@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import {
+  FormGroupDirective,
   UntypedFormBuilder,
   UntypedFormGroup,
-  FormGroupDirective,
   Validators,
 } from '@angular/forms';
 import { Title } from '@angular/platform-browser';
@@ -27,7 +27,7 @@ export class HomeComponent implements OnInit {
   articles: Array<Article>;
 
   constructor(
-    private UntypedFormBuilder: UntypedFormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private titleService: Title,
     private alertService: AlertService,
     private userService: UserService,
@@ -37,7 +37,7 @@ export class HomeComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.articleForm = this.UntypedFormBuilder.group({
+    this.articleForm = this.formBuilder.group({
       text: ['', Validators.required],
     });
 

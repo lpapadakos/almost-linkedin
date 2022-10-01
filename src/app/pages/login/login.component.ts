@@ -20,7 +20,7 @@ export class LoginComponent implements OnInit {
   loginForm: UntypedFormGroup;
 
   constructor(
-    private UntypedFormBuilder: UntypedFormBuilder,
+    private formBuilder: UntypedFormBuilder,
     private titleService: Title,
     private router: Router,
     private route: ActivatedRoute,
@@ -34,7 +34,7 @@ export class LoginComponent implements OnInit {
     // Don't be here if you're logged in, boi
     if (this.userService.user) this.router.navigate([this.returnUrl]);
 
-    this.loginForm = this.UntypedFormBuilder.group({
+    this.loginForm = this.formBuilder.group({
       email: ['', Validators.email],
       password: ['', Validators.required],
     });
